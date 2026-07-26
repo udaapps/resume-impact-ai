@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Create professional, ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, receive an ATS score, and download results as PDF, DOCX, or TXT.",
+  "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",
 
   keywords: [
     "AI resume bullet generator",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     title:
       "Free AI Resume Bullet Generator | Resume Impact AI",
     description:
-      "Generate professional ATS-friendly resume bullets, analyze their quality, and download your results as PDF or DOCX.",
+  "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",
     images: [
       {
         url: "/opengraph-image.png",
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     title:
       "Free AI Resume Bullet Generator | Resume Impact AI",
     description:
-      "Generate ATS-friendly resume bullets and receive an AI-powered ATS score.",
+      "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",
     images: ["/opengraph-image.png"],
   },
 
