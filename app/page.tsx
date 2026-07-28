@@ -336,38 +336,27 @@ export default function Home() {
     };
   }, [user]);
 
-  async function handleGoogleLogin() {
-    setError("");
-    setSuccessMessage("");
-    toast.loading("Opening Google sign-in...", {
-      id: "google-login",
+ async function handleGoogleLogin() {
+  setError("");
+  setSuccessMessage("");
+
+  const redirectTo =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000/"
+      : "https://resume-impact-ai.vercel.app/";
+
+  const { error: loginError } =
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo,
+      },
     });
 
-    sendGAEvent("event", "google_login_start", {
-      method: "google",
-    });
-
-    const redirectTo =
-      window.location.hostname === "localhost"
-        ? "http://localhost:3000"
-        : "https://resume-impact-ai.vercel.app";
-
-    const { error: loginError } =
-      await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo,
-        },
-      });
-
-    if (loginError) {
-      toast.error("Google sign-in failed.", {
-        id: "google-login",
-        description: loginError.message,
-      });
-      setError(loginError.message);
-    }
+  if (loginError) {
+    setError(loginError.message);
   }
+}
 
   async function handleLogout() {
     setError("");
