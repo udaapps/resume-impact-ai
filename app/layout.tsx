@@ -22,6 +22,10 @@ export const metadata: Metadata = {
     "https://resume-impact-ai.vercel.app"
   ),
 
+  verification: {
+    google: "FYbX8VFA_hCVhcmpT342Rcv2yfGHl8Oc-SeGi-akSbY",
+  },
+
   title: {
     default:
       "Free AI Resume Bullet Generator | Resume Impact AI",
