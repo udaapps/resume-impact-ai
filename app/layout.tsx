@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { Toaster } from "sonner";
+
+import { ThemeProvider } from "@/components/theme-provider";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,7 +29,7 @@ export const metadata: Metadata = {
   },
 
   description:
-  "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",
+    "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",
 
   keywords: [
     "AI resume bullet generator",
@@ -57,7 +62,7 @@ export const metadata: Metadata = {
     title:
       "Free AI Resume Bullet Generator | Resume Impact AI",
     description:
-  "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",
+      "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",
     images: [
       {
         url: "/opengraph-image.png",
@@ -98,11 +103,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider>
+          {children}
+
+          <Toaster
+            richColors
+            closeButton
+            position="top-center"
+            duration={3500}
+            visibleToasts={4}
+          />
+        </ThemeProvider>
+
+        <GoogleAnalytics gaId="G-5C8WQHHY15" />
       </body>
     </html>
   );
