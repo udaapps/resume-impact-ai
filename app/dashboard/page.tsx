@@ -1,21 +1,20 @@
 "use client";
 
-import Link from "next/link";
 import {
   ArrowRight,
-  Award,
   BarChart3,
   CalendarDays,
-  Download,
+  Cloud,
   FileSearch,
-  FileText,
-  History,
-  Sparkles,
+  Loader2,
+  RefreshCw,
   Target,
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
+import Link from "next/link";
 import {
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -23,43 +22,9 @@ import {
 import { toast } from "sonner";
 
 import {
-  exportAtsHistoryItemPdf,
-} from "@/lib/ats/exportAtsPdf";
-
-import {
-  getAtsAnalysisHistory,
-  type AtsAnalysisHistoryItem,
-} from "@/lib/ats/analysisHistory";
-
-type ScoreMetric = {
-  label: string;
-  value: number;
-  icon: React.ComponentType<{
-    className?: string;
-    "aria-hidden"?: boolean;
-  }>;
-  helperText: string;
-};
-
-type TrendPoint = {
-  id: string;
-  label: string;
-  score: number;
-  createdAt: string;
-};
-
-function clampScore(
-  value: number
-): number {
-  if (!Number.isFinite(value)) {
-    return 0;
-  }
-
-  return Math.max(
-    0,
-    Math.min(100, Math.round(value))
-  );
-}
+  loadResumeAnalyses,
+  type ResumeAnalysisRecord,
+} from "@/lib/supabase/resume-analyses";
 
 function calculateAverage(
   values: number[]
@@ -68,1215 +33,1044 @@ function calculateAverage(
     return 0;
   }
 
+  const total = values.reduce(
+    (sum, value) => sum + value,
+    0
+  );
+
   return Math.round(
-    values.reduce(
-      (total, value) =>
-        total + value,
-      0
-    ) / values.length
+    total / values.length
   );
 }
 
-function formatDashboardDate(
-  dateValue: string
+function getScoreTextClass(
+  score: number
 ): string {
-  const date = new Date(dateValue);
+  if (score >= 80) {
+    return "text-emerald-300";
+  }
 
-  if (Number.isNaN(date.getTime())) {
+  if (score >= 60) {
+    return "text-blue-300";
+  }
+
+  if (score >= 40) {
+    return "text-amber-300";
+  }
+
+  return "text-red-300";
+}
+
+function getScoreBarClass(
+  score: number
+): string {
+  if (score >= 80) {
+    return "bg-emerald-500";
+  }
+
+  if (score >= 60) {
+    return "bg-blue-500";
+  }
+
+  if (score >= 40) {
+    return "bg-amber-500";
+  }
+
+  return "bg-red-500";
+}
+
+function formatDate(
+  value: string
+): string {
+  const date = new Date(value);
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
     return "Unknown date";
   }
 
   return new Intl.DateTimeFormat(
-    undefined,
+    "en",
     {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
+      dateStyle: "medium",
+      timeStyle: "short",
     }
   ).format(date);
 }
 
-function formatShortDate(
-  dateValue: string
+function formatRelativeTime(
+  value: string
 ): string {
-  const date = new Date(dateValue);
+  const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return "";
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+    return "Unknown";
+  }
+
+  const difference =
+    Date.now() -
+    date.getTime();
+
+  const minutes =
+    Math.floor(
+      difference / 60_000
+    );
+
+  const hours =
+    Math.floor(
+      difference / 3_600_000
+    );
+
+  const days =
+    Math.floor(
+      difference / 86_400_000
+    );
+
+  if (minutes < 1) {
+    return "Just now";
+  }
+
+  if (minutes < 60) {
+    return `${minutes}m ago`;
+  }
+
+  if (hours < 24) {
+    return `${hours}h ago`;
+  }
+
+  if (days < 7) {
+    return `${days}d ago`;
   }
 
   return new Intl.DateTimeFormat(
-    undefined,
+    "en",
     {
-      month: "short",
-      day: "numeric",
+      dateStyle: "medium",
     }
   ).format(date);
 }
 
-function getScoreLabel(
-  score: number
-): string {
-  if (score >= 80) {
-    return "Strong Match";
-  }
+function getFrequentMissingKeywords(
+  analyses: ResumeAnalysisRecord[],
+  maximumItems = 8
+) {
+  const frequency =
+    new Map<string, number>();
 
-  if (score >= 60) {
-    return "Good Foundation";
-  }
+  analyses.forEach(
+    (analysis) => {
+      analysis.missingKeywords.forEach(
+        (keyword) => {
+          const normalized =
+            keyword
+              .trim()
+              .toLowerCase();
 
-  if (score >= 40) {
-    return "Needs Improvement";
-  }
+          if (!normalized) {
+            return;
+          }
 
-  return "Low Match";
+          frequency.set(
+            normalized,
+            (frequency.get(
+              normalized
+            ) ?? 0) + 1
+          );
+        }
+      );
+    }
+  );
+
+  return [
+    ...frequency.entries(),
+  ]
+    .map(
+      ([keyword, count]) => ({
+        keyword,
+        count,
+      })
+    )
+    .sort(
+      (first, second) => {
+        if (
+          second.count !==
+          first.count
+        ) {
+          return (
+            second.count -
+            first.count
+          );
+        }
+
+        return first.keyword.localeCompare(
+          second.keyword
+        );
+      }
+    )
+    .slice(0, maximumItems);
 }
 
-function getScoreClasses(
-  score: number
-): {
-  text: string;
-  border: string;
-  background: string;
-  progress: string;
-} {
-  if (score >= 80) {
-    return {
-      text: "text-emerald-300",
-      border: "border-emerald-500/30",
-      background: "bg-emerald-500/10",
-      progress: "bg-emerald-500",
-    };
+export default function DashboardPage() {
+  const [
+    analyses,
+    setAnalyses,
+  ] = useState<
+    ResumeAnalysisRecord[]
+  >([]);
+
+  const [
+    isLoading,
+    setIsLoading,
+  ] = useState(true);
+
+  const [
+    isRefreshing,
+    setIsRefreshing,
+  ] = useState(false);
+
+  const [
+    errorMessage,
+    setErrorMessage,
+  ] = useState("");
+
+  const loadDashboardData =
+    useCallback(
+      async (
+        showRefreshToast = false
+      ) => {
+        if (showRefreshToast) {
+          setIsRefreshing(true);
+        } else {
+          setIsLoading(true);
+        }
+
+        setErrorMessage("");
+
+        try {
+          const records =
+            await loadResumeAnalyses(
+              100
+            );
+
+          setAnalyses(records);
+
+          if (
+            showRefreshToast
+          ) {
+            toast.success(
+              "Dashboard refreshed."
+            );
+          }
+        } catch (error) {
+          console.error(
+            "Dashboard cloud load error:",
+            error
+          );
+
+          const message =
+            error instanceof Error
+              ? error.message
+              : "Unable to load dashboard data.";
+
+          setErrorMessage(
+            message
+          );
+
+          toast.error(
+            "Unable to load dashboard.",
+            {
+              description:
+                message,
+            }
+          );
+        } finally {
+          setIsLoading(false);
+          setIsRefreshing(false);
+        }
+      },
+      []
+    );
+
+  useEffect(() => {
+    void loadDashboardData();
+  }, [loadDashboardData]);
+
+  const stats =
+    useMemo(() => {
+      const totalAnalyses =
+        analyses.length;
+
+      const averageScore =
+        calculateAverage(
+          analyses.map(
+            (analysis) =>
+              analysis.overallScore
+          )
+        );
+
+      const averageKeywordScore =
+        calculateAverage(
+          analyses.map(
+            (analysis) =>
+              analysis.keywordScore
+          )
+        );
+
+      const averageStructureScore =
+        calculateAverage(
+          analyses.map(
+            (analysis) =>
+              analysis.structureScore
+          )
+        );
+
+      const bestScore =
+        totalAnalyses > 0
+          ? Math.max(
+              ...analyses.map(
+                (analysis) =>
+                  analysis.overallScore
+              )
+            )
+          : 0;
+
+      const latestScore =
+        analyses[0]
+          ?.overallScore ?? 0;
+
+      const previousScore =
+        analyses[1]
+          ?.overallScore ?? 0;
+
+      const scoreChange =
+        totalAnalyses >= 2
+          ? latestScore -
+            previousScore
+          : 0;
+
+      const matchedKeywords =
+        analyses.reduce(
+          (
+            total,
+            analysis
+          ) =>
+            total +
+            analysis
+              .matchedKeywords
+              .length,
+          0
+        );
+
+      const missingKeywords =
+        analyses.reduce(
+          (
+            total,
+            analysis
+          ) =>
+            total +
+            analysis
+              .missingKeywords
+              .length,
+          0
+        );
+
+      return {
+        totalAnalyses,
+        averageScore,
+        averageKeywordScore,
+        averageStructureScore,
+        bestScore,
+        latestScore,
+        scoreChange,
+        matchedKeywords,
+        missingKeywords,
+      };
+    }, [analyses]);
+
+  const scoreTrend =
+    useMemo(
+      () =>
+        [...analyses]
+          .reverse()
+          .slice(-8),
+      [analyses]
+    );
+
+  const frequentMissingKeywords =
+    useMemo(
+      () =>
+        getFrequentMissingKeywords(
+          analyses
+        ),
+      [analyses]
+    );
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="text-center">
+          <Loader2
+            aria-hidden
+            className="mx-auto h-9 w-9 animate-spin text-blue-400"
+          />
+
+          <p className="mt-4 text-sm text-slate-400">
+            Loading your cloud
+            dashboard...
+          </p>
+        </div>
+      </div>
+    );
   }
 
-  if (score >= 60) {
-    return {
-      text: "text-blue-300",
-      border: "border-blue-500/30",
-      background: "bg-blue-500/10",
-      progress: "bg-blue-500",
-    };
+  if (errorMessage) {
+    return (
+      <section className="rounded-3xl border border-red-500/30 bg-red-500/10 p-6 sm:p-8">
+        <h1 className="text-2xl font-bold text-red-200">
+          Dashboard data
+          unavailable
+        </h1>
+
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-red-100/80">
+          {errorMessage}
+        </p>
+
+        <button
+          type="button"
+          onClick={() =>
+            void loadDashboardData()
+          }
+          className="mt-6 rounded-xl border border-red-300/30 px-5 py-3 font-semibold text-red-100 transition hover:bg-red-500/10"
+        >
+          Try Again
+        </button>
+      </section>
+    );
   }
-
-  if (score >= 40) {
-    return {
-      text: "text-amber-300",
-      border: "border-amber-500/30",
-      background: "bg-amber-500/10",
-      progress: "bg-amber-500",
-    };
-  }
-
-  return {
-    text: "text-red-300",
-    border: "border-red-500/30",
-    background: "bg-red-500/10",
-    progress: "bg-red-500",
-  };
-}
-
-function getRecentTrend(
-  history: AtsAnalysisHistoryItem[]
-): number {
-  if (history.length < 2) {
-    return 0;
-  }
-
-  const newest =
-    history[0].result.overallScore;
-
-  const previous =
-    history[1].result.overallScore;
-
-  return newest - previous;
-}
-
-function createTrendPoints(
-  history: AtsAnalysisHistoryItem[]
-): TrendPoint[] {
-  return history
-    .slice(0, 10)
-    .reverse()
-    .map((item) => ({
-      id: item.id,
-      label: formatShortDate(
-        item.updatedAt ||
-          item.createdAt
-      ),
-      score: clampScore(
-        item.result.overallScore
-      ),
-      createdAt:
-        item.updatedAt ||
-        item.createdAt,
-    }));
-}
-
-function createChartPath(
-  points: TrendPoint[],
-  width: number,
-  height: number,
-  padding: number
-): string {
-  if (points.length === 0) {
-    return "";
-  }
-
-  const chartWidth =
-    width - padding * 2;
-
-  const chartHeight =
-    height - padding * 2;
-
-  return points
-    .map((point, index) => {
-      const x =
-        points.length === 1
-          ? width / 2
-          : padding +
-            (index /
-              (points.length - 1)) *
-              chartWidth;
-
-      const y =
-        padding +
-        chartHeight -
-        (point.score / 100) *
-          chartHeight;
-
-      return `${index === 0 ? "M" : "L"} ${x} ${y}`;
-    })
-    .join(" ");
-}
-
-function ScoreGauge({
-  score,
-}: {
-  score: number;
-}) {
-  const safeScore =
-    clampScore(score);
-
-  const radius = 62;
-  const circumference =
-    2 * Math.PI * radius;
-
-  const offset =
-    circumference -
-    (safeScore / 100) *
-      circumference;
-
-  const style =
-    getScoreClasses(safeScore);
 
   return (
-    <div className="relative flex h-44 w-44 items-center justify-center">
-      <svg
-        viewBox="0 0 160 160"
-        className="h-full w-full -rotate-90"
-        role="img"
-        aria-label={`ATS score ${safeScore} out of 100`}
-      >
-        <circle
-          cx="80"
-          cy="80"
-          r={radius}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="12"
-          className="text-slate-800"
+    <div className="space-y-8">
+      <section className="overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-blue-600/15 via-slate-900 to-violet-600/10 p-6 sm:p-8">
+        <div className="flex flex-col justify-between gap-6 xl:flex-row xl:items-end">
+          <div>
+            <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
+              <Cloud
+                aria-hidden
+                className="h-4 w-4"
+              />
+
+              Live Cloud Dashboard
+            </div>
+
+            <h1 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Your real ATS
+              performance workspace
+            </h1>
+
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-400 sm:text-base">
+              Scores, history,
+              keyword gaps and recent
+              reports are loaded from
+              your personal Supabase
+              account.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={() =>
+                void loadDashboardData(
+                  true
+                )
+              }
+              disabled={
+                isRefreshing
+              }
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 px-5 py-3 font-semibold text-slate-300 transition hover:border-blue-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <RefreshCw
+                aria-hidden
+                className={`h-4 w-4 ${
+                  isRefreshing
+                    ? "animate-spin"
+                    : ""
+                }`}
+              />
+
+              {isRefreshing
+                ? "Refreshing..."
+                : "Refresh Data"}
+            </button>
+
+            <Link
+              href="/ats-resume-checker"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-bold text-white transition hover:bg-blue-500"
+            >
+              Run New Analysis
+
+              <ArrowRight
+                aria-hidden
+                className="h-4 w-4"
+              />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          label="Total Analyses"
+          value={String(
+            stats.totalAnalyses
+          )}
+          caption="Cloud records"
+          icon={FileSearch}
+          iconClass="bg-blue-500/10 text-blue-300"
         />
 
-        <circle
-          cx="80"
-          cy="80"
-          r={radius}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="12"
-          strokeLinecap="round"
-          strokeDasharray={
-            circumference
-          }
-          strokeDashoffset={
-            offset
-          }
-          className={style.text}
+        <StatCard
+          label="Average ATS Score"
+          value={`${stats.averageScore}/100`}
+          caption="All reports"
+          icon={BarChart3}
+          iconClass="bg-violet-500/10 text-violet-300"
+          valueClass={getScoreTextClass(
+            stats.averageScore
+          )}
         />
-      </svg>
 
-      <div className="absolute text-center">
-        <p className="text-4xl font-bold text-white">
-          {safeScore}
-        </p>
+        <StatCard
+          label="Best ATS Score"
+          value={`${stats.bestScore}/100`}
+          caption="Best result"
+          icon={Target}
+          iconClass="bg-emerald-500/10 text-emerald-300"
+          valueClass={getScoreTextClass(
+            stats.bestScore
+          )}
+        />
 
-        <p className="mt-1 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
-          ATS Score
-        </p>
-      </div>
+        <StatCard
+          label="Latest ATS Score"
+          value={`${stats.latestScore}/100`}
+          caption={`${
+            stats.scoreChange > 0
+              ? "+"
+              : ""
+          }${stats.scoreChange} change`}
+          icon={
+            stats.scoreChange >= 0
+              ? TrendingUp
+              : TrendingDown
+          }
+          iconClass="bg-amber-500/10 text-amber-300"
+          valueClass={getScoreTextClass(
+            stats.latestScore
+          )}
+        />
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+        <article className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                ATS Score Trend
+              </h2>
+
+              <p className="mt-2 text-sm text-slate-400">
+                Latest cloud reports
+                from oldest to newest.
+              </p>
+            </div>
+
+            <Link
+              href="/dashboard/analytics"
+              className="text-sm font-semibold text-blue-300 transition hover:text-blue-200"
+            >
+              Open Analytics
+            </Link>
+          </div>
+
+          {scoreTrend.length ===
+          0 ? (
+            <EmptyState
+              title="No score trend yet"
+              description="Run your first ATS analysis to begin tracking progress."
+            />
+          ) : (
+            <div className="mt-7 flex h-72 items-end gap-3 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950 p-5">
+              {scoreTrend.map(
+                (analysis) => {
+                  const height =
+                    Math.max(
+                      8,
+                      analysis.overallScore
+                    );
+
+                  return (
+                    <div
+                      key={
+                        analysis.id
+                      }
+                      className="flex min-w-14 flex-1 flex-col items-center justify-end"
+                    >
+                      <span
+                        className={`mb-2 text-xs font-bold ${getScoreTextClass(
+                          analysis.overallScore
+                        )}`}
+                      >
+                        {
+                          analysis.overallScore
+                        }
+                      </span>
+
+                      <div className="flex h-48 w-full items-end rounded-xl bg-slate-900 p-1">
+                        <div
+                          className={`w-full rounded-lg ${getScoreBarClass(
+                            analysis.overallScore
+                          )}`}
+                          style={{
+                            height: `${height}%`,
+                          }}
+                        />
+                      </div>
+
+                      <span className="mt-2 text-[11px] text-slate-600">
+                        {formatRelativeTime(
+                          analysis.createdAt
+                        )}
+                      </span>
+                    </div>
+                  );
+                }
+              )}
+            </div>
+          )}
+        </article>
+
+        <article className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+          <h2 className="text-xl font-bold text-white">
+            Resume Quality
+            Averages
+          </h2>
+
+          <p className="mt-2 text-sm text-slate-400">
+            Average quality signals
+            across your cloud reports.
+          </p>
+
+          <div className="mt-6 space-y-5">
+            <ProgressItem
+              label="Keyword Match"
+              score={
+                stats.averageKeywordScore
+              }
+            />
+
+            <ProgressItem
+              label="Resume Structure"
+              score={
+                stats.averageStructureScore
+              }
+            />
+
+            <ProgressItem
+              label="Overall ATS"
+              score={
+                stats.averageScore
+              }
+            />
+          </div>
+
+          <div className="mt-7 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4">
+              <p className="text-xs text-emerald-200/70">
+                Matched Keywords
+              </p>
+
+              <p className="mt-2 text-2xl font-bold text-emerald-300">
+                {
+                  stats.matchedKeywords
+                }
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4">
+              <p className="text-xs text-amber-200/70">
+                Missing Keywords
+              </p>
+
+              <p className="mt-2 text-2xl font-bold text-amber-300">
+                {
+                  stats.missingKeywords
+                }
+              </p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+        <article className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                Recent Cloud
+                Analyses
+              </h2>
+
+              <p className="mt-2 text-sm text-slate-400">
+                Reports saved
+                automatically after
+                analysis.
+              </p>
+            </div>
+
+            <Link
+              href="/dashboard/reports"
+              className="text-sm font-semibold text-blue-300 transition hover:text-blue-200"
+            >
+              View All Reports
+            </Link>
+          </div>
+
+          {analyses.length === 0 ? (
+            <EmptyState
+              title="No cloud analyses yet"
+              description="Run an ATS analysis while signed in. It will appear here automatically."
+            />
+          ) : (
+            <div className="mt-6 space-y-3">
+              {analyses
+                .slice(0, 6)
+                .map(
+                  (analysis) => (
+                    <article
+                      key={
+                        analysis.id
+                      }
+                      className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:flex-row sm:items-center"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-white">
+                          {
+                            analysis.title
+                          }
+                        </p>
+
+                        <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                          <span className="inline-flex items-center gap-1.5">
+                            <CalendarDays
+                              aria-hidden
+                              className="h-3.5 w-3.5"
+                            />
+
+                            {formatDate(
+                              analysis.createdAt
+                            )}
+                          </span>
+
+                          <span>
+                            {
+                              analysis
+                                .matchedKeywords
+                                .length
+                            }{" "}
+                            matched
+                          </span>
+
+                          <span>
+                            {
+                              analysis
+                                .missingKeywords
+                                .length
+                            }{" "}
+                            missing
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-6">
+                        <div>
+                          <p className="text-xs text-slate-500">
+                            Keywords
+                          </p>
+
+                          <p className="mt-1 font-bold text-slate-200">
+                            {
+                              analysis.keywordScore
+                            }
+                            /100
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-slate-500">
+                            ATS Score
+                          </p>
+
+                          <p
+                            className={`mt-1 text-lg font-bold ${getScoreTextClass(
+                              analysis.overallScore
+                            )}`}
+                          >
+                            {
+                              analysis.overallScore
+                            }
+                            /100
+                          </p>
+                        </div>
+                      </div>
+                    </article>
+                  )
+                )}
+            </div>
+          )}
+        </article>
+
+        <article className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+          <h2 className="text-xl font-bold text-white">
+            Frequent Keyword Gaps
+          </h2>
+
+          <p className="mt-2 text-sm text-slate-400">
+            Missing keywords that
+            appear most often across
+            your reports.
+          </p>
+
+          {frequentMissingKeywords.length ===
+          0 ? (
+            <EmptyState
+              title="No recurring gaps"
+              description="No frequent missing keywords were found yet."
+            />
+          ) : (
+            <div className="mt-6 space-y-3">
+              {frequentMissingKeywords.map(
+                (
+                  item,
+                  index
+                ) => (
+                  <div
+                    key={
+                      item.keyword
+                    }
+                    className="flex items-center justify-between gap-4 rounded-xl border border-slate-800 bg-slate-950 px-4 py-3"
+                  >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-xs font-bold text-amber-300">
+                        {index + 1}
+                      </span>
+
+                      <span className="truncate text-sm font-semibold capitalize text-slate-200">
+                        {
+                          item.keyword
+                        }
+                      </span>
+                    </div>
+
+                    <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-300">
+                      {item.count}x
+                    </span>
+                  </div>
+                )
+              )}
+            </div>
+          )}
+        </article>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        <DashboardLinkCard
+          title="Detailed Analytics"
+          description="Review trends, averages, keyword gaps and improvement activity."
+          href="/dashboard/analytics"
+          icon={BarChart3}
+        />
+
+        <DashboardLinkCard
+          title="Reports Center"
+          description="Open your saved cloud reports and export professional PDFs."
+          href="/dashboard/reports"
+          icon={FileSearch}
+        />
+
+        <DashboardLinkCard
+          title="Compare Analyses"
+          description="Compare two saved ATS reports and measure improvement."
+          href="/dashboard/compare"
+          icon={TrendingUp}
+        />
+      </section>
     </div>
   );
 }
 
-function MetricCard({
+type IconComponent =
+  typeof FileSearch;
+
+function StatCard({
   label,
   value,
+  caption,
   icon: Icon,
-  helperText,
-}: ScoreMetric) {
-  const style =
-    getScoreClasses(value);
-
+  iconClass,
+  valueClass = "text-white",
+}: {
+  label: string;
+  value: string;
+  caption: string;
+  icon: IconComponent;
+  iconClass: string;
+  valueClass?: string;
+}) {
   return (
-    <article className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg shadow-black/10">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-sm text-slate-400">
-            {label}
-          </p>
-
-          <p className="mt-2 text-3xl font-bold text-white">
-            {value}
-          </p>
-        </div>
-
+    <article className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+      <div className="flex items-center justify-between">
         <span
-          className={`flex h-11 w-11 items-center justify-center rounded-xl border ${style.border} ${style.background} ${style.text}`}
+          className={`flex h-11 w-11 items-center justify-center rounded-xl ${iconClass}`}
         >
           <Icon
             aria-hidden
             className="h-5 w-5"
           />
         </span>
+
+        <span className="text-xs text-slate-500">
+          {caption}
+        </span>
       </div>
 
-      <p className="mt-4 text-xs leading-5 text-slate-500">
-        {helperText}
+      <p className="mt-5 text-sm text-slate-400">
+        {label}
       </p>
 
-      <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-800">
-        <div
-          className={`h-full rounded-full ${style.progress}`}
-          style={{
-            width: `${clampScore(
-              value
-            )}%`,
-          }}
-        />
-      </div>
+      <p
+        className={`mt-2 text-3xl font-bold ${valueClass}`}
+      >
+        {value}
+      </p>
     </article>
   );
 }
 
-function EmptyDashboard() {
+function ProgressItem({
+  label,
+  score,
+}: {
+  label: string;
+  score: number;
+}) {
   return (
-    <section className="rounded-3xl border border-dashed border-slate-700 bg-slate-900/60 p-8 text-center sm:p-12">
-      <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-500/30 bg-blue-500/10 text-blue-300">
-        <FileSearch
-          aria-hidden
-          className="h-8 w-8"
+    <div>
+      <div className="flex items-center justify-between gap-4 text-sm">
+        <span className="text-slate-300">
+          {label}
+        </span>
+
+        <span
+          className={`font-bold ${getScoreTextClass(
+            score
+          )}`}
+        >
+          {score}/100
+        </span>
+      </div>
+
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-800">
+        <div
+          className={`h-full rounded-full ${getScoreBarClass(
+            score
+          )}`}
+          style={{
+            width: `${Math.max(
+              0,
+              Math.min(
+                100,
+                score
+              )
+            )}%`,
+          }}
         />
-      </span>
-
-      <h2 className="mt-5 text-2xl font-bold text-white">
-        Complete your first ATS analysis
-      </h2>
-
-      <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-400">
-        Analyze a resume against a job
-        description to unlock score trends,
-        history insights, best-match reports,
-        and personalized dashboard metrics.
-      </p>
-
-      <Link
-        href="/ats-resume-checker"
-        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-500"
-      >
-        Start New Analysis
-
-        <ArrowRight
-          aria-hidden
-          className="h-4 w-4"
-        />
-      </Link>
-    </section>
+      </div>
+    </div>
   );
 }
 
-export default function DashboardPage() {
-  const [
-    history,
-    setHistory,
-  ] = useState<
-    AtsAnalysisHistoryItem[]
-  >([]);
-
-  const [
-    historyLoaded,
-    setHistoryLoaded,
-  ] = useState(false);
-
-  const [
-    exportingId,
-    setExportingId,
-  ] = useState<string | null>(
-    null
-  );
-
-  useEffect(() => {
-    try {
-      setHistory(
-        getAtsAnalysisHistory()
-      );
-    } catch (historyError) {
-      console.error(
-        "Unable to load dashboard history:",
-        historyError
-      );
-
-      toast.error(
-        "Unable to load dashboard data."
-      );
-    } finally {
-      setHistoryLoaded(true);
-    }
-  }, []);
-
-  const sortedHistory =
-    useMemo(
-      () =>
-        [...history].sort(
-          (first, second) =>
-            new Date(
-              second.updatedAt ||
-                second.createdAt
-            ).getTime() -
-            new Date(
-              first.updatedAt ||
-                first.createdAt
-            ).getTime()
-        ),
-      [history]
-    );
-
-  const scores = useMemo(
-    () =>
-      sortedHistory.map((item) =>
-        clampScore(
-          item.result.overallScore
-        )
-      ),
-    [sortedHistory]
-  );
-
-  const totalAnalyses =
-    sortedHistory.length;
-
-  const averageScore =
-    calculateAverage(scores);
-
-  const bestAnalysis =
-    useMemo(
-      () =>
-        sortedHistory.reduce<
-          AtsAnalysisHistoryItem | null
-        >(
-          (best, current) => {
-            if (!best) {
-              return current;
-            }
-
-            return current.result
-              .overallScore >
-              best.result.overallScore
-              ? current
-              : best;
-          },
-          null
-        ),
-      [sortedHistory]
-    );
-
-  const latestAnalysis =
-    sortedHistory[0] ?? null;
-
-  const bestScore =
-    bestAnalysis
-      ? clampScore(
-          bestAnalysis.result
-            .overallScore
-        )
-      : 0;
-
-  const latestScore =
-    latestAnalysis
-      ? clampScore(
-          latestAnalysis.result
-            .overallScore
-        )
-      : 0;
-
-  const recentTrend =
-    getRecentTrend(
-      sortedHistory
-    );
-
-  const trendPoints =
-    useMemo(
-      () =>
-        createTrendPoints(
-          sortedHistory
-        ),
-      [sortedHistory]
-    );
-
-  const chartWidth = 760;
-  const chartHeight = 240;
-  const chartPadding = 28;
-
-  const chartPath =
-    createChartPath(
-      trendPoints,
-      chartWidth,
-      chartHeight,
-      chartPadding
-    );
-
-  const metrics =
-    useMemo<ScoreMetric[]>(
-      () => [
-        {
-          label: "Total Analyses",
-          value: Math.min(
-            totalAnalyses,
-            100
-          ),
-          icon: FileSearch,
-          helperText: `${totalAnalyses} resume-to-job comparisons saved in this browser.`,
-        },
-        {
-          label: "Average Score",
-          value: averageScore,
-          icon: BarChart3,
-          helperText:
-            "Average ATS alignment across all saved analyses.",
-        },
-        {
-          label: "Best Score",
-          value: bestScore,
-          icon: Award,
-          helperText:
-            "Highest ATS match score achieved so far.",
-        },
-        {
-          label: "Latest Score",
-          value: latestScore,
-          icon: Target,
-          helperText:
-            "Score from your most recent resume analysis.",
-        },
-      ],
-      [
-        totalAnalyses,
-        averageScore,
-        bestScore,
-        latestScore,
-      ]
-    );
-
-  async function handleExport(
-    item: AtsAnalysisHistoryItem
-  ) {
-    setExportingId(item.id);
-
-    try {
-      await exportAtsHistoryItemPdf(
-        item
-      );
-
-      toast.success(
-        "ATS PDF report downloaded."
-      );
-    } catch (pdfError) {
-      console.error(
-        "Dashboard PDF export error:",
-        pdfError
-      );
-
-      toast.error(
-        "Unable to export the PDF report."
-      );
-    } finally {
-      setExportingId(null);
-    }
-  }
-
-  if (!historyLoaded) {
-    return (
-      <div className="space-y-6">
-        <div className="h-40 animate-pulse rounded-3xl bg-slate-900" />
-
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {[1, 2, 3, 4].map(
-            (item) => (
-              <div
-                key={item}
-                className="h-40 animate-pulse rounded-2xl bg-slate-900"
-              />
-            )
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  if (history.length === 0) {
-    return (
-      <div className="space-y-8">
-        <section className="overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950/50 p-6 sm:p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
-            Premium Dashboard
-          </p>
-
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">
-            Resume performance overview
-          </h2>
-
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400">
-            Track your ATS progress, review
-            analysis history, export reports,
-            and identify your strongest resume
-            version.
-          </p>
-        </section>
-
-        <EmptyDashboard />
-      </div>
-    );
-  }
-
-  const latestScoreStyle =
-    getScoreClasses(
-      latestScore
-    );
-
+function EmptyState({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
   return (
-    <div className="space-y-8">
-      <section className="overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950/60 p-6 shadow-xl shadow-black/20 sm:p-8">
-        <div className="flex flex-col justify-between gap-8 xl:flex-row xl:items-center">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
-              Premium Dashboard
-            </p>
-
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Improve your resume with
-              measurable ATS insights
-            </h2>
-
-            <p className="mt-4 text-sm leading-7 text-slate-400 sm:text-base">
-              Review your latest score, monitor
-              progress over time, restore saved
-              analyses, and export professional
-              PDF reports.
-            </p>
-
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/ats-resume-checker"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-500"
-              >
-                <FileSearch
-                  aria-hidden
-                  className="h-4 w-4"
-                />
-
-                New ATS Analysis
-              </Link>
-
-              <Link
-                href="/ats-resume-checker#ats-history-title"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-950/70 px-5 py-3 text-sm font-bold text-slate-300 transition hover:border-blue-500 hover:text-white"
-              >
-                <History
-                  aria-hidden
-                  className="h-4 w-4"
-                />
-
-                View History
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center rounded-3xl border border-slate-700 bg-slate-950/60 p-6 sm:flex-row sm:gap-7 xl:min-w-[390px]">
-            <ScoreGauge
-              score={latestScore}
-            />
-
-            <div className="mt-4 text-center sm:mt-0 sm:text-left">
-              <p
-                className={`text-lg font-bold ${latestScoreStyle.text}`}
-              >
-                {getScoreLabel(
-                  latestScore
-                )}
-              </p>
-
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                Latest ATS analysis
-              </p>
-
-              {recentTrend === 0 ? (
-                <p className="mt-3 text-xs text-slate-500">
-                  Complete another analysis
-                  to measure progress.
-                </p>
-              ) : recentTrend > 0 ? (
-                <p className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-emerald-300">
-                  <TrendingUp
-                    aria-hidden
-                    className="h-4 w-4"
-                  />
-
-                  +{recentTrend} points
-                </p>
-              ) : (
-                <p className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-amber-300">
-                  <TrendingDown
-                    aria-hidden
-                    className="h-4 w-4"
-                  />
-
-                  {recentTrend} points
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section
-        aria-label="Dashboard metrics"
-        className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4"
-      >
-        {metrics.map((metric) => (
-          <MetricCard
-            key={metric.label}
-            {...metric}
-          />
-        ))}
-      </section>
-
-      <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
-        <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl shadow-black/10 sm:p-7">
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-blue-400">
-                Score Trend
-              </p>
-
-              <h2 className="mt-2 text-2xl font-bold text-white">
-                ATS performance over time
-              </h2>
-
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Your latest ten saved ATS
-                analysis scores.
-              </p>
-            </div>
-
-            <Link
-              href="/dashboard/analytics"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-blue-300 transition hover:text-blue-200"
-            >
-              Full Analytics
-
-              <ArrowRight
-                aria-hidden
-                className="h-4 w-4"
-              />
-            </Link>
-          </div>
-
-          <div className="mt-7 overflow-x-auto">
-            <div className="min-w-[620px]">
-              <svg
-                viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-                className="h-[260px] w-full"
-                role="img"
-                aria-label="ATS score trend chart"
-              >
-                {[0, 25, 50, 75, 100].map(
-                  (score) => {
-                    const y =
-                      chartPadding +
-                      (chartHeight -
-                        chartPadding *
-                          2) -
-                      (score / 100) *
-                        (chartHeight -
-                          chartPadding *
-                            2);
-
-                    return (
-                      <g key={score}>
-                        <line
-                          x1={
-                            chartPadding
-                          }
-                          y1={y}
-                          x2={
-                            chartWidth -
-                            chartPadding
-                          }
-                          y2={y}
-                          stroke="currentColor"
-                          strokeWidth="1"
-                          className="text-slate-800"
-                        />
-
-                        <text
-                          x="0"
-                          y={y + 4}
-                          fontSize="11"
-                          fill="currentColor"
-                          className="text-slate-500"
-                        >
-                          {score}
-                        </text>
-                      </g>
-                    );
-                  }
-                )}
-
-                {chartPath && (
-                  <path
-                    d={chartPath}
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-blue-500"
-                  />
-                )}
-
-                {trendPoints.map(
-                  (point, index) => {
-                    const x =
-                      trendPoints.length ===
-                      1
-                        ? chartWidth / 2
-                        : chartPadding +
-                          (index /
-                            (trendPoints.length -
-                              1)) *
-                            (chartWidth -
-                              chartPadding *
-                                2);
-
-                    const y =
-                      chartPadding +
-                      (chartHeight -
-                        chartPadding *
-                          2) -
-                      (point.score /
-                        100) *
-                        (chartHeight -
-                          chartPadding *
-                            2);
-
-                    return (
-                      <g key={point.id}>
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r="6"
-                          fill="currentColor"
-                          className="text-blue-400"
-                        />
-
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r="11"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          className="text-blue-500/30"
-                        />
-
-                        <text
-                          x={x}
-                          y={
-                            chartHeight -
-                            4
-                          }
-                          textAnchor="middle"
-                          fontSize="10"
-                          fill="currentColor"
-                          className="text-slate-500"
-                        >
-                          {point.label}
-                        </text>
-                      </g>
-                    );
-                  }
-                )}
-              </svg>
-            </div>
-          </div>
-        </section>
-
-        <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl shadow-black/10 sm:p-7">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-violet-400">
-            Best Analysis
-          </p>
-
-          <h2 className="mt-2 text-2xl font-bold text-white">
-            Highest scoring resume
-          </h2>
-
-          {bestAnalysis && (
-            <>
-              <div className="mt-6 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-sm text-slate-400">
-                      Best ATS score
-                    </p>
-
-                    <p className="mt-2 text-4xl font-bold text-emerald-300">
-                      {bestScore}
-                      <span className="text-base text-slate-500">
-                        /100
-                      </span>
-                    </p>
-                  </div>
-
-                  <Award
-                    aria-hidden
-                    className="h-8 w-8 text-emerald-300"
-                  />
-                </div>
-
-                <p className="mt-4 line-clamp-2 text-sm font-semibold leading-6 text-white">
-                  {bestAnalysis.title}
-                </p>
-
-                <p className="mt-2 text-xs text-slate-500">
-                  {formatDashboardDate(
-                    bestAnalysis.updatedAt ||
-                      bestAnalysis.createdAt
-                  )}
-                </p>
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                  <p className="text-xs text-slate-500">
-                    Keywords
-                  </p>
-
-                  <p className="mt-1 text-xl font-bold text-white">
-                    {
-                      bestAnalysis
-                        .result
-                        .keywordScore
-                    }
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                  <p className="text-xs text-slate-500">
-                    Formatting
-                  </p>
-
-                  <p className="mt-1 text-xl font-bold text-white">
-                    {
-                      bestAnalysis
-                        .result
-                        .formattingScore
-                    }
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                  <p className="text-xs text-slate-500">
-                    Achievements
-                  </p>
-
-                  <p className="mt-1 text-xl font-bold text-white">
-                    {
-                      bestAnalysis
-                        .result
-                        .achievementScore
-                    }
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                  <p className="text-xs text-slate-500">
-                    Readability
-                  </p>
-
-                  <p className="mt-1 text-xl font-bold text-white">
-                    {
-                      bestAnalysis
-                        .result
-                        .readabilityScore
-                    }
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-5 flex flex-col gap-3">
-                <Link
-                  href="/ats-resume-checker#ats-history-title"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-500"
-                >
-                  <History
-                    aria-hidden
-                    className="h-4 w-4"
-                  />
-
-                  Restore Analysis
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleExport(
-                      bestAnalysis
-                    )
-                  }
-                  disabled={
-                    exportingId ===
-                    bestAnalysis.id
-                  }
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-300 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <Download
-                    aria-hidden
-                    className="h-4 w-4"
-                  />
-
-                  {exportingId ===
-                  bestAnalysis.id
-                    ? "Creating PDF..."
-                    : "Export Best Report"}
-                </button>
-              </div>
-            </>
-          )}
-        </section>
-      </div>
-
-      <div className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
-        <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl shadow-black/10 sm:p-7">
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-400">
-                Recent Activity
-              </p>
-
-              <h2 className="mt-2 text-2xl font-bold text-white">
-                Latest analyses
-              </h2>
-            </div>
-
-            <Link
-              href="/ats-resume-checker#ats-history-title"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-blue-300 transition hover:text-blue-200"
-            >
-              View All
-
-              <ArrowRight
-                aria-hidden
-                className="h-4 w-4"
-              />
-            </Link>
-          </div>
-
-          <div className="mt-6 space-y-3">
-            {sortedHistory
-              .slice(0, 5)
-              .map((item) => {
-                const score =
-                  clampScore(
-                    item.result
-                      .overallScore
-                  );
-
-                const style =
-                  getScoreClasses(
-                    score
-                  );
-
-                return (
-                  <article
-                    key={item.id}
-                    className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4 sm:flex-row sm:items-center"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate font-semibold text-white">
-                        {item.title}
-                      </p>
-
-                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                        <span className="inline-flex items-center gap-1">
-                          <CalendarDays
-                            aria-hidden
-                            className="h-3.5 w-3.5"
-                          />
-
-                          {formatDashboardDate(
-                            item.updatedAt ||
-                              item.createdAt
-                          )}
-                        </span>
-
-                        <span>
-                          {
-                            item.result
-                              .matchedKeywords
-                              .length
-                          }{" "}
-                          matched keywords
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex shrink-0 items-center gap-3">
-                      <span
-                        className={`rounded-full border px-3 py-1 text-xs font-bold ${style.border} ${style.background} ${style.text}`}
-                      >
-                        {score}/100
-                      </span>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleExport(
-                            item
-                          )
-                        }
-                        disabled={
-                          exportingId ===
-                          item.id
-                        }
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-700 bg-slate-900 text-slate-400 transition hover:border-emerald-500 hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-40"
-                        aria-label="Export ATS PDF"
-                      >
-                        <Download
-                          aria-hidden
-                          className="h-4 w-4"
-                        />
-                      </button>
-                    </div>
-                  </article>
-                );
-              })}
-          </div>
-        </section>
-
-        <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl shadow-black/10 sm:p-7">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-violet-400">
-            Quick Actions
-          </p>
-
-          <h2 className="mt-2 text-2xl font-bold text-white">
-            Continue improving
-          </h2>
-
-          <div className="mt-6 space-y-3">
-            <Link
-              href="/ats-resume-checker"
-              className="group flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 transition hover:border-blue-500/50 hover:bg-blue-500/5"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-500/30 bg-blue-500/10 text-blue-300">
-                <FileSearch
-                  aria-hidden
-                  className="h-5 w-5"
-                />
-              </span>
-
-              <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-white">
-                  New ATS Analysis
-                </span>
-
-                <span className="mt-1 block text-xs text-slate-500">
-                  Compare another resume
-                  and job description.
-                </span>
-              </span>
-
-              <ArrowRight
-                aria-hidden
-                className="h-4 w-4 text-slate-600 transition group-hover:text-blue-300"
-              />
-            </Link>
-
-            <Link
-              href="/ats-resume-checker#ats-bullet-rewriter-title"
-              className="group flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 transition hover:border-violet-500/50 hover:bg-violet-500/5"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-violet-500/30 bg-violet-500/10 text-violet-300">
-                <Sparkles
-                  aria-hidden
-                  className="h-5 w-5"
-                />
-              </span>
-
-              <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-white">
-                  AI Bullet Rewrite
-                </span>
-
-                <span className="mt-1 block text-xs text-slate-500">
-                  Strengthen a weak resume
-                  bullet with AI.
-                </span>
-              </span>
-
-              <ArrowRight
-                aria-hidden
-                className="h-4 w-4 text-slate-600 transition group-hover:text-violet-300"
-              />
-            </Link>
-
-            <Link
-              href="/dashboard/reports"
-              className="group flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 transition hover:border-emerald-500/50 hover:bg-emerald-500/5"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300">
-                <FileText
-                  aria-hidden
-                  className="h-5 w-5"
-                />
-              </span>
-
-              <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-white">
-                  Saved Reports
-                </span>
-
-                <span className="mt-1 block text-xs text-slate-500">
-                  Review and export ATS
-                  PDF reports.
-                </span>
-              </span>
-
-              <ArrowRight
-                aria-hidden
-                className="h-4 w-4 text-slate-600 transition group-hover:text-emerald-300"
-              />
-            </Link>
-          </div>
-        </section>
-      </div>
+    <div className="mt-6 rounded-2xl border border-dashed border-slate-700 bg-slate-950 p-8 text-center">
+      <FileSearch
+        aria-hidden
+        className="mx-auto h-8 w-8 text-slate-600"
+      />
+
+      <p className="mt-4 font-semibold text-white">
+        {title}
+      </p>
+
+      <p className="mt-2 text-sm leading-6 text-slate-500">
+        {description}
+      </p>
     </div>
+  );
+}
+
+function DashboardLinkCard({
+  title,
+  description,
+  href,
+  icon: Icon,
+}: {
+  title: string;
+  description: string;
+  href: string;
+  icon: IconComponent;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group rounded-2xl border border-slate-800 bg-slate-900 p-5 transition hover:border-blue-500/50"
+    >
+      <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-500/10 text-blue-300 transition group-hover:bg-blue-500/20">
+        <Icon
+          aria-hidden
+          className="h-5 w-5"
+        />
+      </span>
+
+      <h2 className="mt-5 font-bold text-white">
+        {title}
+      </h2>
+
+      <p className="mt-2 text-sm leading-6 text-slate-400">
+        {description}
+      </p>
+
+      <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-300">
+        Open
+
+        <ArrowRight
+          aria-hidden
+          className="h-4 w-4 transition group-hover:translate-x-1"
+        />
+      </span>
+    </Link>
   );
 }

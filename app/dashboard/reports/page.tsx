@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   Award,
   CalendarDays,
@@ -10,12 +9,17 @@ import {
   Eye,
   FileSearch,
   FileText,
+  Loader2,
+  Pencil,
+  RefreshCw,
   Search,
   Sparkles,
   Trash2,
   X,
 } from "lucide-react";
+import Link from "next/link";
 import {
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -23,14 +27,19 @@ import {
 import { toast } from "sonner";
 
 import {
-  exportAtsHistoryItemPdf,
+  exportAtsAnalysisPdf,
 } from "@/lib/ats/exportAtsPdf";
 
-import {
-  deleteAtsAnalysisHistory,
-  getAtsAnalysisHistory,
-  type AtsAnalysisHistoryItem,
+import type {
+  AtsHistoryAnalysisResult,
 } from "@/lib/ats/analysisHistory";
+
+import {
+  deleteResumeAnalysis,
+  loadResumeAnalyses,
+  renameResumeAnalysis,
+  type ResumeAnalysisRecord,
+} from "@/lib/supabase/resume-analyses";
 
 type SortOption =
   | "newest"
@@ -55,16 +64,24 @@ function clampScore(
 
   return Math.max(
     0,
-    Math.min(100, Math.round(value))
+    Math.min(
+      100,
+      Math.round(value)
+    )
   );
 }
 
 function formatReportDate(
   dateValue: string
 ): string {
-  const date = new Date(dateValue);
+  const date =
+    new Date(dateValue);
 
-  if (Number.isNaN(date.getTime())) {
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
     return "Unknown date";
   }
 
@@ -78,7 +95,7 @@ function formatReportDate(
 }
 
 function getItemDate(
-  item: AtsAnalysisHistoryItem
+  item: ResumeAnalysisRecord
 ): string {
   return (
     item.updatedAt ||
@@ -109,7 +126,8 @@ function getScoreClasses(
 ) {
   if (score >= 80) {
     return {
-      text: "text-emerald-300",
+      text:
+        "text-emerald-300",
       border:
         "border-emerald-500/30",
       background:
@@ -121,7 +139,8 @@ function getScoreClasses(
 
   if (score >= 60) {
     return {
-      text: "text-blue-300",
+      text:
+        "text-blue-300",
       border:
         "border-blue-500/30",
       background:
@@ -133,7 +152,8 @@ function getScoreClasses(
 
   if (score >= 40) {
     return {
-      text: "text-amber-300",
+      text:
+        "text-amber-300",
       border:
         "border-amber-500/30",
       background:
@@ -144,7 +164,8 @@ function getScoreClasses(
   }
 
   return {
-    text: "text-red-300",
+    text:
+      "text-red-300",
     border:
       "border-red-500/30",
     background:
@@ -167,11 +188,19 @@ function matchesScoreFilter(
   }
 
   if (filter === "good") {
-    return score >= 60 && score < 80;
+    return (
+      score >= 60 &&
+      score < 80
+    );
   }
 
-  if (filter === "improving") {
-    return score >= 40 && score < 60;
+  if (
+    filter === "improving"
+  ) {
+    return (
+      score >= 40 &&
+      score < 60
+    );
   }
 
   return score < 40;
@@ -181,15 +210,19 @@ function createPreviewText(
   value: string,
   maximumLength = 220
 ): string {
-  const cleanValue = value
-    .replace(/\s+/g, " ")
-    .trim();
+  const cleaned =
+    value
+      .replace(/\s+/g, " ")
+      .trim();
 
-  if (cleanValue.length <= maximumLength) {
-    return cleanValue;
+  if (
+    cleaned.length <=
+    maximumLength
+  ) {
+    return cleaned;
   }
 
-  return `${cleanValue.slice(
+  return `${cleaned.slice(
     0,
     maximumLength
   )}...`;
@@ -198,7 +231,9 @@ function createPreviewText(
 function getMissingKeywordPreview(
   keywords: string[]
 ): string {
-  if (keywords.length === 0) {
+  if (
+    keywords.length === 0
+  ) {
     return "No important missing keywords";
   }
 
@@ -206,11 +241,126 @@ function getMissingKeywordPreview(
     keywords.slice(0, 4);
 
   const remaining =
-    keywords.length - visible.length;
+    keywords.length -
+    visible.length;
 
   return remaining > 0
-    ? `${visible.join(", ")} +${remaining}`
+    ? `${visible.join(
+        ", "
+      )} +${remaining}`
     : visible.join(", ");
+}
+
+function createPdfResult(
+  item: ResumeAnalysisRecord
+): AtsHistoryAnalysisResult {
+  return {
+    overallScore:
+      item.overallScore,
+
+    keywordScore:
+      item.keywordScore,
+
+    skillsScore:
+      item.skillsScore,
+
+    experienceScore:
+      item.experienceScore,
+
+    structureScore:
+      item.structureScore,
+
+    bulletScore:
+      item.bulletScore,
+
+    achievementScore:
+      item.achievementScore,
+
+    formattingScore:
+      item.formattingScore,
+
+    readabilityScore:
+      item.readabilityScore,
+
+    matchedKeywords:
+      item.matchedKeywords,
+
+    missingKeywords:
+      item.missingKeywords,
+
+    foundSections:
+      item.foundSections,
+
+    missingSections:
+      item.missingSections,
+
+    requiredMissingSections:
+      item.requiredMissingSections,
+
+    recommendations:
+      item.recommendations,
+
+    sections:
+      item.sections as AtsHistoryAnalysisResult["sections"],
+
+    formattingIssues:
+      item.formattingIssues as AtsHistoryAnalysisResult["formattingIssues"],
+
+    matchedItems:
+      item.matchedItems as AtsHistoryAnalysisResult["matchedItems"],
+
+    missingItems:
+      item.missingItems as AtsHistoryAnalysisResult["missingItems"],
+
+    achievementMetrics:
+      item.achievementMetrics,
+
+    achievementActionVerbs:
+      item.achievementActionVerbs,
+
+    achievementCount:
+      item.achievementCount,
+
+    wordCount:
+      item.wordCount,
+
+    bulletCount:
+      item.bulletCount,
+
+    weakPhraseCount:
+      item.weakPhraseCount,
+
+    longSentenceCount:
+      item.longSentenceCount,
+
+    longParagraphCount:
+      item.longParagraphCount,
+
+    hasEmail:
+      item.hasEmail,
+
+    hasPhone:
+      item.hasPhone,
+
+    hasLinkedIn:
+      item.hasLinkedIn,
+
+    firstPersonPronounCount:
+      typeof item.analysisResult
+        .firstPersonPronounCount ===
+      "number"
+        ? item.analysisResult
+            .firstPersonPronounCount
+        : 0,
+
+    repeatedKeywordCount:
+      typeof item.analysisResult
+        .repeatedKeywordCount ===
+      "number"
+        ? item.analysisResult
+            .repeatedKeywordCount
+        : 0,
+  };
 }
 
 function EmptyReports() {
@@ -224,14 +374,15 @@ function EmptyReports() {
       </span>
 
       <h2 className="mt-5 text-2xl font-bold text-white">
-        No saved ATS reports yet
+        No cloud ATS reports yet
       </h2>
 
       <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-400">
-        Complete an ATS resume analysis to
-        create a saved report. You can then
-        review, search, preview, delete and
-        export it as a professional PDF.
+        Complete an ATS resume
+        analysis while signed in.
+        Your report will be saved to
+        Supabase and appear here
+        automatically.
       </p>
 
       <Link
@@ -254,13 +405,23 @@ export default function ReportsPage() {
     reports,
     setReports,
   ] = useState<
-    AtsAnalysisHistoryItem[]
+    ResumeAnalysisRecord[]
   >([]);
 
   const [
     reportsLoaded,
     setReportsLoaded,
   ] = useState(false);
+
+  const [
+    isRefreshing,
+    setIsRefreshing,
+  ] = useState(false);
+
+  const [
+    errorMessage,
+    setErrorMessage,
+  ] = useState("");
 
   const [
     searchText,
@@ -285,7 +446,7 @@ export default function ReportsPage() {
     previewItem,
     setPreviewItem,
   ] = useState<
-    AtsAnalysisHistoryItem | null
+    ResumeAnalysisRecord | null
   >(null);
 
   const [
@@ -295,24 +456,112 @@ export default function ReportsPage() {
     null
   );
 
-  useEffect(() => {
-    try {
-      setReports(
-        getAtsAnalysisHistory()
-      );
-    } catch (error) {
-      console.error(
-        "Unable to load ATS reports:",
-        error
-      );
+  const [
+    deletingId,
+    setDeletingId,
+  ] = useState<string | null>(
+    null
+  );
 
-      toast.error(
-        "Unable to load saved reports."
-      );
-    } finally {
-      setReportsLoaded(true);
-    }
-  }, []);
+  const [
+    renamingItem,
+    setRenamingItem,
+  ] = useState<
+    ResumeAnalysisRecord | null
+  >(null);
+
+  const [
+    renameValue,
+    setRenameValue,
+  ] = useState("");
+
+  const [
+    isRenaming,
+    setIsRenaming,
+  ] = useState(false);
+
+  const loadReports =
+    useCallback(
+      async (
+        showRefreshToast = false
+      ) => {
+        if (showRefreshToast) {
+          setIsRefreshing(true);
+        }
+
+        setErrorMessage("");
+
+        try {
+          const cloudReports =
+            await loadResumeAnalyses(
+              300
+            );
+
+          setReports(
+            cloudReports
+          );
+
+          setPreviewItem(
+            (current) => {
+              if (!current) {
+                return null;
+              }
+
+              return (
+                cloudReports.find(
+                  (item) =>
+                    item.id ===
+                    current.id
+                ) ?? null
+              );
+            }
+          );
+
+          if (
+            showRefreshToast
+          ) {
+            toast.success(
+              "Cloud reports refreshed."
+            );
+          }
+        } catch (error) {
+          console.error(
+            "Unable to load cloud ATS reports:",
+            error
+          );
+
+          const message =
+            error instanceof Error
+              ? error.message
+              : "Unable to load cloud reports.";
+
+          setErrorMessage(
+            message
+          );
+
+          toast.error(
+            "Unable to load reports.",
+            {
+              description:
+                message,
+            }
+          );
+        } finally {
+          setReportsLoaded(
+            true
+          );
+
+          setIsRefreshing(
+            false
+          );
+        }
+      },
+      []
+    );
+
+  useEffect(() => {
+    void loadReports();
+  }, [loadReports]);
 
   useEffect(() => {
     if (!previewItem) {
@@ -320,7 +569,8 @@ export default function ReportsPage() {
     }
 
     const previousOverflow =
-      document.body.style.overflow;
+      document.body.style
+        .overflow;
 
     document.body.style.overflow =
       "hidden";
@@ -328,7 +578,9 @@ export default function ReportsPage() {
     function handleEscape(
       event: KeyboardEvent
     ) {
-      if (event.key === "Escape") {
+      if (
+        event.key === "Escape"
+      ) {
         setPreviewItem(null);
       }
     }
@@ -349,22 +601,33 @@ export default function ReportsPage() {
     };
   }, [previewItem]);
 
+  useEffect(() => {
+    if (!renamingItem) {
+      return;
+    }
+
+    setRenameValue(
+      renamingItem.title
+    );
+  }, [renamingItem]);
+
   const bestReport =
     useMemo(
       () =>
         reports.reduce<
-          AtsAnalysisHistoryItem | null
+          ResumeAnalysisRecord | null
         >(
           (best, current) => {
             if (!best) {
               return current;
             }
 
-            return current.result
-              .overallScore >
-              best.result.overallScore
-              ? current
-              : best;
+            return (
+              current.overallScore >
+              best.overallScore
+                ? current
+                : best
+            );
           },
           null
         ),
@@ -373,7 +636,9 @@ export default function ReportsPage() {
 
   const averageScore =
     useMemo(() => {
-      if (reports.length === 0) {
+      if (
+        reports.length === 0
+      ) {
         return 0;
       }
 
@@ -382,8 +647,7 @@ export default function ReportsPage() {
           (sum, item) =>
             sum +
             clampScore(
-              item.result
-                .overallScore
+              item.overallScore
             ),
           0
         );
@@ -401,71 +665,77 @@ export default function ReportsPage() {
           .toLowerCase();
 
       const filtered =
-        reports.filter((item) => {
-          const score =
-            clampScore(
-              item.result
-                .overallScore
-            );
+        reports.filter(
+          (item) => {
+            const score =
+              clampScore(
+                item.overallScore
+              );
 
-          if (
-            !matchesScoreFilter(
-              score,
-              scoreFilter
-            )
-          ) {
-            return false;
-          }
+            if (
+              !matchesScoreFilter(
+                score,
+                scoreFilter
+              )
+            ) {
+              return false;
+            }
 
-          if (!query) {
-            return true;
-          }
+            if (!query) {
+              return true;
+            }
 
-          const searchableText = [
-            item.title,
-            item.resumeText,
-            item.jobDescription,
-            ...item.result
-              .matchedKeywords,
-            ...item.result
-              .missingKeywords,
-            ...item.result
-              .recommendations,
-          ]
-            .join(" ")
-            .toLowerCase();
+            const searchableText =
+              [
+                item.title,
+                item.resumeText,
+                item.jobDescription,
+                ...item
+                  .matchedKeywords,
+                ...item
+                  .missingKeywords,
+                ...item
+                  .recommendations,
+              ]
+                .join(" ")
+                .toLowerCase();
 
-          return searchableText.includes(
-            query
-          );
-        });
-
-      return [...filtered].sort(
-        (first, second) => {
-          if (
-            sortOption === "highest"
-          ) {
-            return (
-              second.result
-                .overallScore -
-              first.result
-                .overallScore
+            return searchableText.includes(
+              query
             );
           }
+        );
 
+      return [
+        ...filtered,
+      ].sort(
+        (
+          first,
+          second
+        ) => {
           if (
-            sortOption === "lowest"
+            sortOption ===
+            "highest"
           ) {
             return (
-              first.result
-                .overallScore -
-              second.result
-                .overallScore
+              second.overallScore -
+              first.overallScore
             );
           }
 
           if (
-            sortOption === "title"
+            sortOption ===
+            "lowest"
+          ) {
+            return (
+              first.overallScore -
+              second.overallScore
+            );
+          }
+
+          if (
+            sortOption ===
+            "title"
           ) {
             return first.title.localeCompare(
               second.title
@@ -484,8 +754,10 @@ export default function ReportsPage() {
 
           return sortOption ===
             "newest"
-            ? secondTime - firstTime
-            : firstTime - secondTime;
+            ? secondTime -
+                firstTime
+            : firstTime -
+                secondTime;
         }
       );
     }, [
@@ -496,60 +768,208 @@ export default function ReportsPage() {
     ]);
 
   async function handleExport(
-    item: AtsAnalysisHistoryItem
+    item: ResumeAnalysisRecord
   ) {
     setExportingId(item.id);
 
     try {
-      await exportAtsHistoryItemPdf(
-        item
-      );
+      await exportAtsAnalysisPdf({
+        resumeText:
+          item.resumeText,
+
+        jobDescription:
+          item.jobDescription,
+
+        result:
+          createPdfResult(
+            item
+          ),
+
+        title:
+          item.title ||
+          "ATS Resume Analysis Report",
+      });
 
       toast.success(
         "ATS PDF report downloaded."
       );
     } catch (error) {
       console.error(
-        "Report PDF export error:",
+        "Cloud report PDF export error:",
         error
       );
 
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to export the PDF report.";
+
       toast.error(
-        "Unable to export the PDF report."
+        "Unable to export PDF.",
+        {
+          description:
+            message,
+        }
       );
     } finally {
       setExportingId(null);
     }
   }
 
-  function handleDelete(
-    item: AtsAnalysisHistoryItem
+  async function handleDelete(
+    item: ResumeAnalysisRecord
   ) {
     const confirmed =
       window.confirm(
-        `Delete "${item.title}"? This action cannot be undone.`
+        `Delete "${item.title}" from cloud history? This action cannot be undone.`
       );
 
     if (!confirmed) {
       return;
     }
 
-    const nextReports =
-      deleteAtsAnalysisHistory(
+    setDeletingId(item.id);
+
+    try {
+      await deleteResumeAnalysis(
         item.id
       );
 
-    setReports(nextReports);
+      setReports(
+        (currentReports) =>
+          currentReports.filter(
+            (report) =>
+              report.id !==
+              item.id
+          )
+      );
 
-    if (
-      previewItem?.id === item.id
-    ) {
-      setPreviewItem(null);
+      if (
+        previewItem?.id ===
+        item.id
+      ) {
+        setPreviewItem(null);
+      }
+
+      if (
+        renamingItem?.id ===
+        item.id
+      ) {
+        setRenamingItem(null);
+      }
+
+      toast.success(
+        "Cloud ATS report deleted."
+      );
+    } catch (error) {
+      console.error(
+        "Unable to delete cloud report:",
+        error
+      );
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to delete the report.";
+
+      toast.error(
+        "Delete failed.",
+        {
+          description:
+            message,
+        }
+      );
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  async function handleRename() {
+    if (!renamingItem) {
+      return;
     }
 
-    toast.success(
-      "ATS report deleted."
-    );
+    const normalizedTitle =
+      renameValue.trim();
+
+    if (!normalizedTitle) {
+      toast.error(
+        "Report title is required."
+      );
+
+      return;
+    }
+
+    if (
+      normalizedTitle.length >
+      200
+    ) {
+      toast.error(
+        "Report title is too long.",
+        {
+          description:
+            "Use 200 characters or fewer.",
+        }
+      );
+
+      return;
+    }
+
+    setIsRenaming(true);
+
+    try {
+      const updated =
+        await renameResumeAnalysis(
+          renamingItem.id,
+          normalizedTitle
+        );
+
+      setReports(
+        (currentReports) =>
+          currentReports.map(
+            (report) =>
+              report.id ===
+              updated.id
+                ? updated
+                : report
+          )
+      );
+
+      setPreviewItem(
+        (current) =>
+          current?.id ===
+          updated.id
+            ? updated
+            : current
+      );
+
+      setRenamingItem(null);
+      setRenameValue("");
+
+      toast.success(
+        "Report renamed successfully."
+      );
+    } catch (error) {
+      console.error(
+        "Unable to rename cloud report:",
+        error
+      );
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to rename the report.";
+
+      toast.error(
+        "Rename failed.",
+        {
+          description:
+            message,
+        }
+      );
+    } finally {
+      setIsRenaming(false);
+    }
   }
 
   function handleResetFilters() {
@@ -579,23 +999,83 @@ export default function ReportsPage() {
     );
   }
 
-  if (reports.length === 0) {
+  if (errorMessage) {
+    return (
+      <section className="rounded-3xl border border-red-500/30 bg-red-500/10 p-6 sm:p-8">
+        <h1 className="text-2xl font-bold text-red-200">
+          Cloud reports unavailable
+        </h1>
+
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-red-100/80">
+          {errorMessage}
+        </p>
+
+        <button
+          type="button"
+          onClick={() =>
+            void loadReports()
+          }
+          className="mt-6 inline-flex items-center gap-2 rounded-xl border border-red-300/30 px-5 py-3 font-semibold text-red-100 transition hover:bg-red-500/10"
+        >
+          <RefreshCw
+            aria-hidden
+            className="h-4 w-4"
+          />
+
+          Try Again
+        </button>
+      </section>
+    );
+  }
+
+  if (
+    reports.length === 0
+  ) {
     return (
       <div className="space-y-8">
         <section className="overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/50 p-6 sm:p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-400">
-            Reports Center
-          </p>
+          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-400">
+                Cloud Reports Center
+              </p>
 
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">
-            ATS analysis reports
-          </h2>
+              <h1 className="mt-3 text-3xl font-bold tracking-tight text-white">
+                ATS analysis reports
+              </h1>
 
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-400">
-            Review, organize and export
-            professional ATS reports from
-            your saved resume analyses.
-          </p>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-400">
+                Review, organize and
+                export professional ATS
+                reports saved in your
+                Supabase account.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                void loadReports(
+                  true
+                )
+              }
+              disabled={
+                isRefreshing
+              }
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 px-5 py-3 text-sm font-bold text-slate-300 transition hover:border-blue-500 hover:text-white disabled:opacity-50"
+            >
+              <RefreshCw
+                aria-hidden
+                className={`h-4 w-4 ${
+                  isRefreshing
+                    ? "animate-spin"
+                    : ""
+                }`}
+              />
+
+              Refresh
+            </button>
+          </div>
         </section>
 
         <EmptyReports />
@@ -606,8 +1086,7 @@ export default function ReportsPage() {
   const bestScore =
     bestReport
       ? clampScore(
-          bestReport.result
-            .overallScore
+          bestReport.overallScore
         )
       : 0;
 
@@ -618,20 +1097,21 @@ export default function ReportsPage() {
           <div className="flex flex-col justify-between gap-7 xl:flex-row xl:items-center">
             <div className="max-w-3xl">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-400">
-                Reports Center
+                Cloud Reports Center
               </p>
 
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Manage your ATS analysis
-                reports
-              </h2>
+              <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                Manage your ATS
+                analysis reports
+              </h1>
 
               <p className="mt-4 text-sm leading-7 text-slate-400 sm:text-base">
-                Search saved resume
-                analyses, filter by score,
-                preview details, remove old
-                reports and export
-                professional PDF files.
+                Search Supabase reports,
+                filter by score, preview
+                details, rename records,
+                remove old reports and
+                export professional PDF
+                files.
               </p>
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -653,6 +1133,32 @@ export default function ReportsPage() {
                 >
                   View Analytics
                 </Link>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void loadReports(
+                      true
+                    )
+                  }
+                  disabled={
+                    isRefreshing
+                  }
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-950/70 px-5 py-3 text-sm font-bold text-slate-300 transition hover:border-emerald-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <RefreshCw
+                    aria-hidden
+                    className={`h-4 w-4 ${
+                      isRefreshing
+                        ? "animate-spin"
+                        : ""
+                    }`}
+                  />
+
+                  {isRefreshing
+                    ? "Refreshing..."
+                    : "Refresh Cloud"}
+                </button>
               </div>
             </div>
 
@@ -703,12 +1209,14 @@ export default function ReportsPage() {
 
                 <div className="min-w-0">
                   <p className="text-sm font-semibold uppercase tracking-[0.15em] text-emerald-300">
-                    Best Saved Report
+                    Best Cloud Report
                   </p>
 
-                  <h3 className="mt-2 truncate text-xl font-bold text-white">
-                    {bestReport.title}
-                  </h3>
+                  <h2 className="mt-2 truncate text-xl font-bold text-white">
+                    {
+                      bestReport.title
+                    }
+                  </h2>
 
                   <p className="mt-2 text-sm text-slate-400">
                     {bestScore}/100 ·{" "}
@@ -740,7 +1248,24 @@ export default function ReportsPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    handleExport(
+                    setRenamingItem(
+                      bestReport
+                    )
+                  }
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-500/30 bg-violet-500/10 px-5 py-3 text-sm font-bold text-violet-200 transition hover:bg-violet-500/20"
+                >
+                  <Pencil
+                    aria-hidden
+                    className="h-4 w-4"
+                  />
+
+                  Rename
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void handleExport(
                       bestReport
                     )
                   }
@@ -758,7 +1283,7 @@ export default function ReportsPage() {
                   {exportingId ===
                   bestReport.id
                     ? "Creating PDF..."
-                    : "Export Best Report"}
+                    : "Export Best"}
                 </button>
               </div>
             </div>
@@ -778,7 +1303,8 @@ export default function ReportsPage() {
                 value={searchText}
                 onChange={(event) =>
                   setSearchText(
-                    event.target.value
+                    event.target
+                      .value
                   )
                 }
                 placeholder="Search reports, keywords, resumes or job descriptions..."
@@ -867,17 +1393,20 @@ export default function ReportsPage() {
             <p className="text-sm text-slate-500">
               Showing{" "}
               <span className="font-semibold text-slate-300">
-                {filteredReports.length}
+                {
+                  filteredReports.length
+                }
               </span>{" "}
               of{" "}
               <span className="font-semibold text-slate-300">
                 {reports.length}
               </span>{" "}
-              reports
+              cloud reports
             </p>
 
             {(searchText ||
-              scoreFilter !== "all" ||
+              scoreFilter !==
+                "all" ||
               sortOption !==
                 "newest") && (
               <button
@@ -906,8 +1435,8 @@ export default function ReportsPage() {
             </h2>
 
             <p className="mt-2 text-sm text-slate-500">
-              Try a different search term
-              or score filter.
+              Try a different search
+              term or score filter.
             </p>
 
             <button
@@ -926,8 +1455,7 @@ export default function ReportsPage() {
               (item) => {
                 const score =
                   clampScore(
-                    item.result
-                      .overallScore
+                    item.overallScore
                   );
 
                 const style =
@@ -936,7 +1464,12 @@ export default function ReportsPage() {
                   );
 
                 const isExporting =
-                  exportingId === item.id;
+                  exportingId ===
+                  item.id;
+
+                const isDeleting =
+                  deletingId ===
+                  item.id;
 
                 return (
                   <article
@@ -949,7 +1482,8 @@ export default function ReportsPage() {
                           <span
                             className={`rounded-full border px-3 py-1 text-xs font-bold ${style.border} ${style.background} ${style.text}`}
                           >
-                            {score}/100 ·{" "}
+                            {score}
+                            /100 ·{" "}
                             {getScoreLabel(
                               score
                             )}
@@ -964,7 +1498,9 @@ export default function ReportsPage() {
                         </div>
 
                         <h2 className="mt-4 line-clamp-2 text-xl font-bold leading-7 text-white">
-                          {item.title}
+                          {
+                            item.title
+                          }
                         </h2>
 
                         <p className="mt-3 inline-flex items-center gap-2 text-xs text-slate-500">
@@ -997,29 +1533,25 @@ export default function ReportsPage() {
                           label:
                             "Keywords",
                           value:
-                            item.result
-                              .keywordScore,
+                            item.keywordScore,
                         },
                         {
                           label:
                             "Structure",
                           value:
-                            item.result
-                              .structureScore,
+                            item.structureScore,
                         },
                         {
                           label:
                             "Formatting",
                           value:
-                            item.result
-                              .formattingScore,
+                            item.formattingScore,
                         },
                         {
                           label:
                             "Readability",
                           value:
-                            item.result
-                              .readabilityScore,
+                            item.readabilityScore,
                         },
                       ].map(
                         (metric) => (
@@ -1052,10 +1584,15 @@ export default function ReportsPage() {
                         </p>
 
                         <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-300">
-                          {item.result
+                          {item
                             .matchedKeywords
-                            .slice(0, 5)
-                            .join(", ") ||
+                            .slice(
+                              0,
+                              5
+                            )
+                            .join(
+                              ", "
+                            ) ||
                             "No matched keywords"}
                         </p>
                       </div>
@@ -1067,8 +1604,7 @@ export default function ReportsPage() {
 
                         <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-300">
                           {getMissingKeywordPreview(
-                            item.result
-                              .missingKeywords
+                            item.missingKeywords
                           )}
                         </p>
                       </div>
@@ -1086,7 +1622,7 @@ export default function ReportsPage() {
                       </p>
                     </div>
 
-                    <div className="mt-auto grid grid-cols-2 gap-3 pt-5 sm:grid-cols-3">
+                    <div className="mt-auto grid grid-cols-2 gap-3 pt-5 sm:grid-cols-4">
                       <button
                         type="button"
                         onClick={() =>
@@ -1107,43 +1643,81 @@ export default function ReportsPage() {
                       <button
                         type="button"
                         onClick={() =>
-                          handleExport(
+                          setRenamingItem(
                             item
                           )
                         }
                         disabled={
-                          isExporting
+                          isDeleting
                         }
-                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-300 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-500/30 bg-violet-500/10 px-4 py-3 text-sm font-bold text-violet-200 transition hover:bg-violet-500/20 disabled:opacity-50"
                       >
-                        <Download
+                        <Pencil
                           aria-hidden
                           className="h-4 w-4"
                         />
 
-                        {isExporting
-                          ? "Creating..."
-                          : "Export PDF"}
+                        Rename
                       </button>
 
                       <button
                         type="button"
                         onClick={() =>
-                          handleDelete(
+                          void handleExport(
                             item
                           )
                         }
                         disabled={
-                          isExporting
+                          isExporting ||
+                          isDeleting
                         }
-                        className="col-span-2 inline-flex items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-300 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-1"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-300 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        <Trash2
-                          aria-hidden
-                          className="h-4 w-4"
-                        />
+                        {isExporting ? (
+                          <Loader2
+                            aria-hidden
+                            className="h-4 w-4 animate-spin"
+                          />
+                        ) : (
+                          <Download
+                            aria-hidden
+                            className="h-4 w-4"
+                          />
+                        )}
 
-                        Delete
+                        {isExporting
+                          ? "Creating..."
+                          : "Export"}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void handleDelete(
+                            item
+                          )
+                        }
+                        disabled={
+                          isExporting ||
+                          isDeleting
+                        }
+                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-300 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {isDeleting ? (
+                          <Loader2
+                            aria-hidden
+                            className="h-4 w-4 animate-spin"
+                          />
+                        ) : (
+                          <Trash2
+                            aria-hidden
+                            className="h-4 w-4"
+                          />
+                        )}
+
+                        {isDeleting
+                          ? "Deleting..."
+                          : "Delete"}
                       </button>
                     </div>
                   </article>
@@ -1161,16 +1735,16 @@ export default function ReportsPage() {
               </p>
 
               <h2 className="mt-2 text-2xl font-bold text-white">
-                Create a stronger resume
-                report
+                Create a stronger
+                resume report
               </h2>
 
               <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-400">
                 Analyze another resume
                 version, resolve missing
                 keywords and compare the
-                new score with your saved
-                reports.
+                new score with your
+                cloud reports.
               </p>
             </div>
 
@@ -1223,14 +1797,17 @@ export default function ReportsPage() {
             <header className="sticky top-0 z-10 flex items-start justify-between gap-5 border-b border-slate-800 bg-slate-900/95 p-5 backdrop-blur-xl sm:p-6">
               <div className="min-w-0">
                 <p className="text-sm font-semibold uppercase tracking-[0.15em] text-blue-400">
-                  ATS Report Preview
+                  Cloud ATS Report
+                  Preview
                 </p>
 
                 <h2
                   id="report-preview-title"
                   className="mt-2 break-words text-2xl font-bold text-white"
                 >
-                  {previewItem.title}
+                  {
+                    previewItem.title
+                  }
                 </h2>
 
                 <p className="mt-2 text-sm text-slate-500">
@@ -1266,16 +1843,14 @@ export default function ReportsPage() {
 
                   <p className="mt-4 text-6xl font-bold text-white">
                     {clampScore(
-                      previewItem.result
-                        .overallScore
+                      previewItem.overallScore
                     )}
                   </p>
 
                   <p className="mt-3 font-semibold text-blue-300">
                     {getScoreLabel(
                       clampScore(
-                        previewItem.result
-                          .overallScore
+                        previewItem.overallScore
                       )
                     )}
                   </p>
@@ -1287,57 +1862,49 @@ export default function ReportsPage() {
                       label:
                         "Keywords",
                       value:
-                        previewItem.result
-                          .keywordScore,
+                        previewItem.keywordScore,
                     },
                     {
                       label:
                         "Structure",
                       value:
-                        previewItem.result
-                          .structureScore,
+                        previewItem.structureScore,
                     },
                     {
                       label:
                         "Achievements",
                       value:
-                        previewItem.result
-                          .achievementScore,
+                        previewItem.achievementScore,
                     },
                     {
                       label:
                         "Formatting",
                       value:
-                        previewItem.result
-                          .formattingScore,
+                        previewItem.formattingScore,
                     },
                     {
                       label:
                         "Readability",
                       value:
-                        previewItem.result
-                          .readabilityScore,
+                        previewItem.readabilityScore,
                     },
                     {
                       label:
                         "Experience",
                       value:
-                        previewItem.result
-                          .experienceScore,
+                        previewItem.experienceScore,
                     },
                     {
                       label:
                         "Bullets",
                       value:
-                        previewItem.result
-                          .bulletScore,
+                        previewItem.bulletScore,
                     },
                     {
                       label:
                         "Skills",
                       value:
-                        previewItem.result
-                          .skillsScore,
+                        previewItem.skillsScore,
                     },
                   ].map(
                     (metric) => (
@@ -1371,14 +1938,15 @@ export default function ReportsPage() {
                   </h3>
 
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {previewItem.result
+                    {previewItem
                       .matchedKeywords
                       .length === 0 ? (
                       <p className="text-sm text-slate-500">
-                        No matched keywords.
+                        No matched
+                        keywords.
                       </p>
                     ) : (
-                      previewItem.result.matchedKeywords.map(
+                      previewItem.matchedKeywords.map(
                         (keyword) => (
                           <span
                             key={
@@ -1387,6 +1955,7 @@ export default function ReportsPage() {
                             className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-200"
                           >
                             <CheckCircle2 className="mr-1 inline h-3.5 w-3.5" />
+
                             {keyword}
                           </span>
                         )
@@ -1401,7 +1970,7 @@ export default function ReportsPage() {
                   </h3>
 
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {previewItem.result
+                    {previewItem
                       .missingKeywords
                       .length === 0 ? (
                       <p className="text-sm text-emerald-300">
@@ -1409,7 +1978,7 @@ export default function ReportsPage() {
                         keywords missing.
                       </p>
                     ) : (
-                      previewItem.result.missingKeywords.map(
+                      previewItem.missingKeywords.map(
                         (keyword) => (
                           <span
                             key={
@@ -1433,7 +2002,7 @@ export default function ReportsPage() {
                 </h3>
 
                 <ol className="mt-4 space-y-3">
-                  {previewItem.result
+                  {previewItem
                     .recommendations
                     .length === 0 ? (
                     <li className="text-sm text-slate-500">
@@ -1441,7 +2010,7 @@ export default function ReportsPage() {
                       available.
                     </li>
                   ) : (
-                    previewItem.result.recommendations.map(
+                    previewItem.recommendations.map(
                       (
                         recommendation,
                         index
@@ -1497,7 +2066,9 @@ export default function ReportsPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    setPreviewItem(null)
+                    setPreviewItem(
+                      null
+                    )
                   }
                   className="rounded-xl border border-slate-700 px-5 py-3 text-sm font-bold text-slate-300 transition hover:border-slate-500 hover:text-white"
                 >
@@ -1507,7 +2078,24 @@ export default function ReportsPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    handleExport(
+                    setRenamingItem(
+                      previewItem
+                    )
+                  }
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-500/30 bg-violet-500/10 px-5 py-3 text-sm font-bold text-violet-200 transition hover:bg-violet-500/20"
+                >
+                  <Pencil
+                    aria-hidden
+                    className="h-4 w-4"
+                  />
+
+                  Rename Report
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void handleExport(
                       previewItem
                     )
                   }
@@ -1517,17 +2105,149 @@ export default function ReportsPage() {
                   }
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Download
-                    aria-hidden
-                    className="h-4 w-4"
-                  />
+                  {exportingId ===
+                  previewItem.id ? (
+                    <Loader2
+                      aria-hidden
+                      className="h-4 w-4 animate-spin"
+                    />
+                  ) : (
+                    <Download
+                      aria-hidden
+                      className="h-4 w-4"
+                    />
+                  )}
 
                   {exportingId ===
                   previewItem.id
                     ? "Creating PDF..."
-                    : "Download PDF Report"}
+                    : "Download PDF"}
                 </button>
               </div>
+            </div>
+          </article>
+        </div>
+      )}
+
+      {renamingItem && (
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="rename-report-title"
+        >
+          <button
+            type="button"
+            onClick={() =>
+              setRenamingItem(
+                null
+              )
+            }
+            aria-label="Close rename dialog"
+            className="absolute inset-0 bg-black/75 backdrop-blur-sm"
+          />
+
+          <article className="relative z-10 w-full max-w-lg rounded-3xl border border-slate-700 bg-slate-900 p-6 shadow-2xl shadow-black/60">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.15em] text-violet-300">
+                  Cloud Report
+                </p>
+
+                <h2
+                  id="rename-report-title"
+                  className="mt-2 text-2xl font-bold text-white"
+                >
+                  Rename ATS report
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setRenamingItem(
+                    null
+                  )
+                }
+                aria-label="Close rename dialog"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-700 bg-slate-950 text-slate-400 transition hover:border-red-500 hover:text-red-300"
+              >
+                <X
+                  aria-hidden
+                  className="h-5 w-5"
+                />
+              </button>
+            </div>
+
+            <label
+              htmlFor="report-title"
+              className="mt-6 block text-sm font-semibold text-slate-300"
+            >
+              Report title
+            </label>
+
+            <input
+              id="report-title"
+              type="text"
+              value={renameValue}
+              onChange={(event) =>
+                setRenameValue(
+                  event.target.value
+                )
+              }
+              maxLength={200}
+              autoFocus
+              className="mt-2 h-12 w-full rounded-xl border border-slate-700 bg-slate-950 px-4 text-white outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+            />
+
+            <p className="mt-2 text-right text-xs text-slate-500">
+              {renameValue.length}
+              /200
+            </p>
+
+            <div className="mt-6 flex flex-col justify-end gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() =>
+                  setRenamingItem(
+                    null
+                  )
+                }
+                disabled={
+                  isRenaming
+                }
+                className="rounded-xl border border-slate-700 px-5 py-3 text-sm font-bold text-slate-300 transition hover:border-slate-500 hover:text-white disabled:opacity-50"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  void handleRename()
+                }
+                disabled={
+                  isRenaming ||
+                  !renameValue.trim()
+                }
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isRenaming ? (
+                  <Loader2
+                    aria-hidden
+                    className="h-4 w-4 animate-spin"
+                  />
+                ) : (
+                  <Pencil
+                    aria-hidden
+                    className="h-4 w-4"
+                  />
+                )}
+
+                {isRenaming
+                  ? "Saving..."
+                  : "Save New Title"}
+              </button>
             </div>
           </article>
         </div>
