@@ -23,7 +23,8 @@ export const metadata: Metadata = {
   ),
 
   verification: {
-    google: "FYbX8VFA_hCVhcmpT342Rcv2yfGHl8Oc-SeGi-akSbY",
+    google:
+      "FYbX8VFA_hCVhcmpT342Rcv2yfGHl8Oc-SeGi-akSbY",
   },
 
   title: {
@@ -31,6 +32,7 @@ export const metadata: Metadata = {
       "Free AI Resume Bullet Generator | Resume Impact AI",
     template: "%s | Resume Impact AI",
   },
+
 
   description:
     "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",

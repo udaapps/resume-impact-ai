@@ -21,6 +21,7 @@ import {
   type SavedBullet,
 } from "@/lib/savedBullets";
 import { supabase } from "@/lib/supabase";
+import Link from "next/link";
 
 type GeneratedBullet = {
   id: number;
@@ -336,40 +337,67 @@ export default function Home() {
     };
   }, [user]);
 
- async function handleGoogleLogin() {
+async function handleGoogleLogin() {
   setError("");
   setSuccessMessage("");
 
-  const redirectTo =
-    window.location.hostname === "localhost"
-      ? "http://localhost:3000/"
-      : "https://resume-impact-ai.vercel.app/";
-
-  const { error: loginError } =
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo,
-      },
+  try {
+    toast.loading("Opening Google sign-in...", {
+      id: "google-login",
     });
 
-  if (loginError) {
-    setError(loginError.message);
+    const redirectTo =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000/"
+        : "https://resume-impact-ai.vercel.app/";
+
+    sendGAEvent("event", "google_login_start", {
+      method: "google",
+    });
+
+    const { error: loginError } =
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo,
+        },
+      });
+
+    if (loginError) {
+      throw loginError;
+    }
+  } catch (loginError) {
+    const message =
+      loginError instanceof Error
+        ? loginError.message
+        : "Unable to start Google login.";
+
+    console.error(
+      "Google login exception:",
+      loginError
+    );
+
+    toast.error("Google login failed.", {
+      id: "google-login",
+      description: message,
+    });
+
+    setError(message);
   }
 }
+async function handleLogout() {
+  setError("");
+  setSuccessMessage("");
 
-  async function handleLogout() {
-    setError("");
-    setSuccessMessage("");
-
+  try {
     const { error: logoutError } =
       await supabase.auth.signOut();
 
     if (logoutError) {
-      setError(logoutError.message);
-      return;
+      throw logoutError;
     }
 
+    setUser(null);
     setHistory([]);
     setSavedBullets([]);
 
@@ -378,7 +406,21 @@ export default function Home() {
     });
 
     toast.success("Signed out successfully.");
+  } catch (logoutError) {
+    const message =
+      logoutError instanceof Error
+        ? logoutError.message
+        : "Unable to sign out.";
+
+    console.error("Logout error:", logoutError);
+
+    toast.error("Sign out failed.", {
+      description: message,
+    });
+
+    setError(message);
   }
+}
 
   async function handleGenerate() {
     if (!usageLoaded) {
@@ -912,13 +954,21 @@ export default function Home() {
                 </button>
               </>
             ) : (
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className="shrink-0 rounded-full bg-blue-600 px-3 py-2 text-xs font-semibold hover:bg-blue-500 sm:px-5 sm:py-2.5 sm:text-sm"
-              >
-                Continue with Google
-              </button>
+              <div className="flex items-center gap-2">
+  <Link
+    href="/login"
+    className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-blue-500 hover:text-white sm:px-5 sm:py-2.5 sm:text-sm"
+  >
+    Sign In
+  </Link>
+
+  <Link
+    href="/signup"
+    className="rounded-full bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-500 sm:px-5 sm:py-2.5 sm:text-sm"
+  >
+    Create Account
+  </Link>
+</div>
             )}
           </div>
         </div>

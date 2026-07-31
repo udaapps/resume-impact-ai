@@ -1,350 +1,460 @@
-import OpenAI from "openai";
 import { NextResponse } from "next/server";
 
-type GenerateRequest = {
-  jobTitle?: string;
-  experienceLevel?: string;
-  resumeStyle?: string;
-  responsibility?: string;
-  achievement?: string;
-  metric?: string;
+import { analyzeAchievements } from "@/lib/ats/achievementAnalyzer";
+import { analyzeFormatting } from "@/lib/ats/formattingAnalyzer";
+import { analyzeKeywordMatch } from "@/lib/ats/keywordMatcher";
+import { analyzeResumeSections } from "@/lib/ats/sectionAnalyzer";
+
+type AtsAnalyzeRequest = {
+  resumeText?: string;
+  jobDescription?: string;
 };
 
-type AtsAnalysis = {
-  score: number;
-  rating: string;
-  strengths: string[];
-  suggestions: string[];
-};
-
-type GenerateResponse = {
-  bullets: string[];
-  atsAnalysis: AtsAnalysis;
-};
-
-function cleanValue(value?: string) {
-  return value?.trim() ?? "";
-}
-
-function isValidGenerateResponse(
-  value: unknown
-): value is GenerateResponse {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-
-  const result = value as Partial<GenerateResponse>;
-
-  return (
-    Array.isArray(result.bullets) &&
-    result.bullets.length === 3 &&
-    result.bullets.every(
-      (bullet) =>
-        typeof bullet === "string" &&
-        bullet.trim().length > 0
-    ) &&
-    !!result.atsAnalysis &&
-    typeof result.atsAnalysis === "object" &&
-    typeof result.atsAnalysis.score === "number" &&
-    result.atsAnalysis.score >= 0 &&
-    result.atsAnalysis.score <= 100 &&
-    typeof result.atsAnalysis.rating === "string" &&
-    Array.isArray(result.atsAnalysis.strengths) &&
-    result.atsAnalysis.strengths.every(
-      (item) => typeof item === "string"
-    ) &&
-    Array.isArray(result.atsAnalysis.suggestions) &&
-    result.atsAnalysis.suggestions.every(
-      (item) => typeof item === "string"
-    )
+function clampScore(score: number) {
+  return Math.max(
+    0,
+    Math.min(100, Math.round(score))
   );
 }
 
-export async function POST(request: Request) {
+function calculateExperienceScore(
+  resumeText: string,
+  jobDescription: string
+) {
+  const resume = resumeText.toLowerCase();
+  const job = jobDescription.toLowerCase();
+
+  let score = 50;
+
+  const seniorTerms = [
+    "senior",
+    "lead",
+    "manager",
+    "director",
+    "architect",
+  ];
+
+  const entryTerms = [
+    "entry level",
+    "junior",
+    "graduate",
+    "intern",
+  ];
+
+  const jobRequiresSenior = seniorTerms.some(
+    (term) => job.includes(term)
+  );
+
+  const resumeShowsSenior = seniorTerms.some(
+    (term) => resume.includes(term)
+  );
+
+  const jobRequiresEntry = entryTerms.some(
+    (term) => job.includes(term)
+  );
+
+  const resumeShowsEntry = entryTerms.some(
+    (term) => resume.includes(term)
+  );
+
+  if (jobRequiresSenior && resumeShowsSenior) {
+    score += 30;
+  } else if (
+    jobRequiresSenior &&
+    !resumeShowsSenior
+  ) {
+    score -= 20;
+  }
+
+  if (jobRequiresEntry && resumeShowsEntry) {
+    score += 25;
+  }
+
+  const yearsPattern =
+    /\b(\d{1,2})\+?\s+(?:years?|yrs?)\b/gi;
+
+  const resumeYears = [
+    ...resume.matchAll(yearsPattern),
+  ].map((match) => Number(match[1]));
+
+  const jobYears = [
+    ...job.matchAll(yearsPattern),
+  ].map((match) => Number(match[1]));
+
+  const highestResumeYears =
+    resumeYears.length > 0
+      ? Math.max(...resumeYears)
+      : 0;
+
+  const highestJobYears =
+    jobYears.length > 0
+      ? Math.max(...jobYears)
+      : 0;
+
+  if (
+    highestJobYears > 0 &&
+    highestResumeYears >= highestJobYears
+  ) {
+    score += 20;
+  } else if (
+    highestJobYears > 0 &&
+    highestResumeYears < highestJobYears
+  ) {
+    score -= 15;
+  }
+
+  return clampScore(score);
+}
+
+function calculateBulletScore(
+  resumeText: string
+) {
+  const lines = resumeText
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const bulletLines = lines.filter(
+    (line) =>
+      line.startsWith("-") ||
+      line.startsWith("•") ||
+      line.startsWith("*") ||
+      /^\d+[.)]\s+/.test(line)
+  );
+
+  const actionVerbs = [
+    "achieved",
+    "automated",
+    "built",
+    "coordinated",
+    "created",
+    "delivered",
+    "designed",
+    "developed",
+    "engineered",
+    "generated",
+    "implemented",
+    "improved",
+    "increased",
+    "launched",
+    "led",
+    "managed",
+    "optimized",
+    "reduced",
+    "streamlined",
+  ];
+
+  const normalizedResume =
+    resumeText.toLowerCase();
+
+  const actionVerbMatches =
+    actionVerbs.filter((verb) =>
+      normalizedResume.includes(verb)
+    ).length;
+
+  const metricMatches =
+    resumeText.match(
+      /\b\d+(?:\.\d+)?%|\$\d+(?:,\d{3})*|\b\d+\+?\b/g
+    )?.length ?? 0;
+
+  let score = 30;
+
+  if (bulletLines.length >= 4) {
+    score += 30;
+  } else if (bulletLines.length >= 2) {
+    score += 20;
+  } else if (bulletLines.length === 1) {
+    score += 10;
+  }
+
+  score += Math.min(
+    actionVerbMatches * 5,
+    25
+  );
+
+  score += Math.min(
+    metricMatches * 5,
+    15
+  );
+
+  return clampScore(score);
+}
+
+function buildCoreRecommendations(params: {
+  keywordScore: number;
+  structureScore: number;
+  experienceScore: number;
+  bulletScore: number;
+  missingKeywords: string[];
+  requiredMissingSections: string[];
+}) {
+  const {
+    keywordScore,
+    structureScore,
+    experienceScore,
+    bulletScore,
+    missingKeywords,
+    requiredMissingSections,
+  } = params;
+
+  const recommendations: string[] = [];
+
+  if (keywordScore < 70) {
+    const priorityKeywords =
+      missingKeywords.slice(0, 5).join(", ");
+
+    recommendations.push(
+      priorityKeywords
+        ? `Add relevant missing keywords naturally, especially: ${priorityKeywords}.`
+        : "Add the most important job-specific skills naturally throughout your resume."
+    );
+  }
+
+  if (
+    structureScore < 75 &&
+    requiredMissingSections.length > 0
+  ) {
+    recommendations.push(
+      `Add clear ATS-friendly sections for: ${requiredMissingSections.join(
+        ", "
+      )}.`
+    );
+  }
+
+  if (experienceScore < 70) {
+    recommendations.push(
+      "Make your experience level and years of experience clearer and align them with the target role."
+    );
+  }
+
+  if (bulletScore < 70) {
+    recommendations.push(
+      "Rewrite weak duties using strong action verbs and measurable achievements."
+    );
+  }
+
+  recommendations.push(
+    "Only include skills, tools, and achievements that accurately reflect your real experience."
+  );
+
+  return recommendations;
+}
+
+export async function POST(
+  request: Request
+) {
   try {
-    const apiKey = process.env.OPENAI_API_KEY;
-
-    if (!apiKey) {
-      return NextResponse.json(
-        {
-          error:
-            "OPENAI_API_KEY was not found. Check your .env.local file and restart the server.",
-        },
-        { status: 500 }
-      );
-    }
-
-    const openai = new OpenAI({
-      apiKey,
-    });
-
     const body =
-      (await request.json()) as GenerateRequest;
+      (await request.json()) as AtsAnalyzeRequest;
 
-    const jobTitle = cleanValue(body.jobTitle);
+    const resumeText =
+      body.resumeText?.trim();
 
-    const experienceLevel =
-      cleanValue(body.experienceLevel) || "Mid Level";
+    const jobDescription =
+      body.jobDescription?.trim();
 
-    const resumeStyle =
-      cleanValue(body.resumeStyle) || "ATS Optimized";
-
-    const responsibility =
-      cleanValue(body.responsibility);
-
-    const achievement =
-      cleanValue(body.achievement);
-
-    const metric =
-      cleanValue(body.metric);
-
-    if (!jobTitle || !responsibility) {
+    if (!resumeText || !jobDescription) {
       return NextResponse.json(
         {
           error:
-            "Job title and responsibility are required.",
+            "Resume content and job description are required.",
         },
         { status: 400 }
       );
     }
 
     if (
-      jobTitle.length > 100 ||
-      experienceLevel.length > 50 ||
-      resumeStyle.length > 50 ||
-      responsibility.length > 800 ||
-      achievement.length > 400 ||
-      metric.length > 100
+      resumeText.length < 100 ||
+      jobDescription.length < 100
     ) {
       return NextResponse.json(
         {
           error:
-            "One or more provided fields are too long.",
+            "Please provide at least 100 characters for both the resume and job description.",
         },
         { status: 400 }
       );
     }
 
-    const prompt = `
-You are an expert resume writer and ATS optimization specialist.
+    const keywordAnalysis =
+      analyzeKeywordMatch(
+        resumeText,
+        jobDescription
+      );
 
-Create exactly 3 professional resume bullet points and analyze their ATS quality.
+    const sectionAnalysis =
+      analyzeResumeSections(resumeText);
 
-User information:
+    const achievementAnalysis =
+      analyzeAchievements(resumeText);
 
-Job title: ${jobTitle}
-Experience level: ${experienceLevel}
-Resume style: ${resumeStyle}
-Responsibility: ${responsibility}
-Achievement or result: ${
-      achievement || "Not provided"
-    }
-Metric or number: ${metric || "Not provided"}
+    const formattingAnalysis =
+      analyzeFormatting(resumeText);
 
-Resume bullet rules:
+    const keywordScore =
+      keywordAnalysis.keywordScore;
 
-- Create exactly 3 different resume bullet points.
-- Start each bullet with a different strong past-tense action verb.
-- Write natural, professional English.
-- Match the vocabulary and responsibility level to the selected experience level.
-- Follow the selected resume style.
-- Focus on impact, outcomes, efficiency, leadership, contribution, or business value.
-- Use the supplied metric only when it was provided.
-- Never invent tools, software, percentages, revenue, team sizes, responsibilities, or achievements.
-- Keep each bullet between 18 and 32 words.
-- Avoid repeating the same sentence structure.
-- Avoid first-person pronouns.
-- Do not add numbering or bullet symbols inside the strings.
+    const skillsScore =
+      keywordAnalysis.keywordScore;
 
-Experience-level guidance:
+    const experienceScore =
+      calculateExperienceScore(
+        resumeText,
+        jobDescription
+      );
 
-- Entry Level: emphasize skills, learning, contribution, reliability, and potential.
-- Mid Level: emphasize ownership, execution, collaboration, and measurable outcomes.
-- Senior Level: emphasize ownership, technical depth, mentoring, strategy, and business impact.
-- Manager: emphasize team leadership, process improvement, decisions, and delivery.
-- Director: emphasize strategy, cross-functional leadership, organizational outcomes, and business value.
-- Executive: emphasize enterprise leadership, transformation, growth, governance, and strategic results.
+    const structureScore =
+      sectionAnalysis.sectionScore;
 
-Resume-style guidance:
+    const bulletScore =
+      calculateBulletScore(resumeText);
 
-- ATS Optimized: use clear job-relevant terminology without keyword stuffing.
-- Professional: use polished and balanced business language.
-- Results Focused: emphasize outcomes and measurable impact.
-- Leadership: emphasize ownership, collaboration, decisions, and team impact.
-- Executive: emphasize strategy, organizational leadership, and business value.
-- Technical: emphasize systems, processes, technical execution, efficiency, quality, and performance.
-- Concise: use shorter sentences while preserving impact.
+    const achievementScore =
+      achievementAnalysis.score;
 
-ATS analysis rules:
+    const formattingScore =
+      formattingAnalysis.formattingScore;
 
-- Score the three generated bullets together from 0 to 100.
-- Evaluate action verbs, clarity, measurable impact, readability, ATS-friendly wording, relevance, repetition, and sentence length.
-- Do not claim that the score guarantees success with a real applicant tracking system.
-- Rating must be one of:
-  "Needs Improvement"
-  "Fair"
-  "Good"
-  "Very Good"
-  "Excellent"
-- Return 3 to 5 concise strengths.
-- Return 2 to 4 practical suggestions.
-- Suggestions must not ask the user to invent experience or false achievements.
-- If no metric was supplied, it is acceptable to suggest adding a truthful measurable result where available.
-`;
+    const readabilityScore =
+      formattingAnalysis.readabilityScore;
 
-    const response =
-      await openai.responses.create({
-        model: "gpt-4o-mini",
-        input: prompt,
-        text: {
-          format: {
-            type: "json_schema",
-            name: "resume_bullets_with_ats_analysis",
-            strict: true,
-            schema: {
-              type: "object",
-              additionalProperties: false,
-              properties: {
-                bullets: {
-                  type: "array",
-                  minItems: 3,
-                  maxItems: 3,
-                  items: {
-                    type: "string",
-                  },
-                },
-                atsAnalysis: {
-                  type: "object",
-                  additionalProperties: false,
-                  properties: {
-                    score: {
-                      type: "integer",
-                      minimum: 0,
-                      maximum: 100,
-                    },
-                    rating: {
-                      type: "string",
-                      enum: [
-                        "Needs Improvement",
-                        "Fair",
-                        "Good",
-                        "Very Good",
-                        "Excellent",
-                      ],
-                    },
-                    strengths: {
-                      type: "array",
-                      minItems: 3,
-                      maxItems: 5,
-                      items: {
-                        type: "string",
-                      },
-                    },
-                    suggestions: {
-                      type: "array",
-                      minItems: 2,
-                      maxItems: 4,
-                      items: {
-                        type: "string",
-                      },
-                    },
-                  },
-                  required: [
-                    "score",
-                    "rating",
-                    "strengths",
-                    "suggestions",
-                  ],
-                },
-              },
-              required: [
-                "bullets",
-                "atsAnalysis",
-              ],
-            },
-          },
-        },
+    const overallScore = clampScore(
+      keywordScore * 0.25 +
+        skillsScore * 0.15 +
+        experienceScore * 0.15 +
+        structureScore * 0.12 +
+        bulletScore * 0.08 +
+        achievementScore * 0.1 +
+        formattingScore * 0.1 +
+        readabilityScore * 0.05
+    );
+
+    const coreRecommendations =
+      buildCoreRecommendations({
+        keywordScore,
+        structureScore,
+        experienceScore,
+        bulletScore,
+        missingKeywords:
+          keywordAnalysis.missingKeywords,
+        requiredMissingSections:
+          sectionAnalysis.requiredMissingSections,
       });
 
-    const output = response.output_text.trim();
-
-    if (!output) {
-      return NextResponse.json(
-        {
-          error:
-            "The AI returned an empty response. Please try again.",
-        },
-        { status: 502 }
-      );
-    }
-
-    let parsedOutput: unknown;
-
-    try {
-      parsedOutput = JSON.parse(output);
-    } catch {
-      console.error(
-        "Invalid AI JSON response:",
-        output
-      );
-
-      return NextResponse.json(
-        {
-          error:
-            "The AI returned invalid JSON. Please try again.",
-        },
-        { status: 502 }
-      );
-    }
-
-    if (!isValidGenerateResponse(parsedOutput)) {
-      console.error(
-        "Invalid AI response structure:",
-        parsedOutput
-      );
-
-      return NextResponse.json(
-        {
-          error:
-            "The AI response did not contain valid bullets and ATS analysis.",
-        },
-        { status: 502 }
-      );
-    }
+    const recommendations = [
+      ...coreRecommendations,
+      ...achievementAnalysis.recommendations,
+      ...formattingAnalysis.recommendations,
+    ]
+      .filter(
+        (recommendation, index, items) =>
+          items.indexOf(recommendation) ===
+          index
+      )
+      .slice(0, 12);
 
     return NextResponse.json({
-      bullets: parsedOutput.bullets.map(
-        (bullet) => bullet.trim()
-      ),
-      atsAnalysis: {
-        score: parsedOutput.atsAnalysis.score,
-        rating:
-          parsedOutput.atsAnalysis.rating.trim(),
-        strengths:
-          parsedOutput.atsAnalysis.strengths.map(
-            (item) => item.trim()
-          ),
-        suggestions:
-          parsedOutput.atsAnalysis.suggestions.map(
-            (item) => item.trim()
-          ),
-      },
+      overallScore,
+
+      keywordScore,
+      skillsScore,
+      experienceScore,
+      structureScore,
+      bulletScore,
+      achievementScore,
+      formattingScore,
+      readabilityScore,
+
+      achievementMetrics:
+        achievementAnalysis.metrics,
+
+      achievementActionVerbs:
+        achievementAnalysis.actionVerbs,
+
+      achievementCount:
+        achievementAnalysis.achievements,
+
+      wordCount:
+        formattingAnalysis.wordCount,
+
+      bulletCount:
+        formattingAnalysis.bulletCount,
+
+      longParagraphCount:
+        formattingAnalysis.longParagraphCount,
+
+      longSentenceCount:
+        formattingAnalysis.longSentenceCount,
+
+      hasEmail:
+        formattingAnalysis.hasEmail,
+
+      hasPhone:
+        formattingAnalysis.hasPhone,
+
+      hasLinkedIn:
+        formattingAnalysis.hasLinkedIn,
+
+      firstPersonPronounCount:
+        formattingAnalysis.firstPersonPronounCount,
+
+      weakPhraseCount:
+        formattingAnalysis.weakPhraseCount,
+
+      repeatedKeywordCount:
+        formattingAnalysis.repeatedKeywordCount,
+
+      formattingIssues:
+        formattingAnalysis.issues,
+
+      matchedKeywords:
+        keywordAnalysis.matchedKeywords.slice(
+          0,
+          20
+        ),
+
+      missingKeywords:
+        keywordAnalysis.missingKeywords.slice(
+          0,
+          20
+        ),
+
+      matchedItems:
+        keywordAnalysis.matchedItems.slice(
+          0,
+          20
+        ),
+
+      missingItems:
+        keywordAnalysis.missingItems.slice(
+          0,
+          20
+        ),
+
+      sections:
+        sectionAnalysis.sections,
+
+      foundSections:
+        sectionAnalysis.foundSections,
+
+      missingSections:
+        sectionAnalysis.missingSections,
+
+      requiredMissingSections:
+        sectionAnalysis.requiredMissingSections,
+
+      recommendations,
     });
   } catch (error) {
     console.error(
-      "Resume generation error:",
+      "ATS analysis error:",
       error
     );
 
-    const message =
-      error instanceof Error
-        ? error.message
-        : "Unable to generate resume bullets.";
-
     return NextResponse.json(
       {
-        error: message,
-        code: "generation_error",
+        error:
+          "Unable to analyze the resume right now. Please try again.",
       },
       { status: 500 }
     );
