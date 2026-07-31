@@ -10,7 +10,6 @@ import {
   FileSearch,
   GitCompareArrows,
   Minus,
-  Plus,
   Sparkles,
   TrendingDown,
   TrendingUp,
@@ -24,13 +23,18 @@ import {
 import { toast } from "sonner";
 
 import {
-  exportAtsHistoryItemPdf,
+  exportAtsAnalysisPdf,
 } from "@/lib/ats/exportAtsPdf";
 
 import {
-  getAtsAnalysisHistory,
-  type AtsAnalysisHistoryItem,
+  loadResumeAnalyses,
+  type ResumeAnalysisRecord,
+} from "@/lib/supabase/resume-analyses";
+
+import type {
+  AtsHistoryAnalysisResult,
 } from "@/lib/ats/analysisHistory";
+
 
 type ComparisonMetric = {
   label: string;
@@ -51,7 +55,7 @@ function clampScore(value: number): number {
 }
 
 function getItemDate(
-  item: AtsAnalysisHistoryItem
+  item: ResumeAnalysisRecord
 ): string {
   return item.updatedAt || item.createdAt;
 }
@@ -471,11 +475,11 @@ function EmptyComparison() {
 
 export default function ComparePage() {
   const [
-    reports,
-    setReports,
-  ] = useState<
-    AtsAnalysisHistoryItem[]
-  >([]);
+  reports,
+  setReports,
+] = useState<
+  ResumeAnalysisRecord[]
+>([]);
 
   const [
     reportsLoaded,
@@ -500,9 +504,10 @@ export default function ComparePage() {
   );
 
   useEffect(() => {
+  async function loadReports() {
     try {
       const savedReports =
-        getAtsAnalysisHistory();
+        await loadResumeAnalyses(300);
 
       const sortedReports = [
         ...savedReports,
@@ -538,12 +543,15 @@ export default function ComparePage() {
       );
 
       toast.error(
-        "Unable to load saved reports."
+        "Unable to load cloud reports."
       );
     } finally {
       setReportsLoaded(true);
     }
-  }, []);
+  }
+
+  void loadReports();
+}, []);
 
   const beforeReport =
     useMemo(
@@ -587,91 +595,73 @@ export default function ComparePage() {
           label:
             "Overall ATS Score",
           before:
-            beforeReport.result
-              .overallScore,
+            beforeReport.overallScore,
           after:
-            afterReport.result
-              .overallScore,
+            afterReport.overallScore,
         },
         {
           label:
             "Keyword Match",
           before:
-            beforeReport.result
-              .keywordScore,
+            beforeReport.keywordScore,
           after:
-            afterReport.result
-              .keywordScore,
+            afterReport.keywordScore,
         },
         {
           label:
             "Skills Match",
           before:
-            beforeReport.result
-              .skillsScore,
+            beforeReport.skillsScore,
           after:
-            afterReport.result
-              .skillsScore,
+            afterReport.skillsScore,
         },
         {
           label:
             "Experience",
           before:
-            beforeReport.result
-              .experienceScore,
+            beforeReport.experienceScore,
           after:
-            afterReport.result
-              .experienceScore,
+            afterReport.experienceScore,
         },
         {
           label:
             "Resume Structure",
           before:
-            beforeReport.result
-              .structureScore,
+            beforeReport.structureScore,
           after:
-            afterReport.result
-              .structureScore,
+            afterReport.structureScore,
         },
         {
           label:
             "Bullet Quality",
           before:
-            beforeReport.result
-              .bulletScore,
+            beforeReport.bulletScore,
           after:
-            afterReport.result
-              .bulletScore,
+            afterReport.bulletScore,
         },
         {
           label:
             "Achievements",
           before:
-            beforeReport.result
-              .achievementScore,
+            beforeReport.achievementScore,
           after:
-            afterReport.result
-              .achievementScore,
+            afterReport.achievementScore,
         },
         {
           label:
             "Formatting",
           before:
-            beforeReport.result
-              .formattingScore,
+            beforeReport.formattingScore,
           after:
-            afterReport.result
-              .formattingScore,
+            afterReport.formattingScore,
         },
         {
           label:
             "Readability",
           before:
-            beforeReport.result
-              .readabilityScore,
+            beforeReport.readabilityScore,
           after:
-            afterReport.result
-              .readabilityScore,
+            afterReport.readabilityScore,
         },
       ];
 
@@ -708,62 +698,48 @@ export default function ComparePage() {
 
       const matchedAdded =
         findAddedKeywords(
-          beforeReport.result
-            .matchedKeywords,
-          afterReport.result
-            .matchedKeywords
+          beforeReport.matchedKeywords,
+          afterReport.matchedKeywords
         );
 
       const matchedRemoved =
         findRemovedKeywords(
-          beforeReport.result
-            .matchedKeywords,
-          afterReport.result
-            .matchedKeywords
+          beforeReport.matchedKeywords,
+          afterReport.matchedKeywords
         );
 
       const missingResolved =
         findRemovedKeywords(
-          beforeReport.result
-            .missingKeywords,
-          afterReport.result
-            .missingKeywords
+          beforeReport.missingKeywords,
+          afterReport.missingKeywords
         );
 
       const newMissing =
         findAddedKeywords(
-          beforeReport.result
-            .missingKeywords,
-          afterReport.result
-            .missingKeywords
+          beforeReport.missingKeywords,
+          afterReport.missingKeywords
         );
 
       const sectionsAdded =
         findAddedKeywords(
-          beforeReport.result
-            .foundSections,
-          afterReport.result
-            .foundSections
+          beforeReport.foundSections,
+          afterReport.foundSections
         );
 
       const missingSectionsResolved =
         findRemovedKeywords(
-          beforeReport.result
-            .missingSections,
-          afterReport.result
-            .missingSections
+          beforeReport.missingSections,
+          afterReport.missingSections
         );
 
       const beforeScore =
         clampScore(
-          beforeReport.result
-            .overallScore
+          beforeReport.overallScore
         );
 
       const afterScore =
         clampScore(
-          afterReport.result
-            .overallScore
+          afterReport.overallScore
         );
 
       return {
@@ -781,10 +757,8 @@ export default function ComparePage() {
         missingSectionsResolved,
 
         recommendationChange:
-          beforeReport.result
-            .recommendations.length -
-          afterReport.result
-            .recommendations.length,
+          beforeReport.recommendations.length -
+          afterReport.recommendations.length,
       };
     }, [
       beforeReport,
@@ -828,14 +802,21 @@ export default function ComparePage() {
   }
 
   async function handleExport(
-    item: AtsAnalysisHistoryItem
+    item: ResumeAnalysisRecord
   ) {
     setExportingId(item.id);
 
     try {
-      await exportAtsHistoryItemPdf(
-        item
-      );
+      await exportAtsAnalysisPdf({
+        title:
+          item.title ||
+          "ATS Resume Analysis Report",
+        resumeText: item.resumeText,
+        jobDescription:
+          item.jobDescription,
+        result:
+          item.analysisResult as AtsHistoryAnalysisResult,
+      });
 
       toast.success(
         "ATS PDF report downloaded."
@@ -846,8 +827,16 @@ export default function ComparePage() {
         error
       );
 
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to export the PDF report.";
+
       toast.error(
-        "Unable to export the PDF report."
+        "Unable to export the PDF report.",
+        {
+          description: message,
+        }
       );
     } finally {
       setExportingId(null);
@@ -1029,8 +1018,7 @@ export default function ComparePage() {
                     >
                       {item.title} —{" "}
                       {
-                        item.result
-                          .overallScore
+                        item.overallScore
                       }
                       /100
                     </option>
@@ -1089,8 +1077,7 @@ export default function ComparePage() {
                     >
                       {item.title} —{" "}
                       {
-                        item.result
-                          .overallScore
+                        item.overallScore
                       }
                       /100
                     </option>
