@@ -608,8 +608,7 @@ if (
     }
   }
 }
-      
-
+  
       sendGAEvent(
         "event",
         "ats_resume_analyze",
