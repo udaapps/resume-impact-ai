@@ -1,13 +1,15 @@
 import {
   createServerClient,
 } from "@supabase/ssr";
+
 import {
   cookies,
 } from "next/headers";
 
 function getSupabaseServerConfig() {
   const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL;
+    process.env
+      .NEXT_PUBLIC_SUPABASE_URL;
 
   const supabasePublishableKey =
     process.env
@@ -66,11 +68,9 @@ export async function createClient() {
             );
           } catch {
             /*
-             * Server Components cannot always
-             * write cookies.
-             *
-             * Session refresh cookie writes are
-             * handled later by the Next.js proxy.
+             * Cookie updates may be unavailable
+             * in read-only Server Components.
+             * Route Handlers can normally write them.
              */
           }
         },
