@@ -1,3 +1,7 @@
+"use client";
+
+import { sendGAEvent } from "@next/third-parties/google";
+
 const FIVERR_GIG_URL = "https://www.fiverr.com/s/Lda2G6p";
 
 type HumanAtsReviewCtaProps = {
@@ -9,6 +13,15 @@ export default function HumanAtsReviewCta({
   className = "",
   source = "website",
 }: HumanAtsReviewCtaProps) {
+  function handleFiverrClick() {
+    sendGAEvent("event", "fiverr_cta_click", {
+      source,
+      offer: "ats_resume_quick_fix",
+      price_usd: 15,
+      destination: "fiverr",
+    });
+  }
+
   return (
     <section
       aria-labelledby={`human-ats-review-${source}`}
@@ -79,6 +92,7 @@ export default function HumanAtsReviewCta({
               href={FIVERR_GIG_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleFiverrClick}
               className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-4 text-center font-semibold text-white transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               Get My ATS Resume Quick Fix
