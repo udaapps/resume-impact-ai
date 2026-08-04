@@ -1,46 +1,70 @@
-# Fiverr CTA Tracking Update
+# ResumeClimb AI — Password Reset Update
 
-This update tracks every Fiverr CTA click in Google Analytics.
+Adds:
 
-## Event name
+- `app/forgot-password/page.tsx`
+- `app/update-password/page.tsx`
 
-`fiverr_cta_click`
+The existing login page already links to `/forgot-password`.
 
-## Event parameters
+## Flow
 
-- `source`
-- `offer`
-- `price_usd`
-- `destination`
+1. User submits email at `/forgot-password`.
+2. Supabase sends the reset link to:
+   `/auth/callback?next=/update-password`
+3. The existing callback route creates the recovery session.
+4. User sets the new password at `/update-password`.
 
-The existing page-specific `source` values remain useful:
+## Supabase URL Configuration
 
-- `homepage`
-- `ats-resume-checker`
-- `resume-bullet-generator`
-- `customer-service-guide`
-- `software-engineer-guide`
+Site URL:
+
+```text
+https://www.resumeclimbai.com
+```
+
+Keep these redirect URLs:
+
+```text
+https://www.resumeclimbai.com/auth/callback
+http://localhost:3000/auth/callback
+https://resume-impact-ai.vercel.app/auth/callback
+```
+
+No separate `/update-password` allow-list entry is required because the email
+first returns through `/auth/callback`.
 
 ## Install
 
-Replace:
-
-`components/marketing/human-ats-review-cta.tsx`
-
-Then run:
+Extract into the project root, then run:
 
 ```bash
 npm run build
+```
+
+The build output should include:
+
+```text
+○ /forgot-password
+○ /update-password
+```
+
+Deploy:
+
+```bash
 git add .
-git commit -m "Track Fiverr CTA clicks in Google Analytics"
+git commit -m "Add secure password reset flow"
 git push origin main
 ```
 
-## Test after deployment
+## Production test
 
-1. Open one public page.
-2. Click **Get My ATS Resume Quick Fix**.
-3. In Google Analytics, open **Reports → Realtime**.
-4. Look for the event `fiverr_cta_click`.
+Use an existing account:
 
-Realtime reporting can take a short time to show the event.
+1. Open `/login`.
+2. Click **Forgot password?**
+3. Request the reset email.
+4. Open only the newest reset email.
+5. Set a password with 8+ characters, uppercase, lowercase and a number.
+6. Continue to the dashboard.
+7. Sign out and sign in using the new password.
