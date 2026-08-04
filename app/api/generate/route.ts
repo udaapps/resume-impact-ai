@@ -234,10 +234,14 @@ export async function POST(
       );
     }
 
+    /*
+     * Use a dedicated non-reasoning model for this short,
+     * structured writing task. Do not reuse the analytics
+     * reasoning-model setting here.
+     */
     const model =
       process.env.OPENAI_RESUME_MODEL?.trim() ||
-      process.env.OPENAI_ANALYTICS_MODEL?.trim() ||
-      "gpt-5-mini";
+      "gpt-4.1-mini";
 
     const openai =
       new OpenAI({
@@ -278,7 +282,7 @@ Achievement or result: ${achievement || "Not provided"}
 Metric or number: ${metric || "Not provided"}
         `.trim(),
 
-        max_output_tokens: 800,
+        max_output_tokens: 700,
       });
 
     const outputText =

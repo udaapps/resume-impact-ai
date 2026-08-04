@@ -1,45 +1,27 @@
-# ResumeClimb AI — `/api/generate` Route Fix
+# ResumeClimb AI — Generate Route Fix v2
 
-## What was wrong
-
-Both uploaded files are ATS analyzer routes. They expect:
+This version fixes the empty OpenAI output shown as:
 
 ```text
-resumeText
-jobDescription
+The AI did not generate usable resume bullets. Please try again.
 ```
 
-The Resume Bullet Generator sends:
+## Change
+
+The generator now uses a dedicated default model:
 
 ```text
-jobTitle
-experienceLevel
-resumeStyle
-responsibility
-achievement
-metric
+gpt-4.1-mini
 ```
 
-That mismatch caused the generator to display:
-
-```text
-Resume content and job description are required.
-```
+It no longer reuses `OPENAI_ANALYTICS_MODEL`, which may be a reasoning model configured for a different task.
 
 ## Install
 
-Extract the ZIP into the project root and allow this file to replace:
+Extract this ZIP into the project root and replace:
 
 ```text
 app/api/generate/route.ts
-```
-
-Do not place either ATS analyzer file inside `app/api/generate/`.
-
-Keep the newer ATS analyzer code at:
-
-```text
-app/api/ats-analyze/route.ts
 ```
 
 ## Build and deploy
@@ -47,31 +29,12 @@ app/api/ats-analyze/route.ts
 ```bash
 npm run build
 git add .
-git commit -m "Restore resume bullet generation API"
+git commit -m "Fix empty resume bullet AI response"
 git push origin main
 ```
 
-## Production test
-
-Open:
+No new Vercel environment variable is required. Optionally, a future dedicated model can be set with:
 
 ```text
-https://www.resumeclimbai.com
+OPENAI_RESUME_MODEL
 ```
-
-Example input:
-
-```text
-Job title: Software Engineer
-Experience level: Senior Level
-Resume style: Technical
-Responsibility: Developed backend APIs and optimized database queries
-Achievement: Improved API response performance
-Metric: 35%
-```
-
-Expected result:
-
-- Exactly 3 generated resume bullets
-- No “Resume content and job description are required” error
-- ATS score card appears
