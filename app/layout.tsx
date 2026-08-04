@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    "https://https://www.resumeclimbai.com"
+    "https://www.resumeclimbai.com"
   ),
 
   verification: {
