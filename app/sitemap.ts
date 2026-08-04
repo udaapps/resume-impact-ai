@@ -1,36 +1,36 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://https://www.resumeclimbai.com";
+const baseUrl = "https://www.resumeclimbai.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: SITE_URL,
-      lastModified: new Date("2026-08-03"),
+      url: baseUrl,
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${SITE_URL}/ats-resume-checker`,
-      lastModified: new Date("2026-08-03"),
+      url: `${baseUrl}/ats-resume-checker`,
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${SITE_URL}/resume-bullet-generator`,
-      lastModified: new Date("2026-08-03"),
+      url: `${baseUrl}/resume-bullet-generator`,
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${SITE_URL}/guides/customer-service-resume-bullets`,
-      lastModified: new Date("2026-08-02"),
+      url: `${baseUrl}/guides/customer-service-resume-bullets`,
+      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/guides/software-engineer-resume-bullets`,
-      lastModified: new Date("2026-08-03"),
+      url: `${baseUrl}/guides/software-engineer-resume-bullets`,
+      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
