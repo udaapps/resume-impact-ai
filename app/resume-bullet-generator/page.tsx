@@ -6,11 +6,11 @@ import ResumeBulletGeneratorSeoContent, {
   resumeBulletGeneratorFaqs,
 } from "@/components/resume-bullet-generator-seo-content";
 
-const siteUrl = "https://resume-impact-ai.vercel.app";
+const siteUrl = "https://https://www.resumeclimbai.com";
 const pageUrl = `${siteUrl}/resume-bullet-generator`;
 
 export const metadata: Metadata = {
-  title: "Free AI Resume Bullet Generator | Resume Impact AI",
+  title: "Free AI Resume Bullet Generator | ResumeClimb AI",
   description:
     "Create strong, ATS-friendly resume bullet points with a free AI resume bullet generator. Turn responsibilities into clear, achievement-focused statements.",
   keywords: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: pageUrl,
-    siteName: "Resume Impact AI",
+    siteName: "ResumeClimb AI",
     title: "Free AI Resume Bullet Generator",
     description:
       "Turn job responsibilities into clear, ATS-friendly, achievement-focused resume bullet points.",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
 const webApplicationSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "Resume Impact AI Resume Bullet Generator",
+  name: "ResumeClimb AI Resume Bullet Generator",
   url: pageUrl,
   applicationCategory: "BusinessApplication",
   operatingSystem: "Any",

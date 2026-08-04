@@ -353,7 +353,7 @@ async function handleGoogleLogin() {
     const redirectTo =
       window.location.hostname === "localhost"
         ? "http://localhost:3000/"
-        : "https://resume-impact-ai.vercel.app/";
+        : "https://https://www.resumeclimbai.com/";
 
     sendGAEvent("event", "google_login_start", {
       method: "google",
@@ -800,7 +800,7 @@ async function handleLogout() {
     }
 
     const fileContent = [
-      "Resume Impact AI",
+      "ResumeClimb AI",
       "Generated Resume Bullets",
       "",
       ...bullets.map(
@@ -885,10 +885,10 @@ async function handleLogout() {
           <a
             href="#"
             className="min-w-0 shrink text-base font-bold tracking-tight sm:text-xl"
-            aria-label="Resume Impact AI home"
+            aria-label="ResumeClimb AI home"
           >
             <span className="sm:hidden">Resume AI</span>
-            <span className="hidden sm:inline">Resume Impact AI</span>
+            <span className="hidden sm:inline">ResumeClimb AI</span>
           </a>
 
           <div className="hidden items-center gap-8 text-sm text-slate-300 md:flex">
@@ -1784,7 +1784,7 @@ async function handleLogout() {
       </nav>
 
       <footer className="border-t border-slate-900 px-6 py-8 text-center text-sm text-slate-500">
-        © 2026 Resume Impact AI. Built by UDA Apps.
+        © 2026 ResumeClimb AI. Built by UDA Apps.
       </footer>
     </main>
   );

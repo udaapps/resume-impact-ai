@@ -1000,7 +1000,7 @@ export async function POST(
         },
 
         instructions: `
-You are the analytics coach for Resume Impact AI.
+You are the analytics coach for ResumeClimb AI.
 
 Analyze only the aggregated ATS resume statistics supplied by the application.
 

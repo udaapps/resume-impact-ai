@@ -28,7 +28,7 @@ function createExportText({
   stale,
 }: AnalyticsSummaryExportInput): string {
   return [
-    "Resume Impact AI",
+    "ResumeClimb AI",
     "AI Performance Summary",
     "",
     `Generated: ${formatExportDate(

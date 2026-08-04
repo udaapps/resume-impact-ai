@@ -1,5 +1,5 @@
 const SITE_URL =
-  "https://resume-impact-ai.vercel.app";
+  "https://https://www.resumeclimbai.com";
 
 const PAGE_URL =
   `${SITE_URL}/ats-resume-checker`;
@@ -15,11 +15,11 @@ const FAQ_ITEMS = [
     question:
       "How do I check my resume ATS score?",
     answer:
-      "Paste your resume text and the complete target job description into Resume Impact AI, then select Analyze Resume Match. The tool returns an estimated ATS score and improvement recommendations.",
+      "Paste your resume text and the complete target job description into ResumeClimb AI, then select Analyze Resume Match. The tool returns an estimated ATS score and improvement recommendations.",
   },
   {
     question:
-      "Is the Resume Impact AI ATS checker free?",
+      "Is the ResumeClimb AI ATS checker free?",
     answer:
       "Yes. You can use the ATS resume checker to compare your resume with a job description and review the generated analysis.",
   },
@@ -62,7 +62,7 @@ const WEB_APPLICATION_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
 
-  name: "Resume Impact AI ATS Resume Checker",
+  name: "ResumeClimb AI ATS Resume Checker",
   alternateName: "Free ATS Resume Checker",
 
   url: PAGE_URL,
@@ -152,7 +152,7 @@ export default function AtsSeoContent() {
               </h2>
 
               <p className="mt-5 leading-8 text-slate-300">
-                Resume Impact AI is a free ATS
+                ResumeClimb AI is a free ATS
                 resume checker that compares your
                 resume with a target job
                 description. It provides an
@@ -266,7 +266,7 @@ export default function AtsSeoContent() {
 
             <div className="mt-10 flex flex-col gap-4 border-t border-slate-800 pt-8 sm:flex-row sm:items-center sm:justify-between">
               <p className="max-w-3xl text-sm leading-6 text-slate-400">
-                Resume Impact AI provides
+                ResumeClimb AI provides
                 estimated results only and cannot
                 guarantee employer ATS performance,
                 interviews, or hiring outcomes.

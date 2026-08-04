@@ -164,7 +164,7 @@ function LoginForm() {
 
               <span>
                 <span className="block text-xl font-bold">
-                  Resume Impact AI
+                  ResumeClimb AI
                 </span>
 
                 <span className="text-sm text-slate-400">
@@ -223,7 +223,7 @@ function LoginForm() {
                 </span>
 
                 <span className="font-bold">
-                  Resume Impact AI
+                  ResumeClimb AI
                 </span>
               </Link>
             </div>

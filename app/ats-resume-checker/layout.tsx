@@ -4,14 +4,14 @@ import type { ReactNode } from "react";
 import AtsSeoContent from "@/components/ats/ats-seo-content";
 
 const PAGE_URL =
-  "https://resume-impact-ai.vercel.app/ats-resume-checker";
+  "https://https://www.resumeclimbai.com/ats-resume-checker";
 
 const PAGE_DESCRIPTION =
   "Check your resume against a job description for free. Get an estimated ATS score, matched and missing keywords, resume section analysis, achievement checks, formatting issues, readability insights, and actionable recommendations.";
 
 export const metadata: Metadata = {
   title:
-    "Free ATS Resume Checker & Job Match Scanner | Resume Impact AI",
+    "Free ATS Resume Checker & Job Match Scanner | ResumeClimb AI",
 
   description: PAGE_DESCRIPTION,
 
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: PAGE_URL,
-    siteName: "Resume Impact AI",
+    siteName: "ResumeClimb AI",
     title:
       "Free ATS Resume Checker & Job Match Scanner",
     description: PAGE_DESCRIPTION,
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt:
-          "Resume Impact AI free ATS resume checker",
+          "ResumeClimb AI free ATS resume checker",
       },
     ],
   },

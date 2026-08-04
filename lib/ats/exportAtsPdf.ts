@@ -303,7 +303,7 @@ function drawBrandHeader(
   pdf.setFontSize(17);
 
   pdf.text(
-    "Resume Impact AI",
+    "ResumeClimb AI",
     PAGE.marginX + 19,
     16
   );
@@ -392,7 +392,7 @@ function drawContinuationHeader(
   setTextColor(pdf, COLORS.white);
 
   pdf.text(
-    "Resume Impact AI",
+    "ResumeClimb AI",
     PAGE.marginX,
     9.8
   );
@@ -1227,7 +1227,7 @@ function drawFooter(
   setTextColor(pdf, COLORS.muted);
 
   pdf.text(
-    "Resume Impact AI · UDA Apps",
+    "ResumeClimb AI · UDA Apps",
     PAGE.marginX,
     y
   );
@@ -1373,7 +1373,7 @@ export async function exportAtsPdf({
     title,
     subject:
       "ATS Resume Analysis Report",
-    author: "Resume Impact AI",
+    author: "ResumeClimb AI",
     creator: "UDA Apps",
     keywords:
       "ATS resume report, resume analysis, job match",
@@ -1711,7 +1711,7 @@ export async function exportAtsPdf({
   setTextColor(pdf, COLORS.dark);
 
   const disclaimer =
-    "Resume Impact AI provides estimated analysis for educational and resume-improvement purposes. The report cannot guarantee compatibility with every applicant tracking system, recruiter review, interview, offer, or hiring decision. Always review generated suggestions before use and never add skills, qualifications, tools, metrics, or achievements that you do not genuinely possess.";
+    "ResumeClimb AI provides estimated analysis for educational and resume-improvement purposes. The report cannot guarantee compatibility with every applicant tracking system, recruiter review, interview, offer, or hiring decision. Always review generated suggestions before use and never add skills, qualifications, tools, metrics, or achievements that you do not genuinely possess.";
 
   pdf.text(
     pdf.splitTextToSize(

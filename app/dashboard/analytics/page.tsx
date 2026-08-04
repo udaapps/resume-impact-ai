@@ -2757,7 +2757,7 @@ export default function AnalyticsPage() {
       </div>
 
       <p className="mt-4 text-sm leading-7 text-slate-400">
-        Resume Impact AI analyzes your
+        ResumeClimb AI analyzes your
         saved ATS reports to identify
         progress, recurring weaknesses,
         keyword gaps, and your strongest

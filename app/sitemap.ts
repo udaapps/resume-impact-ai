@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://resume-impact-ai.vercel.app";
+const SITE_URL = "https://https://www.resumeclimbai.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

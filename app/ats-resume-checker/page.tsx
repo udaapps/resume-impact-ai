@@ -8,13 +8,13 @@ import AtsResumeCheckerSeoContent, {
 
 const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://resume-impact-ai.vercel.app"
+  "https://https://www.resumeclimbai.com"
 ).replace(/\/$/, "");
 
 const PAGE_URL = `${SITE_URL}/ats-resume-checker`;
 
 const TITLE =
-  "Free ATS Resume Checker & Resume Score | Resume Impact AI";
+  "Free ATS Resume Checker & Resume Score | ResumeClimb AI";
 
 const DESCRIPTION =
   "Check your resume against a job description with our free ATS resume checker. Find missing keywords, formatting issues, weak bullet points, and practical improvements.";
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: PAGE_URL,
-    siteName: "Resume Impact AI",
+    siteName: "ResumeClimb AI",
     title: TITLE,
     description: DESCRIPTION,
     images: [
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Resume Impact AI free ATS resume checker",
+        alt: "ResumeClimb AI free ATS resume checker",
       },
     ],
   },
@@ -91,7 +91,7 @@ const structuredData = {
     {
       "@type": "WebApplication",
       "@id": `${PAGE_URL}#application`,
-      name: "Resume Impact AI ATS Resume Checker",
+      name: "ResumeClimb AI ATS Resume Checker",
       url: PAGE_URL,
       description: DESCRIPTION,
       applicationCategory: "BusinessApplication",
@@ -114,7 +114,7 @@ const structuredData = {
       ],
       provider: {
         "@type": "Organization",
-        name: "Resume Impact AI",
+        name: "ResumeClimb AI",
         url: SITE_URL,
       },
     },
@@ -125,7 +125,7 @@ const structuredData = {
         {
           "@type": "ListItem",
           position: 1,
-          name: "Resume Impact AI",
+          name: "ResumeClimb AI",
           item: `${SITE_URL}/`,
         },
         {
@@ -166,7 +166,7 @@ export default function AtsResumeCheckerPage() {
       <AtsResumeCheckerSeoContent />
 
       <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-500 sm:px-6 lg:px-8">
-        © 2026 Resume Impact AI. ATS results and AI rewrites are estimates
+        © 2026 ResumeClimb AI. ATS results and AI rewrites are estimates
         and should be reviewed before use.
       </footer>
     </main>

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const baseUrl = "https://resume-impact-ai.vercel.app";
+const baseUrl = "https://https://www.resumeclimbai.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {

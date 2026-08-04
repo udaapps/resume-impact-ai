@@ -126,7 +126,7 @@ function getPageDetails(
   return {
     title: "Dashboard",
     description:
-      "Manage your Resume Impact AI workspace.",
+      "Manage your ResumeClimb AI workspace.",
     breadcrumbs: ["Dashboard"],
   };
 }

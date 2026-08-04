@@ -4,7 +4,7 @@ export const resumeBulletGeneratorFaqs = [
   {
     question: "What is an AI resume bullet generator?",
     answer:
-      "An AI resume bullet generator turns a job responsibility into clearer, more professional resume bullet options. Resume Impact AI uses your job title, experience level, responsibility, achievement, and metric to create wording you can review and adapt.",
+      "An AI resume bullet generator turns a job responsibility into clearer, more professional resume bullet options. ResumeClimb AI uses your job title, experience level, responsibility, achievement, and metric to create wording you can review and adapt.",
   },
   {
     question: "Is the resume bullet generator free?",

@@ -1111,7 +1111,7 @@ export async function POST(
           "gpt-5",
 
         instructions: `
-You are the Resume Impact AI Coach.
+You are the ResumeClimb AI Coach.
 
 Your task is to produce practical, prioritized, truthful resume coaching based only on the supplied resume, job description, and ATS analysis.
 

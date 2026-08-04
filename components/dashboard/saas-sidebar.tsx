@@ -256,7 +256,7 @@ export default function SaasSidebar({
           {!collapsed && (
             <span className="min-w-0">
               <span className="block truncate text-base font-bold tracking-tight text-white">
-                Resume Impact AI
+                ResumeClimb AI
               </span>
 
               <span className="mt-0.5 block truncate text-xs text-slate-500">

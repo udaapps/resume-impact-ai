@@ -3,13 +3,13 @@ import Link from "next/link";
 
 import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 
-const SITE_URL = "https://resume-impact-ai.vercel.app";
+const SITE_URL = "https://https://www.resumeclimbai.com";
 const PAGE_PATH = "/guides/software-engineer-resume-bullets";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    "Software Engineer Resume Bullet Examples (30+) | Resume Impact AI",
+    "Software Engineer Resume Bullet Examples (30+) | ResumeClimb AI",
   description:
     "Use 30+ software engineer resume bullet examples for backend, frontend, APIs, cloud, DevOps, performance, testing, and leadership roles.",
   alternates: {
@@ -17,11 +17,11 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title:
-      "Software Engineer Resume Bullet Examples (30+) | Resume Impact AI",
+      "Software Engineer Resume Bullet Examples (30+) | ResumeClimb AI",
     description:
       "Practical software engineer resume bullets, ATS keywords, writing formulas, and before-and-after examples.",
     url: PAGE_URL,
-    siteName: "Resume Impact AI",
+    siteName: "ResumeClimb AI",
     type: "article",
   },
   twitter: {
@@ -223,12 +223,12 @@ export default function SoftwareEngineerResumeBulletsPage() {
     mainEntityOfPage: PAGE_URL,
     author: {
       "@type": "Organization",
-      name: "Resume Impact AI",
+      name: "ResumeClimb AI",
       url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
-      name: "Resume Impact AI",
+      name: "ResumeClimb AI",
       url: SITE_URL,
     },
   };
@@ -269,7 +269,7 @@ export default function SoftwareEngineerResumeBulletsPage() {
             href="/"
             className="text-lg font-bold tracking-tight text-white"
           >
-            Resume Impact AI
+            ResumeClimb AI
           </Link>
 
           <div className="flex flex-wrap gap-2">
@@ -689,7 +689,7 @@ export default function SoftwareEngineerResumeBulletsPage() {
       <HumanAtsReviewCta source="software-engineer-guide" />
 
       <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-500">
-        © 2026 Resume Impact AI. Examples are educational and must be
+        © 2026 ResumeClimb AI. Examples are educational and must be
         adapted to accurately reflect your experience.
       </footer>
     </main>

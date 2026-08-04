@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    "https://resume-impact-ai.vercel.app"
+    "https://https://www.resumeclimbai.com"
   ),
 
   verification: {
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
 
   title: {
     default:
-      "Free AI Resume Bullet Generator | Resume Impact AI",
-    template: "%s | Resume Impact AI",
+      "Free AI Resume Bullet Generator | ResumeClimb AI",
+    template: "%s | ResumeClimb AI",
   },
 
 
@@ -64,9 +64,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/",
-    siteName: "Resume Impact AI",
+    siteName: "ResumeClimb AI",
     title:
-      "Free AI Resume Bullet Generator | Resume Impact AI",
+      "Free AI Resume Bullet Generator | ResumeClimb AI",
     description:
       "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",
     images: [
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Resume Impact AI",
+        alt: "ResumeClimb AI",
       },
     ],
   },
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title:
-      "Free AI Resume Bullet Generator | Resume Impact AI",
+      "Free AI Resume Bullet Generator | ResumeClimb AI",
     description:
       "Create ATS-friendly resume bullet points with AI. Generate achievement-focused bullets, improve your resume, analyze ATS score, and export to PDF, DOCX or TXT.",
     images: ["/opengraph-image.png"],

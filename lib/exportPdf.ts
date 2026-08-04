@@ -45,7 +45,7 @@ export function exportResumePdf(
 
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(22);
-  pdf.text("Resume Impact AI", leftMargin, y);
+  pdf.text("ResumeClimb AI", leftMargin, y);
 
   y += 9;
 

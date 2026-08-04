@@ -791,7 +791,7 @@ function handleRestoreHistory(
             href="/"
             className="text-lg font-bold tracking-tight text-white"
           >
-            Resume Impact AI
+            ResumeClimb AI
           </a>
 
           <div className="flex flex-wrap gap-3">
@@ -823,7 +823,7 @@ function handleRestoreHistory(
           </h1>
 
           <p className="mx-auto mt-5 max-w-3xl text-base leading-7 text-slate-400 sm:text-lg">
-            Resume Impact AI is a free ATS resume checker that compares
+            ResumeClimb AI is a free ATS resume checker that compares
             your resume with a target job description. Find missing
             keywords, weak bullet points, formatting risks, and practical
             improvements before your next application.

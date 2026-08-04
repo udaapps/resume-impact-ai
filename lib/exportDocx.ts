@@ -32,7 +32,7 @@ export async function exportResumeDocx(
       heading: HeadingLevel.TITLE,
       children: [
         new TextRun({
-          text: "Resume Impact AI",
+          text: "ResumeClimb AI",
           bold: true,
         }),
       ],
