@@ -1,6 +1,15 @@
 "use client";
 
 import { sendGAEvent } from "@next/third-parties/google";
+declare global {
+  interface Window {
+    gtag?: (
+      command: string,
+      eventName: string,
+      parameters?: Record<string, unknown>
+    ) => void;
+  }
+}
 
 const FIVERR_GIG_URL = "https://www.fiverr.com/s/Lda2G6p";
 
@@ -13,14 +22,31 @@ export default function HumanAtsReviewCta({
   className = "",
   source = "website",
 }: HumanAtsReviewCtaProps) {
-  function handleFiverrClick() {
-    sendGAEvent("event", "fiverr_cta_click", {
-      source,
-      offer: "ats_resume_quick_fix",
-      price_usd: 15,
-      destination: "fiverr",
-    });
+ function handleFiverrClick() {
+  const eventParameters = {
+    source,
+    offer: "ats_resume_quick_fix",
+    value: 15,
+    currency: "USD",
+    destination: "fiverr",
+  };
+
+  if (typeof window.gtag === "function") {
+    window.gtag(
+      "event",
+      "fiverr_cta_click",
+      eventParameters
+    );
+
+    return;
   }
+
+  sendGAEvent(
+    "event",
+    "fiverr_cta_click",
+    eventParameters
+  );
+}
 
   return (
     <section
