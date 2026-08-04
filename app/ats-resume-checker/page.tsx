@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import AtsResumeCheckerClient from "@/components/ats/ats-resume-checker-client";
+import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 import AtsResumeCheckerSeoContent, {
   ATS_RESUME_CHECKER_FAQS,
 } from "@/components/ats/ats-resume-checker-seo-content";
@@ -161,6 +162,7 @@ export default function AtsResumeCheckerPage() {
       />
 
       <AtsResumeCheckerClient />
+      <HumanAtsReviewCta source="ats-resume-checker" />
       <AtsResumeCheckerSeoContent />
 
       <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-500 sm:px-6 lg:px-8">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import ResumeBulletGeneratorClient from "@/components/resume-bullet-generator-client";
+import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 
 const siteUrl = "https://resume-impact-ai.vercel.app";
 
@@ -18,5 +19,9 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <ResumeBulletGeneratorClient />;
+  return (
+    <ResumeBulletGeneratorClient>
+      <HumanAtsReviewCta source="homepage" />
+    </ResumeBulletGeneratorClient>
+  );
 }

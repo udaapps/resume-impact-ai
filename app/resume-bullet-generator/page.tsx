@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import ResumeBulletGeneratorClient from "@/components/resume-bullet-generator-client";
+import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 import ResumeBulletGeneratorSeoContent, {
   resumeBulletGeneratorFaqs,
 } from "@/components/resume-bullet-generator-seo-content";
@@ -128,7 +129,10 @@ export default function ResumeBulletGeneratorPage() {
       />
 
       <ResumeBulletGeneratorClient>
-        <ResumeBulletGeneratorSeoContent />
+        <>
+          <HumanAtsReviewCta source="resume-bullet-generator" />
+          <ResumeBulletGeneratorSeoContent />
+        </>
       </ResumeBulletGeneratorClient>
     </>
   );

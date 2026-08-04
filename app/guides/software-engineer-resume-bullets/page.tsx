@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
+
 const SITE_URL = "https://resume-impact-ai.vercel.app";
 const PAGE_PATH = "/guides/software-engineer-resume-bullets";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
@@ -683,6 +685,8 @@ export default function SoftwareEngineerResumeBulletsPage() {
           </aside>
         </div>
       </article>
+
+      <HumanAtsReviewCta source="software-engineer-guide" />
 
       <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-500">
         © 2026 Resume Impact AI. Examples are educational and must be
