@@ -3,37 +3,73 @@ import Link from "next/link";
 
 import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 
-const SITE_URL = "https://https://www.resumeclimbai.com";
+const SITE_URL = "https://www.resumeclimbai.com";
 const PAGE_PATH = "/guides/customer-service-resume-bullets";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
+const PAGE_TITLE = "25 Customer Service Resume Bullet Examples";
+
+const PAGE_DESCRIPTION =
+  "Use 25 customer service resume bullet examples, ATS keywords, writing formulas, and before-and-after guidance to strengthen your resume.";
+
 export const metadata: Metadata = {
-  title:
-    "Customer Service Resume Bullet Examples (25+) | ResumeClimb AI",
-  description:
-    "Use 25+ customer service resume bullet examples, ATS keywords, writing formulas, and before-and-after examples to strengthen your resume.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  authors: [
+    {
+      name: "UDA Apps",
+      url: SITE_URL,
+    },
+  ],
+  creator: "UDA Apps",
+  publisher: "ResumeClimb AI",
+  category: "career",
+  keywords: [
+    "customer service resume bullet examples",
+    "customer service resume bullets",
+    "customer service resume keywords",
+    "customer support resume examples",
+    "customer service achievements",
+    "ATS customer service resume",
+    "customer service action verbs",
+  ],
   alternates: {
-    canonical: PAGE_PATH,
+    canonical: PAGE_URL,
   },
   openGraph: {
-    title:
-      "Customer Service Resume Bullet Examples (25+) | ResumeClimb AI",
-    description:
-      "Practical customer service resume bullet examples, ATS keywords, and achievement-focused writing guidance.",
+    title: `${PAGE_TITLE} | ResumeClimb AI`,
+    description: PAGE_DESCRIPTION,
     url: PAGE_URL,
     siteName: "ResumeClimb AI",
     type: "article",
+    publishedTime: "2026-08-02T00:00:00.000Z",
+    modifiedTime: "2026-08-06T00:00:00.000Z",
+    authors: ["UDA Apps"],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Customer service resume bullet examples",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
-    title:
-      "Customer Service Resume Bullet Examples (25+)",
-    description:
-      "Build stronger, ATS-friendly customer service resume bullets with examples and practical guidance.",
+    card: "summary_large_image",
+    title: `${PAGE_TITLE} | ResumeClimb AI`,
+    description: PAGE_DESCRIPTION,
+    images: [`${SITE_URL}/opengraph-image.png`],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -147,38 +183,109 @@ const keywordGroups = [
   },
 ];
 
+const relatedGuides = [
+  {
+    href: "/guides/resume-bullets-without-metrics",
+    title: "How to Write Strong Resume Bullets Without Metrics",
+    description:
+      "Show scope, ownership, skill, and impact when exact numbers are unavailable.",
+  },
+  {
+    href: "/guides/software-engineer-resume-bullets",
+    title: "Software Engineer Resume Bullet Examples",
+    description:
+      "Learn how to present technical responsibilities, project work, and engineering impact.",
+  },
+];
+
 const faqItems = [
   {
-    question:
-      "How many customer service bullet points should I include?",
+    question: "How many customer service bullet points should I include?",
     answer:
       "A recent and relevant role commonly needs three to six focused bullets. Use fewer for older or less relevant positions. Prioritize achievements, complexity, and evidence over a long list of routine duties.",
   },
   {
-    question:
-      "Should every resume bullet include a number?",
+    question: "Should every resume bullet include a number?",
     answer:
       "No. Metrics are useful when they are accurate and meaningful, but a strong bullet can also describe scope, difficulty, systems used, collaboration, or the result of your work.",
   },
   {
-    question:
-      "Which ATS keywords should I add?",
+    question: "Which ATS keywords should I add?",
     answer:
       "Use terms that appear in the target job description and truthfully match your experience. Common examples include CRM, ticketing systems, complaint resolution, customer satisfaction, escalation management, live chat, and first-contact resolution.",
   },
   {
-    question:
-      "Can I copy these bullets exactly?",
+    question: "Can I copy these bullets exactly?",
     answer:
       "Treat them as adaptable examples. Change the channel, task, tools, scope, and result so each bullet accurately represents your own work. Replace bracketed placeholders only with verified information.",
   },
   {
-    question:
-      "What should an entry-level candidate write?",
+    question: "What should an entry-level candidate write?",
     answer:
       "Focus on communication, reliability, customer-facing experience, teamwork, problem-solving, handling payments or orders, and learning products or procedures quickly. Relevant volunteer, retail, hospitality, and internship experience can also support a customer service application.",
   },
 ];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": `${PAGE_URL}#article`,
+      headline: PAGE_TITLE,
+      description: PAGE_DESCRIPTION,
+      url: PAGE_URL,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": PAGE_URL,
+      },
+      datePublished: "2026-08-02T00:00:00.000Z",
+      dateModified: "2026-08-06T00:00:00.000Z",
+      inLanguage: "en-US",
+      image: `${SITE_URL}/opengraph-image.png`,
+      author: {
+        "@type": "Organization",
+        name: "UDA Apps",
+        url: SITE_URL,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "ResumeClimb AI",
+        url: SITE_URL,
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${PAGE_URL}#breadcrumb`,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "ResumeClimb AI",
+          item: `${SITE_URL}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Customer Service Resume Bullet Examples",
+          item: PAGE_URL,
+        },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${PAGE_URL}#faq`,
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    },
+  ],
+};
 
 function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
@@ -192,58 +299,14 @@ function JsonLd({ data }: { data: Record<string, unknown> }) {
 }
 
 export default function CustomerServiceResumeBulletsPage() {
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: "Customer Service Resume Bullet Examples (25+)",
-    description:
-      "Customer service resume bullet examples, ATS keywords, writing formulas, and practical customization guidance.",
-    datePublished: "2026-08-02",
-    dateModified: "2026-08-02",
-    mainEntityOfPage: PAGE_URL,
-    author: {
-      "@type": "Organization",
-      name: "ResumeClimb AI",
-      url: SITE_URL,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "ResumeClimb AI",
-      url: SITE_URL,
-    },
-  };
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: SITE_URL,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Resume Guides",
-        item: `${SITE_URL}/guides`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "Customer Service Resume Bullet Examples",
-        item: PAGE_URL,
-      },
-    ],
-  };
-
   return (
     <main className="min-h-screen bg-slate-950 text-white">
-      <JsonLd data={articleSchema} />
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={structuredData} />
 
-      <nav className="border-b border-slate-800 bg-slate-950/95">
+      <nav
+        aria-label="Main navigation"
+        className="border-b border-slate-800 bg-slate-950/95"
+      >
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-4 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8">
           <Link
             href="/"
@@ -259,6 +322,7 @@ export default function CustomerServiceResumeBulletsPage() {
             >
               AI Bullet Generator
             </Link>
+
             <Link
               href="/ats-resume-checker"
               className="rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-300 transition hover:border-blue-500 hover:text-white"
@@ -292,14 +356,14 @@ export default function CustomerServiceResumeBulletsPage() {
             </p>
 
             <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Customer Service Resume Bullet Examples
+              25 Customer Service Resume Bullet Examples
             </h1>
 
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-              Use these 25 achievement-focused examples to describe
-              customer support, complaint resolution, CRM work,
-              teamwork, and measurable service results. Adapt every
-              bullet to match your real experience and target job.
+              Use these 25 achievement-focused examples to describe customer
+              support, complaint resolution, CRM work, teamwork, and measurable
+              service results. Adapt every bullet to match your real experience
+              and target job.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -309,6 +373,7 @@ export default function CustomerServiceResumeBulletsPage() {
               >
                 Generate Customer Service Bullets
               </Link>
+
               <Link
                 href="/ats-resume-checker"
                 className="rounded-xl border border-slate-700 px-6 py-3 text-center font-semibold text-slate-200 transition hover:border-blue-500 hover:bg-slate-900"
@@ -321,9 +386,11 @@ export default function CustomerServiceResumeBulletsPage() {
               <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
                 25 examples
               </span>
+
               <span className="rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-2 text-blue-300">
                 ATS keyword guidance
               </span>
+
               <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
                 No invented claims
               </span>
@@ -332,6 +399,8 @@ export default function CustomerServiceResumeBulletsPage() {
             <p className="mt-6 text-sm text-slate-500">
               Published{" "}
               <time dateTime="2026-08-02">August 2, 2026</time>
+              <span aria-hidden="true"> · </span>
+              Updated <time dateTime="2026-08-06">August 6, 2026</time>
             </p>
           </div>
         </header>
@@ -342,6 +411,7 @@ export default function CustomerServiceResumeBulletsPage() {
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
                 Writing formula
               </p>
+
               <h2
                 id="formula-heading"
                 className="mt-3 text-3xl font-bold tracking-tight"
@@ -351,8 +421,8 @@ export default function CustomerServiceResumeBulletsPage() {
 
               <div className="mt-6 rounded-3xl border border-blue-500/30 bg-blue-500/10 p-6 sm:p-8">
                 <p className="text-xl font-semibold text-blue-200">
-                  Strong action verb + customer service task + scope or
-                  tool + accurate result
+                  Strong action verb + customer service task + scope or tool +
+                  accurate result
                 </p>
 
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -383,6 +453,7 @@ export default function CustomerServiceResumeBulletsPage() {
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-400">
                 Resume examples
               </p>
+
               <h2
                 id="examples-heading"
                 className="mt-3 text-3xl font-bold tracking-tight"
@@ -392,9 +463,9 @@ export default function CustomerServiceResumeBulletsPage() {
 
               <p className="mt-4 max-w-3xl leading-8 text-slate-400">
                 Select only the examples that reflect work you actually
-                performed. Replace bracketed placeholders with verified
-                figures from reports, schedules, quality reviews, or
-                performance records.
+                performed. Replace bracketed placeholders with verified figures
+                from reports, schedules, quality reviews, or performance
+                records.
               </p>
 
               <div className="mt-8 space-y-8">
@@ -406,6 +477,7 @@ export default function CustomerServiceResumeBulletsPage() {
                     <h3 className="text-2xl font-bold text-white">
                       {group.title}
                     </h3>
+
                     <p className="mt-3 leading-7 text-slate-400">
                       {group.description}
                     </p>
@@ -422,9 +494,8 @@ export default function CustomerServiceResumeBulletsPage() {
                           >
                             ✓
                           </span>
-                          <p className="leading-7 text-slate-200">
-                            {bullet}
-                          </p>
+
+                          <p className="leading-7 text-slate-200">{bullet}</p>
                         </li>
                       ))}
                     </ul>
@@ -437,17 +508,18 @@ export default function CustomerServiceResumeBulletsPage() {
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-400">
                 ATS keyword guidance
               </p>
+
               <h2
                 id="keywords-heading"
                 className="mt-3 text-3xl font-bold tracking-tight"
               >
                 Customer service resume keywords
               </h2>
+
               <p className="mt-4 max-w-3xl leading-8 text-slate-400">
-                Do not add every keyword. Compare the target job
-                description with your experience, then use the terms
-                that accurately describe your skills, tools, and
-                responsibilities.
+                Do not add every keyword. Compare the target job description
+                with your experience, then use the terms that accurately
+                describe your skills, tools, and responsibilities.
               </p>
 
               <div className="mt-8 grid gap-5 md:grid-cols-2">
@@ -459,6 +531,7 @@ export default function CustomerServiceResumeBulletsPage() {
                     <h3 className="text-lg font-bold text-white">
                       {group.title}
                     </h3>
+
                     <div className="mt-4 flex flex-wrap gap-2">
                       {group.items.map((item) => (
                         <span
@@ -497,12 +570,46 @@ export default function CustomerServiceResumeBulletsPage() {
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 font-bold text-emerald-300">
                       {index + 1}
                     </span>
-                    <p className="pt-1 leading-7 text-slate-300">
-                      {step}
-                    </p>
+
+                    <p className="pt-1 leading-7 text-slate-300">{step}</p>
                   </li>
                 ))}
               </ol>
+            </section>
+
+            <section aria-labelledby="related-guides-heading">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
+                Related Resume Guides
+              </p>
+
+              <h2
+                id="related-guides-heading"
+                className="mt-3 text-3xl font-bold tracking-tight"
+              >
+                Continue improving your resume bullets
+              </h2>
+
+              <div className="mt-7 grid gap-5 md:grid-cols-2">
+                {relatedGuides.map((guide) => (
+                  <Link
+                    key={guide.href}
+                    href={guide.href}
+                    className="group rounded-2xl border border-slate-800 bg-slate-900/70 p-6 transition hover:border-blue-600 hover:bg-slate-900"
+                  >
+                    <h3 className="text-lg font-semibold text-white transition group-hover:text-blue-300">
+                      {guide.title}
+                    </h3>
+
+                    <p className="mt-3 text-sm leading-6 text-slate-400">
+                      {guide.description}
+                    </p>
+
+                    <span className="mt-5 inline-flex text-sm font-semibold text-blue-400">
+                      Read guide →
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </section>
 
             <section
@@ -534,11 +641,13 @@ export default function CustomerServiceResumeBulletsPage() {
               <h2 className="text-3xl font-bold text-white">
                 Turn your real experience into stronger bullets
               </h2>
+
               <p className="mx-auto mt-4 max-w-2xl leading-8 text-slate-300">
-                Add your job title, responsibility, achievement, and
-                verified metric to generate three tailored bullet
-                options. Review every result before using it.
+                Add your job title, responsibility, achievement, and verified
+                metric to generate three tailored bullet options. Review every
+                result before using it.
               </p>
+
               <Link
                 href="/resume-bullet-generator#generator"
                 className="mt-7 inline-flex rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-500"
@@ -551,31 +660,43 @@ export default function CustomerServiceResumeBulletsPage() {
           <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
             <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
               <h2 className="font-bold text-white">On this page</h2>
-              <nav className="mt-4 space-y-3 text-sm">
+
+              <nav aria-label="Table of contents" className="mt-4 space-y-3 text-sm">
                 <a
                   href="#formula-heading"
                   className="block text-slate-400 hover:text-white"
                 >
                   Resume bullet formula
                 </a>
+
                 <a
                   href="#examples-heading"
                   className="block text-slate-400 hover:text-white"
                 >
                   25 bullet examples
                 </a>
+
                 <a
                   href="#keywords-heading"
                   className="block text-slate-400 hover:text-white"
                 >
                   ATS keywords
                 </a>
+
                 <a
                   href="#tailoring-heading"
                   className="block text-slate-400 hover:text-white"
                 >
                   Tailoring steps
                 </a>
+
+                <a
+                  href="#related-guides-heading"
+                  className="block text-slate-400 hover:text-white"
+                >
+                  Related guides
+                </a>
+
                 <a
                   href="#faq-heading"
                   className="block text-slate-400 hover:text-white"
@@ -589,15 +710,17 @@ export default function CustomerServiceResumeBulletsPage() {
               <h2 className="font-bold text-emerald-200">
                 Accuracy reminder
               </h2>
+
               <p className="mt-3 text-sm leading-6 text-slate-300">
-                Use only truthful responsibilities, tools,
-                achievements, and metrics. Strong wording should improve
-                presentation—not create experience you do not have.
+                Use only truthful responsibilities, tools, achievements, and
+                metrics. Strong wording should improve presentation—not create
+                experience you do not have.
               </p>
             </section>
 
             <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
               <h2 className="font-bold text-white">Related tools</h2>
+
               <div className="mt-4 space-y-3">
                 <Link
                   href="/resume-bullet-generator"
@@ -605,6 +728,7 @@ export default function CustomerServiceResumeBulletsPage() {
                 >
                   AI Resume Bullet Generator
                 </Link>
+
                 <Link
                   href="/ats-resume-checker"
                   className="block rounded-xl border border-slate-700 px-4 py-3 text-sm font-semibold text-slate-200 hover:border-blue-500"
@@ -620,8 +744,8 @@ export default function CustomerServiceResumeBulletsPage() {
       <HumanAtsReviewCta source="customer-service-guide" />
 
       <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-500">
-        © 2026 ResumeClimb AI. Examples are educational and must be
-        adapted to accurately reflect your experience.
+        © 2026 ResumeClimb AI. Examples are educational and must be adapted to
+        accurately reflect your experience.
       </footer>
     </main>
   );

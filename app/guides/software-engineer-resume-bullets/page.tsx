@@ -3,37 +3,73 @@ import Link from "next/link";
 
 import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 
-const SITE_URL = "https://https://www.resumeclimbai.com";
+const SITE_URL = "https://www.resumeclimbai.com";
 const PAGE_PATH = "/guides/software-engineer-resume-bullets";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
+const PAGE_TITLE = "30 Software Engineer Resume Bullet Examples";
+
+const PAGE_DESCRIPTION =
+  "Use 30 software engineer resume bullet examples for backend, frontend, APIs, cloud, DevOps, performance, testing, and leadership roles.";
+
 export const metadata: Metadata = {
-  title:
-    "Software Engineer Resume Bullet Examples (30+) | ResumeClimb AI",
-  description:
-    "Use 30+ software engineer resume bullet examples for backend, frontend, APIs, cloud, DevOps, performance, testing, and leadership roles.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  authors: [
+    {
+      name: "UDA Apps",
+      url: SITE_URL,
+    },
+  ],
+  creator: "UDA Apps",
+  publisher: "ResumeClimb AI",
+  category: "career",
+  keywords: [
+    "software engineer resume bullet examples",
+    "software engineer resume bullets",
+    "software developer resume examples",
+    "software engineer resume keywords",
+    "ATS software engineer resume",
+    "technical resume achievements",
+    "software engineering action verbs",
+  ],
   alternates: {
-    canonical: PAGE_PATH,
+    canonical: PAGE_URL,
   },
   openGraph: {
-    title:
-      "Software Engineer Resume Bullet Examples (30+) | ResumeClimb AI",
-    description:
-      "Practical software engineer resume bullets, ATS keywords, writing formulas, and before-and-after examples.",
+    title: `${PAGE_TITLE} | ResumeClimb AI`,
+    description: PAGE_DESCRIPTION,
     url: PAGE_URL,
     siteName: "ResumeClimb AI",
     type: "article",
+    publishedTime: "2026-08-03T00:00:00.000Z",
+    modifiedTime: "2026-08-06T00:00:00.000Z",
+    authors: ["UDA Apps"],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Software engineer resume bullet examples",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
-    title:
-      "Software Engineer Resume Bullet Examples (30+)",
-    description:
-      "Build stronger, ATS-friendly software engineering resume bullets with practical examples and keyword guidance.",
+    card: "summary_large_image",
+    title: `${PAGE_TITLE} | ResumeClimb AI`,
+    description: PAGE_DESCRIPTION,
+    images: [`${SITE_URL}/opengraph-image.png`],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -167,6 +203,21 @@ const keywordGroups = [
   },
 ];
 
+const relatedGuides = [
+  {
+    href: "/guides/resume-bullets-without-metrics",
+    title: "How to Write Strong Resume Bullets Without Metrics",
+    description:
+      "Show technical scope, ownership, complexity, and impact when exact numbers are unavailable.",
+  },
+  {
+    href: "/guides/customer-service-resume-bullets",
+    title: "Customer Service Resume Bullet Examples",
+    description:
+      "See how role-specific actions, skills, and credible outcomes can strengthen customer service experience.",
+  },
+];
+
 const faqItems = [
   {
     question:
@@ -175,30 +226,87 @@ const faqItems = [
       "A recent and relevant role commonly needs four to six focused bullets. Older or less relevant roles may need two to four. Prioritize technical scope, measurable impact, complexity, ownership, and collaboration.",
   },
   {
-    question:
-      "Should I list every technology inside the experience section?",
+    question: "Should I list every technology inside the experience section?",
     answer:
       "No. Mention technologies where they help explain what you built or improved. Keep a separate skills section for broader keyword coverage, and avoid repeating long tool lists in every bullet.",
   },
   {
-    question:
-      "What metrics can software engineers use?",
+    question: "What metrics can software engineers use?",
     answer:
       "Useful metrics may include response time, page speed, uptime, error rate, deployment frequency, test coverage, infrastructure cost, request volume, user count, processing time, defect reduction, or delivery time. Use only figures you can verify.",
   },
   {
-    question:
-      "How should an entry-level engineer write resume bullets?",
+    question: "How should an entry-level engineer write resume bullets?",
     answer:
       "Describe projects as real engineering work: the problem, technology, feature, technical decision, testing approach, deployment, users, or measurable result. Coursework, internships, open-source work, and personal projects can provide credible evidence.",
   },
   {
-    question:
-      "Can I copy these examples exactly?",
+    question: "Can I copy these examples exactly?",
     answer:
       "Use them as structures rather than ready-made claims. Replace the technology, scope, action, and result so the final bullet accurately reflects your own work and target role.",
   },
 ];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": `${PAGE_URL}#article`,
+      headline: PAGE_TITLE,
+      description: PAGE_DESCRIPTION,
+      url: PAGE_URL,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": PAGE_URL,
+      },
+      datePublished: "2026-08-03T00:00:00.000Z",
+      dateModified: "2026-08-06T00:00:00.000Z",
+      inLanguage: "en-US",
+      image: `${SITE_URL}/opengraph-image.png`,
+      author: {
+        "@type": "Organization",
+        name: "UDA Apps",
+        url: SITE_URL,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "ResumeClimb AI",
+        url: SITE_URL,
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${PAGE_URL}#breadcrumb`,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "ResumeClimb AI",
+          item: `${SITE_URL}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Software Engineer Resume Bullet Examples",
+          item: PAGE_URL,
+        },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${PAGE_URL}#faq`,
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    },
+  ],
+};
 
 function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
@@ -212,58 +320,14 @@ function JsonLd({ data }: { data: Record<string, unknown> }) {
 }
 
 export default function SoftwareEngineerResumeBulletsPage() {
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: "Software Engineer Resume Bullet Examples (30+)",
-    description:
-      "Software engineer resume bullet examples, ATS keywords, writing formulas, and practical customization guidance.",
-    datePublished: "2026-08-03",
-    dateModified: "2026-08-03",
-    mainEntityOfPage: PAGE_URL,
-    author: {
-      "@type": "Organization",
-      name: "ResumeClimb AI",
-      url: SITE_URL,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "ResumeClimb AI",
-      url: SITE_URL,
-    },
-  };
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: SITE_URL,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Resume Guides",
-        item: `${SITE_URL}/guides`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "Software Engineer Resume Bullet Examples",
-        item: PAGE_URL,
-      },
-    ],
-  };
-
   return (
     <main className="min-h-screen bg-slate-950 text-white">
-      <JsonLd data={articleSchema} />
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={structuredData} />
 
-      <nav className="border-b border-slate-800 bg-slate-950/95">
+      <nav
+        aria-label="Main navigation"
+        className="border-b border-slate-800 bg-slate-950/95"
+      >
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-4 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8">
           <Link
             href="/"
@@ -302,9 +366,7 @@ export default function SoftwareEngineerResumeBulletsPage() {
               <span aria-hidden="true">/</span>
               <span>Resume Guides</span>
               <span aria-hidden="true">/</span>
-              <span className="text-slate-300">
-                Software Engineer Bullets
-              </span>
+              <span className="text-slate-300">Software Engineer Bullets</span>
             </nav>
 
             <p className="mt-8 text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
@@ -312,14 +374,14 @@ export default function SoftwareEngineerResumeBulletsPage() {
             </p>
 
             <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Software Engineer Resume Bullet Examples
+              30 Software Engineer Resume Bullet Examples
             </h1>
 
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-              Use these 30 achievement-focused examples to describe
-              backend, frontend, API, database, cloud, DevOps, testing,
-              performance, and leadership work. Adapt each example to
-              your real contribution and target job description.
+              Use these 30 achievement-focused examples to describe backend,
+              frontend, API, database, cloud, DevOps, testing, performance, and
+              leadership work. Adapt each example to your real contribution and
+              target job description.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -350,8 +412,9 @@ export default function SoftwareEngineerResumeBulletsPage() {
             </div>
 
             <p className="mt-6 text-sm text-slate-500">
-              Published{" "}
-              <time dateTime="2026-08-03">August 3, 2026</time>
+              Published <time dateTime="2026-08-03">August 3, 2026</time>
+              <span aria-hidden="true"> · </span>
+              Updated <time dateTime="2026-08-06">August 6, 2026</time>
             </p>
           </div>
         </header>
@@ -390,9 +453,9 @@ export default function SoftwareEngineerResumeBulletsPage() {
                       Stronger
                     </p>
                     <p className="mt-3 leading-7 text-slate-200">
-                      Developed REST APIs with Node.js and PostgreSQL,
-                      added validation and caching, and reduced average
-                      response time by 35%.
+                      Developed REST APIs with Node.js and PostgreSQL, added
+                      validation and caching, and reduced average response time
+                      by [X%].
                     </p>
                   </div>
                 </div>
@@ -411,10 +474,9 @@ export default function SoftwareEngineerResumeBulletsPage() {
               </h2>
 
               <p className="mt-4 max-w-3xl leading-8 text-slate-400">
-                Choose examples that match work you actually performed.
-                Replace bracketed placeholders with accurate
-                technologies, scale, dates, and metrics you can explain
-                during an interview.
+                Choose examples that match work you actually performed. Replace
+                bracketed placeholders with accurate technologies, scale, dates,
+                and metrics you can explain during an interview.
               </p>
 
               <div className="mt-8 space-y-8">
@@ -442,9 +504,7 @@ export default function SoftwareEngineerResumeBulletsPage() {
                           >
                             ✓
                           </span>
-                          <p className="leading-7 text-slate-200">
-                            {bullet}
-                          </p>
+                          <p className="leading-7 text-slate-200">{bullet}</p>
                         </li>
                       ))}
                     </ul>
@@ -464,9 +524,9 @@ export default function SoftwareEngineerResumeBulletsPage() {
                 Software engineer resume keywords
               </h2>
               <p className="mt-4 max-w-3xl leading-8 text-slate-400">
-                Do not add every technology. Compare the job description
-                with your real skills, then use the exact relevant terms
-                in your skills and experience sections.
+                Do not add every technology. Compare the job description with
+                your real skills, then use the exact relevant terms in your
+                skills and experience sections.
               </p>
 
               <div className="mt-8 grid gap-5 md:grid-cols-2">
@@ -524,9 +584,9 @@ export default function SoftwareEngineerResumeBulletsPage() {
               </div>
 
               <p className="mt-5 rounded-2xl border border-amber-500/25 bg-amber-500/10 p-5 leading-7 text-amber-100">
-                Do not estimate a number merely to make a bullet sound
-                stronger. Use a verified figure or describe the scope
-                and outcome without a metric.
+                Do not estimate a number merely to make a bullet sound stronger.
+                Use a verified figure or describe the scope and outcome without
+                a metric.
               </p>
             </section>
 
@@ -553,12 +613,45 @@ export default function SoftwareEngineerResumeBulletsPage() {
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 font-bold text-emerald-300">
                       {index + 1}
                     </span>
-                    <p className="pt-1 leading-7 text-slate-300">
-                      {step}
-                    </p>
+                    <p className="pt-1 leading-7 text-slate-300">{step}</p>
                   </li>
                 ))}
               </ol>
+            </section>
+
+            <section aria-labelledby="related-guides-heading">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
+                Related Resume Guides
+              </p>
+
+              <h2
+                id="related-guides-heading"
+                className="mt-3 text-3xl font-bold tracking-tight"
+              >
+                Continue improving your resume bullets
+              </h2>
+
+              <div className="mt-7 grid gap-5 md:grid-cols-2">
+                {relatedGuides.map((guide) => (
+                  <Link
+                    key={guide.href}
+                    href={guide.href}
+                    className="group rounded-2xl border border-slate-800 bg-slate-900/70 p-6 transition hover:border-blue-600 hover:bg-slate-900"
+                  >
+                    <h3 className="text-lg font-semibold text-white transition group-hover:text-blue-300">
+                      {guide.title}
+                    </h3>
+
+                    <p className="mt-3 text-sm leading-6 text-slate-400">
+                      {guide.description}
+                    </p>
+
+                    <span className="mt-5 inline-flex text-sm font-semibold text-blue-400">
+                      Read guide →
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </section>
 
             <section
@@ -591,9 +684,9 @@ export default function SoftwareEngineerResumeBulletsPage() {
                 Turn your engineering work into stronger resume bullets
               </h2>
               <p className="mx-auto mt-4 max-w-2xl leading-8 text-slate-300">
-                Enter your role, responsibility, achievement, and
-                verified metric to generate three tailored bullet
-                options. Review every claim before using it.
+                Enter your role, responsibility, achievement, and verified
+                metric to generate three tailored bullet options. Review every
+                claim before using it.
               </p>
               <Link
                 href="/resume-bullet-generator#generator"
@@ -607,7 +700,10 @@ export default function SoftwareEngineerResumeBulletsPage() {
           <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
             <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
               <h2 className="font-bold text-white">On this page</h2>
-              <nav className="mt-4 space-y-3 text-sm">
+              <nav
+                aria-label="Table of contents"
+                className="mt-4 space-y-3 text-sm"
+              >
                 <a
                   href="#formula-heading"
                   className="block text-slate-400 hover:text-white"
@@ -639,6 +735,12 @@ export default function SoftwareEngineerResumeBulletsPage() {
                   Tailoring steps
                 </a>
                 <a
+                  href="#related-guides-heading"
+                  className="block text-slate-400 hover:text-white"
+                >
+                  Related guides
+                </a>
+                <a
                   href="#faq-heading"
                   className="block text-slate-400 hover:text-white"
                 >
@@ -648,14 +750,11 @@ export default function SoftwareEngineerResumeBulletsPage() {
             </section>
 
             <section className="rounded-2xl border border-emerald-500/25 bg-emerald-500/10 p-5">
-              <h2 className="font-bold text-emerald-200">
-                Accuracy reminder
-              </h2>
+              <h2 className="font-bold text-emerald-200">Accuracy reminder</h2>
               <p className="mt-3 text-sm leading-6 text-slate-300">
-                Use only truthful technologies, responsibilities,
-                achievements, ownership, and metrics. Strong wording
-                should improve presentation—not create experience you do
-                not have.
+                Use only truthful technologies, responsibilities, achievements,
+                ownership, and metrics. Strong wording should improve
+                presentation—not create experience you do not have.
               </p>
             </section>
 
@@ -689,8 +788,8 @@ export default function SoftwareEngineerResumeBulletsPage() {
       <HumanAtsReviewCta source="software-engineer-guide" />
 
       <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-500">
-        © 2026 ResumeClimb AI. Examples are educational and must be
-        adapted to accurately reflect your experience.
+        © 2026 ResumeClimb AI. Examples are educational and must be adapted to
+        accurately reflect your experience.
       </footer>
     </main>
   );
