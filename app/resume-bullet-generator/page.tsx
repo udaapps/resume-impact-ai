@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 
 import ResumeBulletGeneratorClient from "@/components/resume-bullet-generator-client";
-import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 import ResumeBulletGeneratorSeoContent, {
   resumeBulletGeneratorFaqs,
 } from "@/components/resume-bullet-generator-seo-content";
+import ResumeGuideLinks from "@/components/resume-guide-links";
+import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 
-const siteUrl = "https://https://www.resumeclimbai.com";
+const siteUrl = "https://www.resumeclimbai.com";
 const pageUrl = `${siteUrl}/resume-bullet-generator`;
 
 export const metadata: Metadata = {
@@ -115,12 +116,14 @@ export default function ResumeBulletGeneratorPage() {
           __html: JSON.stringify(webApplicationSchema),
         }}
       />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(faqSchema),
         }}
       />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -131,6 +134,7 @@ export default function ResumeBulletGeneratorPage() {
       <ResumeBulletGeneratorClient>
         <>
           <HumanAtsReviewCta source="resume-bullet-generator" />
+          <ResumeGuideLinks />
           <ResumeBulletGeneratorSeoContent />
         </>
       </ResumeBulletGeneratorClient>

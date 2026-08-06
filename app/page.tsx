@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import ResumeBulletGeneratorClient from "@/components/resume-bullet-generator-client";
 import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 
-const siteUrl = "https://https://www.resumeclimbai.com";
+const siteUrl = "https://www.resumeclimbai.com";
 
 export const metadata: Metadata = {
   title: "AI Resume Bullet Generator | ResumeClimb AI",
