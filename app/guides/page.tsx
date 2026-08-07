@@ -92,6 +92,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/administrative-assistant-resume-bullets",
+    category: "Administrative Support",
+    title: "30 Administrative Assistant Resume Bullet Examples",
+    description:
+      "Use original examples for scheduling, office communication, documents, records, vendors, executive support, and verified achievements.",
+    highlights: [
+      "30 administrative examples",
+      "Role-specific ATS keywords",
+      "No-metrics writing guidance",
+    ],
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     category: "Software Engineering",
     title: "30 Software Engineer Resume Bullet Examples",
@@ -232,7 +244,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              55 role-specific examples
+              85 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims
@@ -258,7 +270,7 @@ export default function GuidesPage() {
             </h2>
           </div>
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
             {guides.map((guide) => (
               <article
                 key={guide.href}
