@@ -29,6 +29,13 @@ const guides = [
     description:
       "Turn technical responsibilities into focused resume bullets that communicate engineering work and business value.",
   },
+  {
+    href: "/guides/project-manager-resume-bullets",
+    label: "Project Management",
+    title: "Project Manager Resume Bullet Examples",
+    description:
+      "Describe project plans, stakeholders, risks, budgets, resources, delivery methods, and verified outcomes.",
+  },
 ] as const;
 
 export default function ResumeGuideLinks() {
@@ -66,7 +73,7 @@ export default function ResumeGuideLinks() {
             </Link>
           </div>
 
-          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
             {guides.map((guide) => (
               <Link
                 key={guide.href}

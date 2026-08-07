@@ -115,6 +115,18 @@ const guides = [
       "Useful impact metrics",
     ],
   },
+  {
+    href: "/guides/project-manager-resume-bullets",
+    category: "Project Management",
+    title: "30 Project Manager Resume Bullet Examples",
+    description:
+      "Use original examples for project planning, stakeholders, risks, budgets, resources, Agile delivery, and verified results.",
+    highlights: [
+      "30 project management examples",
+      "Role-specific ATS keywords",
+      "Confidential-metrics guidance",
+    ],
+  },
 ] as const;
 
 const structuredData = {
@@ -244,7 +256,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              85 role-specific examples
+              115 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims
@@ -390,7 +402,7 @@ export default function GuidesPage() {
         </div>
       </section>
 
-      <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-500">
+      <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-400">
         © 2026 ResumeClimb AI. Built by UDA Apps.
       </footer>
     </main>
