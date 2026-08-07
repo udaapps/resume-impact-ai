@@ -11,7 +11,7 @@ const siteUrl = "https://www.resumeclimbai.com";
 const pageUrl = `${siteUrl}/resume-bullet-generator`;
 
 export const metadata: Metadata = {
-  title: "Free AI Resume Bullet Generator | ResumeClimb AI",
+  title: "Free AI Resume Bullet Generator",
   description:
     "Create strong, ATS-friendly resume bullet points with a free AI resume bullet generator. Turn responsibilities into clear, achievement-focused statements.",
   keywords: [

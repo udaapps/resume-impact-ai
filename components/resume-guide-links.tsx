@@ -16,6 +16,13 @@ const guides = [
       "Write clearer customer service resume bullets using strong action verbs, relevant skills, and credible results.",
   },
   {
+    href: "/guides/administrative-assistant-resume-bullets",
+    label: "Administrative Support",
+    title: "Administrative Assistant Resume Bullet Examples",
+    description:
+      "Describe scheduling, office communication, document management, vendor coordination, and team support.",
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     label: "Software Engineering",
     title: "Software Engineer Resume Bullet Examples",
@@ -32,25 +39,34 @@ export default function ResumeGuideLinks() {
     >
       <div className="mx-auto max-w-7xl">
         <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 lg:p-10">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
-              Free Resume Writing Guides
-            </p>
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <div className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
+                Free Resume Writing Guides
+              </p>
 
-            <h2
-              id="resume-guides-heading"
-              className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl"
+              <h2
+                id="resume-guides-heading"
+                className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl"
+              >
+                Learn how to write stronger resume bullet points
+              </h2>
+
+              <p className="mt-4 leading-7 text-slate-400">
+                Use these practical guides to improve your resume with truthful,
+                role-relevant examples before checking it for ATS alignment.
+              </p>
+            </div>
+
+            <Link
+              href="/guides"
+              className="inline-flex w-fit rounded-xl border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-blue-500 hover:text-white"
             >
-              Learn how to write stronger resume bullet points
-            </h2>
-
-            <p className="mt-4 leading-7 text-slate-400">
-              Use these practical guides to improve your resume with truthful,
-              role-relevant examples before checking it for ATS alignment.
-            </p>
+              Browse all resume guides
+            </Link>
           </div>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {guides.map((guide) => (
               <Link
                 key={guide.href}
