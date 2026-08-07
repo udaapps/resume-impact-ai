@@ -139,6 +139,18 @@ const guides = [
       "Revenue accuracy guidance",
     ],
   },
+  {
+    href: "/guides/data-analyst-resume-bullets",
+    category: "Data Analytics",
+    title: "30 Data Analyst Resume Bullet Examples",
+    description:
+      "Use original examples for SQL, Python, Excel, data cleaning, dashboards, reporting, automation, and business insights.",
+    highlights: [
+      "30 data analyst examples",
+      "Technical ATS keywords",
+      "Confidential-data guidance",
+    ],
+  },
 ] as const;
 
 const structuredData = {
@@ -268,7 +280,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              145 role-specific examples
+              175 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims

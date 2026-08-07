@@ -43,6 +43,13 @@ const guides = [
     description:
       "Describe prospecting, presentations, negotiation, closing, CRM work, customer growth, and verified results.",
   },
+  {
+    href: "/guides/data-analyst-resume-bullets",
+    label: "Data Analytics",
+    title: "Data Analyst Resume Bullet Examples",
+    description:
+      "Describe SQL, Python, Excel, dashboards, data cleaning, reporting, automation, and business insights.",
+  },
 ] as const;
 
 export default function ResumeGuideLinks() {
