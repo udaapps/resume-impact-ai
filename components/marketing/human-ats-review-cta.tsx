@@ -1,6 +1,7 @@
 "use client";
 
 import { sendGAEvent } from "@next/third-parties/google";
+
 declare global {
   interface Window {
     gtag?: (
@@ -22,41 +23,32 @@ export default function HumanAtsReviewCta({
   className = "",
   source = "website",
 }: HumanAtsReviewCtaProps) {
- function handleFiverrClick() {
-  const eventParameters = {
-    source,
-    offer: "ats_resume_quick_fix",
-    value: 15,
-    currency: "USD",
-    destination: "fiverr",
-  };
+  function handleFiverrClick() {
+    const eventParameters = {
+      source,
+      offer: "ats_resume_quick_fix",
+      value: 15,
+      currency: "USD",
+      destination: "fiverr",
+    };
 
-  if (typeof window.gtag === "function") {
-    window.gtag(
-      "event",
-      "fiverr_cta_click",
-      eventParameters
-    );
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "fiverr_cta_click", eventParameters);
+      return;
+    }
 
-    return;
+    sendGAEvent("event", "fiverr_cta_click", eventParameters);
   }
-
-  sendGAEvent(
-    "event",
-    "fiverr_cta_click",
-    eventParameters
-  );
-}
 
   return (
     <section
       aria-labelledby={`human-ats-review-${source}`}
       className={`border-y border-blue-500/20 bg-gradient-to-br from-blue-600/10 via-slate-950 to-violet-600/10 px-4 py-14 text-white sm:px-6 sm:py-16 lg:px-8 ${className}`}
     >
-      <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-blue-500/30 bg-slate-900/90 shadow-2xl shadow-blue-950/30">
-        <div className="grid gap-0 lg:grid-cols-[1.25fr_0.75fr]">
-          <div className="p-6 sm:p-9 lg:p-11">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
+      <div className="mx-auto max-w-6xl">
+        <div className="grid overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 shadow-2xl shadow-slate-950/30 lg:grid-cols-[minmax(0,1.35fr)_minmax(300px,0.65fr)]">
+          <div className="p-6 sm:p-9 lg:p-10">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-300">
               Human Resume Service
             </p>
 
@@ -96,9 +88,8 @@ export default function HumanAtsReviewCta({
             </ul>
 
             <p className="mt-6 text-sm leading-6 text-slate-400">
-              Recommendations are based on the resume and job
-              description you provide. No false experience, skills, or
-              achievements are added.
+              Recommendations are based on the resume and job description you
+              provide. No false experience, skills, or achievements are added.
             </p>
           </div>
 
@@ -119,13 +110,13 @@ export default function HumanAtsReviewCta({
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleFiverrClick}
-              className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-4 text-center font-semibold text-white transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+              className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-700 px-6 py-4 text-center font-semibold text-white transition hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               Get My ATS Resume Quick Fix
               <span aria-hidden="true">↗</span>
             </a>
 
-            <p className="mt-4 text-center text-xs leading-5 text-slate-500">
+            <p className="mt-4 text-center text-xs leading-5 text-slate-400">
               Secure order, communication, and payment through Fiverr.
             </p>
           </div>

@@ -345,7 +345,7 @@ export default function HomePage() {
                     className={`mt-8 inline-flex w-fit rounded-xl px-6 py-3 font-semibold text-white transition ${
                       isBlue
                         ? "bg-blue-600 hover:bg-blue-500"
-                        : "bg-emerald-600 hover:bg-emerald-500"
+                        : "bg-emerald-700 hover:bg-emerald-600"
                     }`}
                   >
                     {tool.cta}
@@ -475,7 +475,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-500">
+      <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-400">
         © 2026 ResumeClimb AI. Built by UDA Apps.
       </footer>
     </main>
