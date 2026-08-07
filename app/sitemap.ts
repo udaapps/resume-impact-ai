@@ -29,6 +29,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/about`,
+      lastModified: new Date("2026-08-07"),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/editorial-policy`,
+      lastModified: new Date("2026-08-07"),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
       url: `${baseUrl}/guides/resume-bullets-without-metrics`,
       lastModified: new Date("2026-08-06"),
       changeFrequency: "monthly",
