@@ -8,7 +8,7 @@ const PAGE_PATH = "/guides/administrative-assistant-resume-bullets";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
 export const metadata: Metadata = {
-  title: "30 Administrative Assistant Resume Bullet Examples | ResumeClimb AI",
+  title: "30 Administrative Assistant Resume Bullet Examples",
   description:
     "Use 30 administrative assistant resume bullet examples, ATS keywords, writing formulas, and practical tips to describe office support experience.",
   alternates: {
