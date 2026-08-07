@@ -7,21 +7,20 @@ import AtsResumeCheckerSeoContent, {
 } from "@/components/ats/ats-resume-checker-seo-content";
 
 const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://https://www.resumeclimbai.com"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.resumeclimbai.com"
 ).replace(/\/$/, "");
 
 const PAGE_URL = `${SITE_URL}/ats-resume-checker`;
 
-const TITLE =
-  "Free ATS Resume Checker & Resume Score | ResumeClimb AI";
+const PAGE_TITLE = "Free ATS Resume Checker & Resume Score";
+const SOCIAL_TITLE = `${PAGE_TITLE} | ResumeClimb AI`;
 
 const DESCRIPTION =
   "Check your resume against a job description with our free ATS resume checker. Find missing keywords, formatting issues, weak bullet points, and practical improvements.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
+  title: PAGE_TITLE,
   description: DESCRIPTION,
   keywords: [
     "free ATS resume checker",
@@ -39,7 +38,7 @@ export const metadata: Metadata = {
     type: "website",
     url: PAGE_URL,
     siteName: "ResumeClimb AI",
-    title: TITLE,
+    title: SOCIAL_TITLE,
     description: DESCRIPTION,
     images: [
       {
@@ -52,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: TITLE,
+    title: SOCIAL_TITLE,
     description: DESCRIPTION,
     images: ["/opengraph-image.png"],
   },
@@ -76,7 +75,7 @@ const structuredData = {
       "@type": "WebPage",
       "@id": `${PAGE_URL}#webpage`,
       url: PAGE_URL,
-      name: TITLE,
+      name: PAGE_TITLE,
       description: DESCRIPTION,
       isPartOf: {
         "@id": `${SITE_URL}/#website`,
@@ -166,8 +165,8 @@ export default function AtsResumeCheckerPage() {
       <AtsResumeCheckerSeoContent />
 
       <footer className="border-t border-slate-900 px-4 py-8 text-center text-sm text-slate-500 sm:px-6 lg:px-8">
-        © 2026 ResumeClimb AI. ATS results and AI rewrites are estimates
-        and should be reviewed before use.
+        © 2026 ResumeClimb AI. ATS results and AI rewrites are estimates and
+        should be reviewed before use.
       </footer>
     </main>
   );
