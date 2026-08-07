@@ -58,5 +58,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/guides/sales-resume-bullets`,
+      lastModified: new Date("2026-08-07"),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
   ];
 }

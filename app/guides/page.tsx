@@ -127,6 +127,18 @@ const guides = [
       "Confidential-metrics guidance",
     ],
   },
+  {
+    href: "/guides/sales-resume-bullets",
+    category: "Sales",
+    title: "30 Sales Resume Bullet Examples",
+    description:
+      "Use original examples for prospecting, discovery, presentations, closing, account growth, CRM, and verified sales results.",
+    highlights: [
+      "30 sales examples",
+      "Sales ATS keywords",
+      "Revenue accuracy guidance",
+    ],
+  },
 ] as const;
 
 const structuredData = {
@@ -256,7 +268,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              115 role-specific examples
+              145 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims

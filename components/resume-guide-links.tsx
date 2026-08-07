@@ -36,6 +36,13 @@ const guides = [
     description:
       "Describe project plans, stakeholders, risks, budgets, resources, delivery methods, and verified outcomes.",
   },
+  {
+    href: "/guides/sales-resume-bullets",
+    label: "Sales",
+    title: "Sales Resume Bullet Examples",
+    description:
+      "Describe prospecting, presentations, negotiation, closing, CRM work, customer growth, and verified results.",
+  },
 ] as const;
 
 export default function ResumeGuideLinks() {
@@ -73,7 +80,7 @@ export default function ResumeGuideLinks() {
             </Link>
           </div>
 
-          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {guides.map((guide) => (
               <Link
                 key={guide.href}
