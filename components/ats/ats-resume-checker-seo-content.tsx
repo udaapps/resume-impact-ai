@@ -4,7 +4,12 @@ export const ATS_RESUME_CHECKER_FAQS = [
   {
     question: "What is an ATS resume checker?",
     answer:
-      "An ATS resume checker compares resume content with a target job description. It highlights keyword alignment, section structure, bullet quality, formatting risks, and other practical improvement opportunities.",
+      "An ATS resume checker compares resume content with a target job description. It can highlight keyword alignment, section structure, bullet quality, formatting risks, and other practical improvement opportunities.",
+  },
+  {
+    question: "What is ResumeClimb Truth Match?",
+    answer:
+      "ResumeClimb Truth Match separates job-description terms into three evidence-aware groups: confirmed terms directly matched in the resume, related concepts that do not confirm the exact requirement, and terms that were not confirmed. It does not independently verify a candidate's employment history or skills.",
   },
   {
     question: "Is this ATS resume checker free?",
@@ -19,7 +24,7 @@ export const ATS_RESUME_CHECKER_FAQS = [
   {
     question: "Should I add every missing keyword?",
     answer:
-      "No. Add a missing keyword only when it accurately reflects your skills, experience, qualifications, tools, or responsibilities. Never add claims that you cannot support.",
+      "No. Review whether the term is confirmed, related, or not confirmed. Add or rewrite a keyword only when it accurately reflects your skills, experience, qualifications, tools, or responsibilities. Never add a claim that you cannot support.",
   },
   {
     question: "What resume format is usually easiest for ATS software to read?",
@@ -35,9 +40,9 @@ export const ATS_RESUME_CHECKER_FAQS = [
 
 const analysisItems = [
   {
-    title: "Keyword alignment",
+    title: "Truth Match keyword review",
     description:
-      "See which important skills and job-specific terms appear in both your resume and the vacancy.",
+      "Separate direct keyword matches from related concepts and job requirements that are not confirmed by the resume.",
   },
   {
     title: "Resume structure",
@@ -114,9 +119,10 @@ export default function AtsResumeCheckerSeoContent() {
           </h2>
           <p className="mt-4 max-w-4xl text-sm leading-7 text-slate-400 sm:text-base">
             The checker compares the language and structure of your resume
-            with one target job description. It is designed to help you find
-            practical improvement opportunities before submitting an
-            application.
+            with one target job description. Truth Match then separates
+            direct keyword matches from related evidence and unconfirmed job
+            terms. The full report is designed to help you prioritize
+            practical improvements before submitting an application.
           </p>
 
           <div className="mt-7 grid gap-4 md:grid-cols-2">
@@ -164,7 +170,7 @@ export default function AtsResumeCheckerSeoContent() {
                 step: "3",
                 title: "Review and improve",
                 description:
-                  "Use the score, missing keywords, formatting findings, and bullet recommendations as a practical editing checklist.",
+                  "Use Truth Match, the estimated score, formatting findings, and bullet recommendations as a practical editing checklist.",
               },
             ].map((item) => (
               <li
@@ -197,7 +203,8 @@ export default function AtsResumeCheckerSeoContent() {
           <p className="mt-4 max-w-4xl text-sm leading-7 text-slate-400 sm:text-base">
             The score summarizes several signals from the current resume and
             job description. Treat it as a prioritization tool rather than an
-            official employer result.
+            official employer result. A related Truth Match item remains
+            unconfirmed and should not be treated as a direct keyword match.
           </p>
 
           <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -219,25 +226,62 @@ export default function AtsResumeCheckerSeoContent() {
         <section className="grid gap-6 lg:grid-cols-2">
           <article className="rounded-3xl border border-amber-500/25 bg-amber-500/5 p-6 sm:p-8">
             <h2 className="text-2xl font-bold tracking-tight text-white">
-              What missing resume keywords mean
+              How ResumeClimb Truth Match classifies keywords
             </h2>
             <p className="mt-4 text-sm leading-7 text-slate-300">
-              Missing keywords are important words or phrases found in the job
-              description but not clearly represented in your resume. They may
-              include tools, qualifications, responsibilities, methods, or
-              role-specific skills.
+              Truth Match compares important job-description terms with the
+              supplied resume without treating every similar word as proof of
+              the exact requirement.
             </p>
-            <p className="mt-4 text-sm leading-7 text-amber-200">
-              Add a keyword only when it truthfully reflects your real
-              experience. Keyword stuffing and unsupported claims can make a
-              resume less credible.
-            </p>
+
+            <dl className="mt-5 space-y-4 text-sm leading-6">
+              <div className="rounded-xl border border-emerald-500/25 bg-slate-950/50 p-4">
+                <dt className="font-semibold text-emerald-200">
+                  Confirmed from resume
+                </dt>
+                <dd className="mt-1 text-slate-300">
+                  A direct match for the job-description term was detected in
+                  the resume.
+                </dd>
+              </div>
+
+              <div className="rounded-xl border border-blue-500/25 bg-slate-950/50 p-4">
+                <dt className="font-semibold text-blue-200">
+                  Related evidence
+                </dt>
+                <dd className="mt-1 text-slate-300">
+                  An adjacent concept was detected, but it does not confirm the
+                  exact tool, skill, or requirement.
+                </dd>
+              </div>
+
+              <div className="rounded-xl border border-amber-500/25 bg-slate-950/50 p-4">
+                <dt className="font-semibold text-amber-200">
+                  Not confirmed
+                </dt>
+                <dd className="mt-1 text-slate-300">
+                  No direct or controlled related wording was found. Leave the
+                  term out unless it genuinely reflects your experience.
+                </dd>
+              </div>
+            </dl>
+
+            <Link
+              href="/editorial-policy"
+              className="mt-5 inline-flex text-sm font-semibold text-blue-200 transition hover:text-white"
+            >
+              Read our editorial and accuracy policy →
+            </Link>
           </article>
 
           <article className="rounded-3xl border border-violet-500/25 bg-violet-500/5 p-6 sm:p-8">
             <h2 className="text-2xl font-bold tracking-tight text-white">
-              Before-and-after resume bullet example
+              Truth-first resume bullet example
             </h2>
+            <p className="mt-4 text-sm leading-7 text-slate-300">
+              Stronger wording should clarify supplied facts without inventing
+              an outcome, metric, tool, or responsibility.
+            </p>
             <div className="mt-5 space-y-4">
               <div className="rounded-2xl border border-red-500/25 bg-slate-950/60 p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-red-300">
@@ -252,8 +296,8 @@ export default function AtsResumeCheckerSeoContent() {
                   After
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
-                  Resolved customer inquiries across phone and email,
-                  improving satisfaction through timely support.
+                  Resolved customer inquiries across phone and email and
+                  documented follow-up actions in the CRM.
                 </p>
               </div>
             </div>
@@ -341,7 +385,7 @@ export default function AtsResumeCheckerSeoContent() {
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/"
+              href="/resume-bullet-generator"
               className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500"
             >
               AI Resume Bullet Generator

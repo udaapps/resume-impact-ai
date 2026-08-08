@@ -16,7 +16,7 @@ const PAGE_TITLE = "Free ATS Resume Checker & Resume Score";
 const SOCIAL_TITLE = `${PAGE_TITLE} | ResumeClimb AI`;
 
 const DESCRIPTION =
-  "Check your resume against a job description with our free ATS resume checker. Find missing keywords, formatting issues, weak bullet points, and practical improvements.";
+  "Check your resume against a job description for free. Separate confirmed, related, and missing keywords, then review bullets, structure, and formatting.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     "ATS resume score",
     "resume keyword checker",
     "resume job match",
+    "job description keyword match",
     "ATS resume analyzer",
     "resume bullet checker",
     "resume formatting checker",
@@ -90,7 +91,7 @@ const structuredData = {
     {
       "@type": "WebApplication",
       "@id": `${PAGE_URL}#application`,
-      name: "ResumeClimb AI ATS Resume Checker",
+      name: "ResumeClimb AI ATS Resume Checker with Truth Match",
       url: PAGE_URL,
       description: DESCRIPTION,
       applicationCategory: "BusinessApplication",
@@ -104,7 +105,7 @@ const structuredData = {
       featureList: [
         "Resume and job description comparison",
         "Estimated ATS resume score",
-        "Matched and missing keyword analysis",
+        "Truth Match classification for confirmed, related, and unconfirmed job keywords",
         "Resume structure analysis",
         "Achievement and bullet quality analysis",
         "Formatting and readability checks",
