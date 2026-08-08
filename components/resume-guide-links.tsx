@@ -58,6 +58,13 @@ const guides = [
       "Describe POS transactions, payments, returns, customer service, till balancing, promotions, checkout support, and verified results.",
   },
   {
+    href: "/guides/delivery-driver-resume-bullets",
+    label: "Delivery and Logistics",
+    title: "Delivery Driver Resume Bullet Examples",
+    description:
+      "Describe routes, vehicle inspections, loading, proof of delivery, customer handoffs, records, safety, and verified results.",
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     label: "Software Engineering",
     title: "Software Engineer Resume Bullet Examples",
