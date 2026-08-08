@@ -104,6 +104,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/resume-action-verbs",
+    category: "Resume Action Verbs",
+    title: "200+ Resume Action Verbs With Examples",
+    description:
+      "Choose precise action verbs by responsibility and contribution level, strengthen supported resume bullets, and avoid wording that overstates your work.",
+    highlights: [
+      "220 categorized action verbs",
+      "Ownership and scope guidance",
+      "Weak-to-strong bullet rewrites",
+    ],
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     category: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",

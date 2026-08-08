@@ -23,6 +23,13 @@ const guides = [
       "Choose relevant hard and soft skills, confirm each claim with real evidence, and place supported skills naturally for ATS review.",
   },
   {
+    href: "/guides/resume-action-verbs",
+    label: "Resume Action Verbs",
+    title: "200+ Resume Action Verbs With Examples",
+    description:
+      "Choose precise verbs for your real contribution, improve supported bullet points, and avoid language that overstates ownership or results.",
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     label: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",
