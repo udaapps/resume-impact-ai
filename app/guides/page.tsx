@@ -116,6 +116,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/how-to-write-work-experience-on-resume",
+    category: "Resume Work Experience",
+    title: "How to Write Resume Work Experience With Examples",
+    description:
+      "Format job titles, employers, dates, promotions, freelance and volunteer work, then turn real responsibilities into evidence-based resume bullets.",
+    highlights: [
+      "Work-history templates",
+      "14 adaptable examples",
+      "Gaps, older roles, and no-metrics advice",
+    ],
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     category: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",

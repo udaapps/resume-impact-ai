@@ -30,6 +30,13 @@ const guides = [
       "Choose precise verbs for your real contribution, improve supported bullet points, and avoid language that overstates ownership or results.",
   },
   {
+    href: "/guides/how-to-write-work-experience-on-resume",
+    label: "Resume Work Experience",
+    title: "How to Write Resume Work Experience",
+    description:
+      "Format titles, employers, dates, promotions, freelance and volunteer work, then write evidence-based bullets for each relevant role.",
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     label: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",
