@@ -30,6 +30,13 @@ const guides = [
       "Describe visitor support, calls, messages, appointments, records, customer service, and front-desk coordination.",
   },
   {
+    href: "/guides/warehouse-worker-resume-bullets",
+    label: "Warehouse and Logistics",
+    title: "Warehouse Worker Resume Bullet Examples",
+    description:
+      "Describe picking, packing, shipping, receiving, inventory, safety, equipment, quality checks, and verified results.",
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     label: "Software Engineering",
     title: "Software Engineer Resume Bullet Examples",

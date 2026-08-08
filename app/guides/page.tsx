@@ -116,6 +116,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/warehouse-worker-resume-bullets",
+    category: "Warehouse and Logistics",
+    title: "30 Warehouse Worker Resume Bullet Examples",
+    description:
+      "Use original examples for picking, packing, shipping, receiving, inventory, safety, equipment, quality, and verified results.",
+    highlights: [
+      "30 warehouse examples",
+      "Warehouse ATS keywords",
+      "Equipment and credential accuracy",
+    ],
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     category: "Software Engineering",
     title: "30 Software Engineer Resume Bullet Examples",
@@ -292,7 +304,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              205 role-specific examples
+              235 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims
