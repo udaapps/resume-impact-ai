@@ -65,6 +65,13 @@ const guides = [
       "Describe routes, vehicle inspections, loading, proof of delivery, customer handoffs, records, safety, and verified results.",
   },
   {
+    href: "/guides/security-guard-resume-bullets",
+    label: "Security and Protective Services",
+    title: "Security Guard Resume Bullet Examples",
+    description:
+      "Describe patrols, access control, CCTV, alarms, incident reports, emergency support, public contact, and verified results.",
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     label: "Software Engineering",
     title: "Software Engineer Resume Bullet Examples",

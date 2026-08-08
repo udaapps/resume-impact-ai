@@ -176,6 +176,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/security-guard-resume-bullets",
+    category: "Security and Protective Services",
+    title: "30 Security Guard Resume Bullet Examples",
+    description:
+      "Use original examples for patrols, access control, CCTV, alarms, incident response, reports, emergency support, and verified results.",
+    highlights: [
+      "30 security guard examples",
+      "Security and incident ATS keywords",
+      "Credential and authority accuracy",
+    ],
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     category: "Software Engineering",
     title: "30 Software Engineer Resume Bullet Examples",
@@ -352,7 +364,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              355 role-specific examples
+              385 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims
