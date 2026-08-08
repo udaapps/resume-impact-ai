@@ -37,6 +37,13 @@ const guides = [
       "Describe picking, packing, shipping, receiving, inventory, safety, equipment, quality checks, and verified results.",
   },
   {
+    href: "/guides/office-manager-resume-bullets",
+    label: "Office Operations",
+    title: "Office Manager Resume Bullet Examples",
+    description:
+      "Describe office operations, facilities, vendors, purchasing, budgets, scheduling, onboarding, records, and process improvement.",
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     label: "Software Engineering",
     title: "Software Engineer Resume Bullet Examples",
