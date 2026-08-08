@@ -530,6 +530,20 @@ export default function TailorResumeToJobDescriptionPage() {
                   );
                 })}
               </div>
+
+              <div className="mt-6 rounded-2xl border border-blue-500/25 bg-blue-500/10 p-5">
+                <p className="leading-7 text-slate-300">
+                  Need help deciding which terms matter and where they belong?
+                  Review the keyword types, evidence rules, placement table,
+                  acronym guidance, and worked examples before editing.
+                </p>
+                <Link
+                  href="/guides/resume-keywords-for-ats"
+                  className="mt-3 inline-flex font-semibold text-blue-200 hover:text-white"
+                >
+                  Read the truth-first ATS resume keyword guide →
+                </Link>
+              </div>
             </section>
 
             <section aria-labelledby="steps-heading">

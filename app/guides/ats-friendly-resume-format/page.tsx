@@ -847,12 +847,20 @@ Credential | Issuer | Current status or date when relevant`}
                 add or rewrite them. Keep unsupported tools, credentials, and
                 outcomes out of the resume.
               </p>
-              <Link
-                href="/guides/how-to-tailor-resume-to-job-description"
-                className="mt-6 inline-flex font-semibold text-blue-300 hover:text-blue-200"
-              >
-                Learn the complete Truth Match tailoring method →
-              </Link>
+              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
+                <Link
+                  href="/guides/resume-keywords-for-ats"
+                  className="inline-flex font-semibold text-blue-300 hover:text-blue-200"
+                >
+                  Learn how to find and use ATS resume keywords →
+                </Link>
+                <Link
+                  href="/guides/how-to-tailor-resume-to-job-description"
+                  className="inline-flex font-semibold text-blue-300 hover:text-blue-200"
+                >
+                  Learn the complete Truth Match tailoring method →
+                </Link>
+              </div>
             </section>
 
             <section aria-labelledby="mistakes-heading">

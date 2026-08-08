@@ -274,6 +274,12 @@ export default function AtsResumeCheckerSeoContent() {
                 Learn the Truth Match resume tailoring method →
               </Link>
               <Link
+                href="/guides/resume-keywords-for-ats"
+                className="inline-flex text-sm font-semibold text-blue-200 transition hover:text-white"
+              >
+                Learn how to find and use ATS resume keywords →
+              </Link>
+              <Link
                 href="/editorial-policy"
                 className="inline-flex text-sm font-semibold text-slate-300 transition hover:text-white"
               >
