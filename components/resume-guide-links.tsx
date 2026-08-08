@@ -2,6 +2,13 @@ import Link from "next/link";
 
 const guides = [
   {
+    href: "/guides/resume-keywords-for-ats",
+    label: "ATS Resume Keywords",
+    title: "Resume Keywords for ATS: Find and Use Them",
+    description:
+      "Identify job-description keywords, classify the evidence, place supported terms naturally, and avoid unsupported claims.",
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     label: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",

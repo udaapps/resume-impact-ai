@@ -59,6 +59,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/guides/resume-keywords-for-ats`,
+      lastModified: new Date("2026-08-08"),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/guides/customer-service-resume-bullets`,
       lastModified: new Date("2026-08-06"),
       changeFrequency: "monthly",

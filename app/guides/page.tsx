@@ -68,6 +68,18 @@ export const metadata: Metadata = {
 
 const guides = [
   {
+    href: "/guides/resume-keywords-for-ats",
+    category: "ATS Resume Keywords",
+    title: "Resume Keywords for ATS: Find and Use Them",
+    description:
+      "Find keywords in a job description, classify each term against real evidence, place supported wording naturally, and avoid keyword stuffing.",
+    highlights: [
+      "Confirmed, Related, and Not Confirmed",
+      "Keyword placement examples",
+      "Truth-first final checklist",
+    ],
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     category: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",
