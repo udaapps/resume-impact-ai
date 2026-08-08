@@ -597,6 +597,19 @@ export default function AdministrativeAssistantResumeBulletsPage() {
                     do not have verified numbers.
                   </p>
                 </Link>
+
+                <Link
+                  href="/guides/executive-assistant-resume-bullets"
+                  className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-blue-500"
+                >
+                  <p className="text-lg font-bold text-white">
+                    Executive Assistant Resume Bullet Examples
+                  </p>
+                  <p className="mt-3 leading-7 text-slate-400">
+                    Review calendar, meeting, travel, expense, communication,
+                    and executive-support examples for higher-scope roles.
+                  </p>
+                </Link>
               </div>
             </section>
 

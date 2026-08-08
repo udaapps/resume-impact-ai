@@ -191,10 +191,10 @@ const relatedGuides = [
       "Show scope, ownership, skill, and impact when exact numbers are unavailable.",
   },
   {
-    href: "/guides/software-engineer-resume-bullets",
-    title: "Software Engineer Resume Bullet Examples",
+    href: "/guides/receptionist-resume-bullets",
+    title: "Receptionist Resume Bullet Examples",
     description:
-      "Learn how to present technical responsibilities, project work, and engineering impact.",
+      "Adapt front-desk, scheduling, phone, visitor, recordkeeping, and customer-support examples.",
   },
 ];
 

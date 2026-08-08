@@ -790,6 +790,13 @@ Credential | Issuer | Current status or date when relevant`}
                   </section>
                 ))}
               </div>
+
+              <Link
+                href="/guides/how-to-list-education-on-resume"
+                className="mt-6 inline-flex font-semibold text-blue-300 hover:text-blue-200"
+              >
+                Learn how to format every resume education scenario →
+              </Link>
             </section>
 
             <section aria-labelledby="testing-heading">

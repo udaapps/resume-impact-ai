@@ -347,6 +347,22 @@ const experienceExamples = [
   },
 ] as const;
 
+const experienceGuideLinks: Record<string, string> = {
+  "Customer service representative":
+    "/guides/customer-service-resume-bullets",
+  "Administrative assistant":
+    "/guides/administrative-assistant-resume-bullets",
+  "Software engineer": "/guides/software-engineer-resume-bullets",
+  "Data analyst": "/guides/data-analyst-resume-bullets",
+  "Project manager or coordinator":
+    "/guides/project-manager-resume-bullets",
+  "Sales representative": "/guides/sales-resume-bullets",
+  "Warehouse worker": "/guides/warehouse-worker-resume-bullets",
+  "Delivery driver": "/guides/delivery-driver-resume-bullets",
+  "Security guard": "/guides/security-guard-resume-bullets",
+  "Part-time or early work experience": "/guides/cashier-resume-bullets",
+};
+
 const specialFormats = [
   {
     title: "Promotions at the same employer",
@@ -955,6 +971,14 @@ export default function HowToWriteWorkExperienceOnResumePage() {
                         <h3 className="mt-2 text-2xl font-bold text-white">
                           {example.title}
                         </h3>
+                        {experienceGuideLinks[example.title] ? (
+                          <Link
+                            href={experienceGuideLinks[example.title]}
+                            className="mt-2 inline-flex text-sm font-semibold text-blue-300 hover:text-blue-200"
+                          >
+                            View role-specific resume bullet examples →
+                          </Link>
+                        ) : null}
                       </div>
                     </div>
                     <div className="mt-5 rounded-xl border border-slate-800 bg-slate-950/70 p-4">

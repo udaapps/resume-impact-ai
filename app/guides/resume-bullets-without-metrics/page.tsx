@@ -96,6 +96,27 @@ const faqItems = [
   },
 ];
 
+const relatedGuides = [
+  {
+    href: "/guides/resume-action-verbs",
+    title: "Resume Action Verbs With Examples",
+    description:
+      "Choose a precise verb that matches whether you led, coordinated, supported, created, analyzed, or improved the work.",
+  },
+  {
+    href: "/guides/how-to-write-work-experience-on-resume",
+    title: "How to Write Resume Work Experience",
+    description:
+      "Turn accurate responsibilities, context, tools, and outcomes into a clear work-history section.",
+  },
+  {
+    href: "/guides/resume-keywords-for-ats",
+    title: "How to Find Resume Keywords for ATS",
+    description:
+      "Find relevant job-description terms and use only the keywords your real experience supports.",
+  },
+] as const;
+
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -608,6 +629,37 @@ export default function ResumeBulletsWithoutMetricsPage() {
                       {item.answer}
                     </p>
                   </details>
+                ))}
+              </div>
+            </section>
+
+            <section className="pt-14" aria-labelledby="related-guides-heading">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
+                Related Resume Guides
+              </p>
+              <h2
+                id="related-guides-heading"
+                className="mt-3 text-3xl font-bold tracking-tight"
+              >
+                Continue building evidence-based resume content
+              </h2>
+              <div className="mt-8 grid gap-5 md:grid-cols-3">
+                {relatedGuides.map((guide) => (
+                  <Link
+                    key={guide.href}
+                    href={guide.href}
+                    className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 transition hover:border-blue-500"
+                  >
+                    <h3 className="text-lg font-bold text-white">
+                      {guide.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-6 text-slate-400">
+                      {guide.description}
+                    </p>
+                    <span className="mt-5 inline-flex text-sm font-semibold text-blue-300">
+                      Read guide →
+                    </span>
+                  </Link>
                 ))}
               </div>
             </section>

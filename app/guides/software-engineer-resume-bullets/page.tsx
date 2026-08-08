@@ -211,10 +211,10 @@ const relatedGuides = [
       "Show technical scope, ownership, complexity, and impact when exact numbers are unavailable.",
   },
   {
-    href: "/guides/customer-service-resume-bullets",
-    title: "Customer Service Resume Bullet Examples",
+    href: "/guides/data-analyst-resume-bullets",
+    title: "Data Analyst Resume Bullet Examples",
     description:
-      "See how role-specific actions, skills, and credible outcomes can strengthen customer service experience.",
+      "Explore truthful examples for SQL, Python, dashboards, reporting, automation, and data quality work.",
   },
 ];
 
@@ -774,10 +774,10 @@ export default function SoftwareEngineerResumeBulletsPage() {
                   Free ATS Resume Checker
                 </Link>
                 <Link
-                  href="/guides/customer-service-resume-bullets"
+                  href="/guides/resume-keywords-for-ats"
                   className="block rounded-xl border border-slate-700 px-4 py-3 text-sm font-semibold text-slate-200 hover:border-blue-500"
                 >
-                  Customer Service Bullet Examples
+                  Resume Keywords for ATS
                 </Link>
               </div>
             </section>
