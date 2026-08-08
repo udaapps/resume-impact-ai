@@ -2,6 +2,13 @@ import Link from "next/link";
 
 const guides = [
   {
+    href: "/guides/ats-friendly-resume-format",
+    label: "ATS Resume Formatting",
+    title: "ATS-Friendly Resume Format: Guide and Checklist",
+    description:
+      "Use a safer layout, choose PDF or DOCX responsibly, test text extraction, and review a complete ATS-format checklist.",
+  },
+  {
     href: "/guides/how-to-tailor-resume-to-job-description",
     label: "Resume Tailoring",
     title: "How to Tailor Your Resume to a Job Description",

@@ -68,6 +68,18 @@ export const metadata: Metadata = {
 
 const guides = [
   {
+    href: "/guides/ats-friendly-resume-format",
+    category: "ATS Resume Formatting",
+    title: "ATS-Friendly Resume Format: Guide and Checklist",
+    description:
+      "Build a parseable, readable resume with a safe layout, PDF and DOCX guidance, practical parsing tests, and a final pre-submission checklist.",
+    highlights: [
+      "Safest, variable, and risky elements",
+      "PDF and DOCX decision guide",
+      "Practical parsing tests",
+    ],
+  },
+  {
     href: "/guides/how-to-tailor-resume-to-job-description",
     category: "Resume Tailoring",
     title: "How to Tailor Your Resume to a Job Description",
