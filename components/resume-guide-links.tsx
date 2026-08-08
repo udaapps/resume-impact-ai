@@ -2,6 +2,13 @@ import Link from "next/link";
 
 const guides = [
   {
+    href: "/guides/how-to-tailor-resume-to-job-description",
+    label: "Resume Tailoring",
+    title: "How to Tailor Your Resume to a Job Description",
+    description:
+      "Match employer priorities to real evidence, classify related terms carefully, and avoid unsupported keyword claims.",
+  },
+  {
     href: "/guides/resume-bullets-without-metrics",
     label: "Resume Writing Guide",
     title: "How to Write Strong Resume Bullets Without Metrics",

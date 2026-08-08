@@ -68,6 +68,18 @@ export const metadata: Metadata = {
 
 const guides = [
   {
+    href: "/guides/how-to-tailor-resume-to-job-description",
+    category: "Resume Tailoring",
+    title: "How to Tailor Your Resume to a Job Description",
+    description:
+      "Use an evidence-first method to match employer priorities, classify keywords, rewrite the right sections, and avoid unsupported claims.",
+    highlights: [
+      "Confirmed, Related, and Not Confirmed",
+      "Worked keyword evidence map",
+      "Final tailoring checklist",
+    ],
+  },
+  {
     href: "/guides/resume-bullets-without-metrics",
     category: "Resume Writing Fundamentals",
     title: "How to Write Strong Resume Bullets Without Metrics",
