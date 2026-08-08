@@ -37,8 +37,176 @@ type FormattingAnalysis = {
   recommendations: string[];
 };
 
+type KeywordItem = {
+  keyword: string;
+  category: string;
+  weight: number;
+};
+
+type TruthMatchStatus =
+  | "confirmed"
+  | "related"
+  | "missing";
+
+type TruthMatchItem = KeywordItem & {
+  status: TruthMatchStatus;
+  explanation: string;
+  relatedResumeTerms: string[];
+};
+
+type TruthMatchAnalysis = {
+  confirmed: TruthMatchItem[];
+  related: TruthMatchItem[];
+  missing: TruthMatchItem[];
+  notice: string;
+};
+
 const MAX_RESUME_LENGTH = 30_000;
 const MAX_JOB_DESCRIPTION_LENGTH = 20_000;
+
+const TRUTH_MATCH_NOTICE =
+  "Truth Match compares wording in the supplied resume with the target job description. Related wording is not proof that the exact skill or requirement is owned. Add or rewrite a term only when it accurately reflects real experience.";
+
+/*
+ * These controlled groups identify adjacent concepts without
+ * claiming that one skill is equivalent to another. For example,
+ * Azure can be related to an AWS requirement, but it does not
+ * confirm AWS experience. This list is deliberately conservative.
+ */
+const RELATED_TERM_GROUPS: string[][] = [
+  [
+    "customer service",
+    "customer support",
+    "customer care",
+    "client service",
+    "client support",
+    "client relations",
+  ],
+  [
+    "complaint resolution",
+    "issue resolution",
+    "conflict resolution",
+    "case resolution",
+    "de-escalation",
+  ],
+  [
+    "project management",
+    "project coordination",
+    "program management",
+    "project delivery",
+    "project planning",
+  ],
+  [
+    "team leadership",
+    "team lead",
+    "people management",
+    "staff supervision",
+    "team supervision",
+  ],
+  [
+    "data analysis",
+    "data analytics",
+    "business analysis",
+    "business intelligence",
+    "reporting",
+  ],
+  [
+    "dashboard",
+    "dashboards",
+    "power bi",
+    "tableau",
+    "looker",
+    "data visualization",
+  ],
+  [
+    "spreadsheet",
+    "spreadsheets",
+    "excel",
+    "google sheets",
+  ],
+  [
+    "database",
+    "databases",
+    "sql",
+    "postgresql",
+    "mysql",
+    "sql server",
+    "oracle",
+  ],
+  [
+    "cloud",
+    "aws",
+    "amazon web services",
+    "azure",
+    "google cloud",
+    "gcp",
+  ],
+  [
+    "devops",
+    "ci cd",
+    "continuous integration",
+    "continuous delivery",
+    "deployment automation",
+    "automated deployment",
+    "deployment workflows",
+    "release automation",
+  ],
+  [
+    "crm",
+    "crm system",
+    "crm systems",
+    "customer relationship management",
+    "salesforce",
+    "hubspot",
+    "zoho crm",
+    "dynamics 365",
+  ],
+  [
+    "agile",
+    "scrum",
+    "kanban",
+    "sprint planning",
+  ],
+  [
+    "sales",
+    "business development",
+    "account management",
+    "lead generation",
+  ],
+  [
+    "written communication",
+    "verbal communication",
+    "presentation",
+    "stakeholder communication",
+    "client communication",
+  ],
+  [
+    "process improvement",
+    "continuous improvement",
+    "workflow improvement",
+    "operational improvement",
+  ],
+  [
+    "automation",
+    "automated workflow",
+    "automated workflows",
+    "scripting",
+    "workflow automation",
+    "process automation",
+  ],
+  [
+    "budget management",
+    "financial planning",
+    "cost control",
+    "budget tracking",
+  ],
+  [
+    "quality assurance",
+    "quality control",
+    "testing",
+    "quality review",
+  ],
+];
 
 function cleanText(
   value: unknown,
@@ -76,6 +244,226 @@ function countOccurrences(
   pattern: RegExp
 ): number {
   return text.match(pattern)?.length ?? 0;
+}
+
+function normalizeMatchText(
+  value: string
+): string {
+  return value
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9+#]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function containsNormalizedTerm(
+  normalizedText: string,
+  term: string
+): boolean {
+  const normalizedTerm =
+    normalizeMatchText(term);
+
+  if (!normalizedTerm) {
+    return false;
+  }
+
+  return ` ${normalizedText} `.includes(
+    ` ${normalizedTerm} `
+  );
+}
+
+function keywordReferencesTerm(
+  keyword: string,
+  term: string
+): boolean {
+  const normalizedKeyword =
+    normalizeMatchText(keyword);
+
+  const normalizedTerm =
+    normalizeMatchText(term);
+
+  if (
+    !normalizedKeyword ||
+    !normalizedTerm
+  ) {
+    return false;
+  }
+
+  return (
+    normalizedKeyword === normalizedTerm ||
+    ` ${normalizedKeyword} `.includes(
+      ` ${normalizedTerm} `
+    ) ||
+    ` ${normalizedTerm} `.includes(
+      ` ${normalizedKeyword} `
+    )
+  );
+}
+
+function findRelatedResumeTerms(
+  keyword: string,
+  normalizedResume: string
+): string[] {
+  const normalizedKeyword =
+    normalizeMatchText(keyword);
+
+  const relatedTerms =
+    RELATED_TERM_GROUPS.flatMap(
+      (group) => {
+        const belongsToGroup =
+          group.some((term) =>
+            keywordReferencesTerm(
+              keyword,
+              term
+            )
+          );
+
+        if (!belongsToGroup) {
+          return [];
+        }
+
+        return group.filter((term) => {
+          const normalizedTerm =
+            normalizeMatchText(term);
+
+          return (
+            normalizedTerm !==
+              normalizedKeyword &&
+            containsNormalizedTerm(
+              normalizedResume,
+              term
+            )
+          );
+        });
+      }
+    );
+
+  return relatedTerms
+    .filter(
+      (term, index, items) =>
+        items.indexOf(term) === index
+    )
+    .slice(0, 3);
+}
+
+function buildTruthMatchAnalysis(params: {
+  resumeText: string;
+  matchedKeywords: string[];
+  missingKeywords: string[];
+  matchedItems: KeywordItem[];
+  missingItems: KeywordItem[];
+}): TruthMatchAnalysis {
+  const {
+    resumeText,
+    matchedKeywords,
+    missingKeywords,
+    matchedItems,
+    missingItems,
+  } = params;
+
+  const normalizedResume =
+    normalizeMatchText(resumeText);
+
+  const itemByKeyword = new Map<
+    string,
+    KeywordItem
+  >();
+
+  for (const item of [
+    ...matchedItems,
+    ...missingItems,
+  ]) {
+    itemByKeyword.set(
+      normalizeMatchText(item.keyword),
+      item
+    );
+  }
+
+  function getKeywordItem(
+    keyword: string
+  ): KeywordItem {
+    return (
+      itemByKeyword.get(
+        normalizeMatchText(keyword)
+      ) ?? {
+        keyword,
+        category: "general",
+        weight: 1,
+      }
+    );
+  }
+
+  const confirmed = matchedKeywords
+    .map((keyword) => keyword.trim())
+    .filter(Boolean)
+    .filter(
+      (keyword, index, items) =>
+        items.indexOf(keyword) === index
+    )
+    .slice(0, 20)
+    .map((keyword): TruthMatchItem => {
+      const item = getKeywordItem(keyword);
+
+      return {
+        ...item,
+        keyword,
+        status: "confirmed",
+        explanation:
+          "This job-description term has a direct match in the supplied resume.",
+        relatedResumeTerms: [],
+      };
+    });
+
+  const related: TruthMatchItem[] = [];
+  const missing: TruthMatchItem[] = [];
+
+  for (const keyword of missingKeywords
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter(
+      (item, index, items) =>
+        items.indexOf(item) === index
+    )
+    .slice(0, 20)) {
+    const item = getKeywordItem(keyword);
+
+    const relatedResumeTerms =
+      findRelatedResumeTerms(
+        keyword,
+        normalizedResume
+      );
+
+    if (relatedResumeTerms.length > 0) {
+      related.push({
+        ...item,
+        keyword,
+        status: "related",
+        explanation: `Related resume wording was detected (${relatedResumeTerms.join(
+          ", "
+        )}), but it does not confirm the exact requirement.`,
+        relatedResumeTerms,
+      });
+
+      continue;
+    }
+
+    missing.push({
+      ...item,
+      keyword,
+      status: "missing",
+      explanation:
+        "No direct or controlled related wording was detected in the supplied resume.",
+      relatedResumeTerms: [],
+    });
+  }
+
+  return {
+    confirmed,
+    related,
+    missing,
+    notice: TRUTH_MATCH_NOTICE,
+  };
 }
 
 function calculateExperienceScore(
@@ -661,8 +1049,8 @@ function buildRecommendations(params: {
 
     recommendations.push(
       priorityKeywords
-        ? `Add relevant missing keywords naturally, especially: ${priorityKeywords}.`
-        : "Add the most important job-specific skills naturally throughout your resume."
+        ? `Review these unconfirmed job terms and add them only when they accurately reflect your experience: ${priorityKeywords}.`
+        : "Review the job-specific requirements and describe only the skills you genuinely have."
     );
   }
 
@@ -796,6 +1184,23 @@ export async function POST(
         resumeText
       );
 
+    const truthMatch =
+      buildTruthMatchAnalysis({
+        resumeText,
+
+        matchedKeywords:
+          keywordAnalysis.matchedKeywords,
+
+        missingKeywords:
+          keywordAnalysis.missingKeywords,
+
+        matchedItems:
+          keywordAnalysis.matchedItems,
+
+        missingItems:
+          keywordAnalysis.missingItems,
+      });
+
     const keywordScore =
       keywordAnalysis.keywordScore;
 
@@ -847,7 +1252,9 @@ export async function POST(
         readabilityScore,
 
         missingKeywords:
-          keywordAnalysis.missingKeywords,
+          truthMatch.missing.map(
+            (item) => item.keyword
+          ),
 
         requiredMissingSections:
           sectionAnalysis.requiredMissingSections,
@@ -950,6 +1357,8 @@ export async function POST(
             0,
             20
           ),
+
+        truthMatch,
 
         sections:
           sectionAnalysis.sections,
