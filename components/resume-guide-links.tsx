@@ -16,6 +16,13 @@ const guides = [
       "Use an evidence-first formula, adaptable examples, ATS keyword guidance, and a final truth check for the top of your resume.",
   },
   {
+    href: "/guides/skills-to-put-on-a-resume",
+    label: "Resume Skills",
+    title: "Skills to Put on a Resume: 100+ Examples",
+    description:
+      "Choose relevant hard and soft skills, confirm each claim with real evidence, and place supported skills naturally for ATS review.",
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     label: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",

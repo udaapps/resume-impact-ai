@@ -92,6 +92,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/skills-to-put-on-a-resume",
+    category: "Resume Skills",
+    title: "Skills to Put on a Resume: 100+ Examples and ATS Tips",
+    description:
+      "Choose relevant hard and soft skills, confirm each claim against real evidence, place supported skills naturally, and avoid keyword stuffing.",
+    highlights: [
+      "100+ categorized skill examples",
+      "Confirmed, Related, and Not Confirmed",
+      "Skills section and ATS guidance",
+    ],
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     category: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",
