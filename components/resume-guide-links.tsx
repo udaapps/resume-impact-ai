@@ -9,6 +9,13 @@ const guides = [
       "Identify job-description keywords, classify the evidence, place supported terms naturally, and avoid unsupported claims.",
   },
   {
+    href: "/guides/how-to-write-a-resume-summary",
+    label: "Professional Resume Summary",
+    title: "How to Write a Resume Summary",
+    description:
+      "Use an evidence-first formula, adaptable examples, ATS keyword guidance, and a final truth check for the top of your resume.",
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     label: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",

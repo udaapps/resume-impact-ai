@@ -80,6 +80,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/how-to-write-a-resume-summary",
+    category: "Professional Resume Summary",
+    title: "How to Write a Resume Summary: Formula and Examples",
+    description:
+      "Build a concise, evidence-based professional summary with a four-part formula, 18 adaptable examples, keyword rules, and a final checklist.",
+    highlights: [
+      "Summary vs. objective guidance",
+      "18 career-stage and role examples",
+      "No-metrics and ATS keyword advice",
+    ],
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     category: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",
