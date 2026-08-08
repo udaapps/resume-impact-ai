@@ -44,6 +44,13 @@ const guides = [
       "Describe office operations, facilities, vendors, purchasing, budgets, scheduling, onboarding, records, and process improvement.",
   },
   {
+    href: "/guides/executive-assistant-resume-bullets",
+    label: "Executive Support",
+    title: "Executive Assistant Resume Bullet Examples",
+    description:
+      "Describe executive calendars, meetings, travel, expenses, communications, confidential documents, projects, and follow-up.",
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     label: "Software Engineering",
     title: "Software Engineer Resume Bullet Examples",

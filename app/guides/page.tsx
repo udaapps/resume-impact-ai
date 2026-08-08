@@ -140,6 +140,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/executive-assistant-resume-bullets",
+    category: "Executive Support",
+    title: "30 Executive Assistant Resume Bullet Examples",
+    description:
+      "Use original examples for executive calendars, meetings, travel, expenses, communications, confidential documents, projects, and verified results.",
+    highlights: [
+      "30 executive assistant examples",
+      "Executive-support ATS keywords",
+      "Access and confidentiality guidance",
+    ],
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     category: "Software Engineering",
     title: "30 Software Engineer Resume Bullet Examples",
@@ -316,7 +328,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              265 role-specific examples
+              295 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims
