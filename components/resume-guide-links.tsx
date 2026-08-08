@@ -37,6 +37,13 @@ const guides = [
       "Format titles, employers, dates, promotions, freelance and volunteer work, then write evidence-based bullets for each relevant role.",
   },
   {
+    href: "/guides/how-to-list-education-on-resume",
+    label: "Resume Education Section",
+    title: "How to List Education on a Resume",
+    description:
+      "Format completed, in-progress, unfinished, vocational, high-school, and international education accurately for your career stage.",
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     label: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",

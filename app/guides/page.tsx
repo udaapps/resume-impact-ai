@@ -128,6 +128,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/how-to-list-education-on-resume",
+    category: "Resume Education Section",
+    title: "How to List Education on a Resume: 14 Examples",
+    description:
+      "Format completed, in-progress, unfinished, vocational, high-school, and international education accurately for every career stage.",
+    highlights: [
+      "14 education templates",
+      "In-progress and unfinished study",
+      "Coursework, GPA, and credential guidance",
+    ],
+  },
+  {
     href: "/guides/ats-friendly-resume-format",
     category: "ATS Resume Formatting",
     title: "ATS-Friendly Resume Format: Guide and Checklist",
