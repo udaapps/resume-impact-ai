@@ -152,6 +152,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/cashier-resume-bullets",
+    category: "Retail and Customer Service",
+    title: "30 Cashier Resume Bullet Examples",
+    description:
+      "Use original examples for POS transactions, payments, returns, customer service, till balancing, promotions, checkout support, and verified results.",
+    highlights: [
+      "30 cashier examples",
+      "Cashier ATS keywords",
+      "No-experience and no-metrics guidance",
+    ],
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     category: "Software Engineering",
     title: "30 Software Engineer Resume Bullet Examples",
@@ -328,7 +340,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              295 role-specific examples
+              325 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims

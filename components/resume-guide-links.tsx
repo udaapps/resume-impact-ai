@@ -51,6 +51,13 @@ const guides = [
       "Describe executive calendars, meetings, travel, expenses, communications, confidential documents, projects, and follow-up.",
   },
   {
+    href: "/guides/cashier-resume-bullets",
+    label: "Retail and Customer Service",
+    title: "Cashier Resume Bullet Examples",
+    description:
+      "Describe POS transactions, payments, returns, customer service, till balancing, promotions, checkout support, and verified results.",
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     label: "Software Engineering",
     title: "Software Engineer Resume Bullet Examples",
