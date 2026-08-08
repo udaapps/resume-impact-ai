@@ -24,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/guides`,
-      lastModified: new Date("2026-08-07"),
+      lastModified: new Date("2026-08-08"),
       changeFrequency: "weekly",
       priority: 0.9,
     },
@@ -79,6 +79,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/guides/data-analyst-resume-bullets`,
       lastModified: new Date("2026-08-07"),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/guides/receptionist-resume-bullets`,
+      lastModified: new Date("2026-08-08"),
       changeFrequency: "monthly",
       priority: 0.8,
     },

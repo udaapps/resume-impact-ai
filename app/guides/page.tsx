@@ -104,6 +104,18 @@ const guides = [
     ],
   },
   {
+    href: "/guides/receptionist-resume-bullets",
+    category: "Reception and Front Desk",
+    title: "30 Receptionist Resume Bullet Examples",
+    description:
+      "Use original examples for visitors, calls, messages, scheduling, records, customer service, office coordination, and verified results.",
+    highlights: [
+      "30 receptionist examples",
+      "Front-desk ATS keywords",
+      "Entry-level and no-metrics guidance",
+    ],
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     category: "Software Engineering",
     title: "30 Software Engineer Resume Bullet Examples",
@@ -280,7 +292,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              175 role-specific examples
+              205 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims

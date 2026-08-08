@@ -23,6 +23,13 @@ const guides = [
       "Describe scheduling, office communication, document management, vendor coordination, and team support.",
   },
   {
+    href: "/guides/receptionist-resume-bullets",
+    label: "Reception and Front Desk",
+    title: "Receptionist Resume Bullet Examples",
+    description:
+      "Describe visitor support, calls, messages, appointments, records, customer service, and front-desk coordination.",
+  },
+  {
     href: "/guides/software-engineer-resume-bullets",
     label: "Software Engineering",
     title: "Software Engineer Resume Bullet Examples",
