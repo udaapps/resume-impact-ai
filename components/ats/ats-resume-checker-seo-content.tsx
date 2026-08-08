@@ -266,12 +266,20 @@ export default function AtsResumeCheckerSeoContent() {
               </div>
             </dl>
 
-            <Link
-              href="/editorial-policy"
-              className="mt-5 inline-flex text-sm font-semibold text-blue-200 transition hover:text-white"
-            >
-              Read our editorial and accuracy policy →
-            </Link>
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-3">
+              <Link
+                href="/guides/how-to-tailor-resume-to-job-description"
+                className="inline-flex text-sm font-semibold text-blue-200 transition hover:text-white"
+              >
+                Learn the Truth Match resume tailoring method →
+              </Link>
+              <Link
+                href="/editorial-policy"
+                className="inline-flex text-sm font-semibold text-slate-300 transition hover:text-white"
+              >
+                Read our editorial and accuracy policy →
+              </Link>
+            </div>
           </article>
 
           <article className="rounded-3xl border border-violet-500/25 bg-violet-500/5 p-6 sm:p-8">
@@ -331,6 +339,20 @@ export default function AtsResumeCheckerSeoContent() {
               </div>
             ))}
           </div>
+
+          <div className="mt-6 rounded-2xl border border-blue-500/25 bg-blue-500/10 p-5">
+            <p className="text-sm leading-7 text-slate-300">
+              Need a complete layout reference? Review the recommended section
+              order, file type guidance, readable fonts, spacing, and common
+              formatting mistakes before submitting your resume.
+            </p>
+            <Link
+              href="/guides/ats-friendly-resume-format"
+              className="mt-3 inline-flex text-sm font-semibold text-blue-200 transition hover:text-white"
+            >
+              Read the ATS-friendly resume format guide →
+            </Link>
+          </div>
         </section>
 
         <section
@@ -376,17 +398,29 @@ export default function AtsResumeCheckerSeoContent() {
             id="related-resume-tools-title"
             className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
           >
-            Related resume tools
+            Related resume tools and guides
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-400">
-            Continue improving your resume with the free bullet generator,
-            AI bullet rewriter, saved analysis history, and resume analytics.
+            Use the foundational guides to improve your format and tailor your
+            content, then continue with the free writing and analysis tools.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/resume-bullet-generator"
+              href="/guides/ats-friendly-resume-format"
               className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500"
+            >
+              ATS-Friendly Resume Format Guide
+            </Link>
+            <Link
+              href="/guides/how-to-tailor-resume-to-job-description"
+              className="rounded-xl border border-blue-500/40 bg-blue-500/10 px-5 py-3 text-sm font-semibold text-blue-100 transition hover:border-blue-400 hover:text-white"
+            >
+              Resume Tailoring Guide
+            </Link>
+            <Link
+              href="/resume-bullet-generator"
+              className="rounded-xl border border-slate-700 bg-slate-950/60 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-blue-500 hover:text-white"
             >
               AI Resume Bullet Generator
             </Link>
