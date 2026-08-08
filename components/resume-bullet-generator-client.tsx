@@ -35,13 +35,24 @@ type AtsAnalysis = {
   suggestions: string[];
 };
 
+type TruthReview = {
+  status: string;
+  summary: string;
+  evidenceUsed: string[];
+  checks: string[];
+  warnings: string[];
+};
+
 type FormState = {
   jobTitle: string;
   experienceLevel: string;
   resumeStyle: string;
   responsibility: string;
   achievement: string;
+  evidenceType: string;
+  supportingEvidence: string;
   metric: string;
+  metricVerified: boolean;
 };
 
 type DailyUsage = {
@@ -71,7 +82,10 @@ const initialForm: FormState = {
   resumeStyle: "ATS Optimized",
   responsibility: "",
   achievement: "",
+  evidenceType: "Outcome or contribution",
+  supportingEvidence: "",
   metric: "",
+  metricVerified: false,
 };
 
 const DAILY_FREE_LIMIT = 5;
@@ -95,6 +109,8 @@ export default function ResumeBulletGeneratorClient({
   const [bullets, setBullets] = useState<GeneratedBullet[]>([]);
   const [atsAnalysis, setAtsAnalysis] =
     useState<AtsAnalysis | null>(null);
+  const [truthReview, setTruthReview] =
+    useState<TruthReview | null>(null);
 
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -170,10 +186,27 @@ export default function ResumeBulletGeneratorClient({
     savedBulletSort,
   ]);
 
-  function updateField(field: keyof FormState, value: string) {
+  function updateField(
+    field: Exclude<keyof FormState, "metricVerified">,
+    value: string
+  ) {
     setForm((current) => ({
       ...current,
       [field]: value,
+    }));
+
+    setError("");
+    setSuccessMessage("");
+  }
+
+  function updateMetric(value: string) {
+    setForm((current) => ({
+      ...current,
+      metric: value,
+      metricVerified:
+        value.trim() && value === current.metric
+          ? current.metricVerified
+          : false,
     }));
 
     setError("");
@@ -353,7 +386,7 @@ async function handleGoogleLogin() {
     const redirectTo =
       window.location.hostname === "localhost"
         ? "http://localhost:3000/"
-        : "https://https://www.resumeclimbai.com/";
+        : "https://www.resumeclimbai.com/";
 
     sendGAEvent("event", "google_login_start", {
       method: "google",
@@ -448,11 +481,19 @@ async function handleLogout() {
       return;
     }
 
+    if (form.metric.trim() && !form.metricVerified) {
+      setError(
+        "Please confirm that the metric is accurate and explainable, or remove it before generating."
+      );
+      return;
+    }
+
     setError("");
     setSuccessMessage("");
     setIsGenerating(true);
     setBullets([]);
     setAtsAnalysis(null);
+    setTruthReview(null);
     setCopiedId(null);
     setAllCopied(false);
 
@@ -468,7 +509,10 @@ async function handleLogout() {
           resumeStyle: form.resumeStyle,
           responsibility: form.responsibility,
           achievement: form.achievement,
+          evidenceType: form.evidenceType,
+          supportingEvidence: form.supportingEvidence,
           metric: form.metric,
+          metricVerified: form.metricVerified,
         }),
       });
 
@@ -477,6 +521,7 @@ async function handleLogout() {
       let data: {
         bullets?: string[];
         atsAnalysis?: AtsAnalysis;
+        truthReview?: TruthReview;
         error?: string;
       };
 
@@ -514,8 +559,12 @@ async function handleLogout() {
       const generatedAtsAnalysis =
         data.atsAnalysis ?? null;
 
+      const generatedTruthReview =
+        data.truthReview ?? null;
+
       setBullets(generatedBullets);
       setAtsAnalysis(generatedAtsAnalysis);
+      setTruthReview(generatedTruthReview);
 
       if (user) {
         const savedRow = await saveResumeHistory({
@@ -562,6 +611,11 @@ async function handleLogout() {
           form.achievement.trim()
         ),
         has_metric: Boolean(form.metric.trim()),
+        metric_verified: form.metricVerified,
+        evidence_type: form.evidenceType,
+        has_supporting_evidence: Boolean(
+          form.supportingEvidence.trim()
+        ),
         signed_in: Boolean(user),
       });
 
@@ -728,6 +782,7 @@ async function handleLogout() {
       },
     ]);
     setAtsAnalysis(null);
+    setTruthReview(null);
     setSuccessMessage("Saved bullet restored.");
 
     sendGAEvent("event", "saved_bullet_restore", {
@@ -858,6 +913,7 @@ async function handleLogout() {
   function handleRestoreHistory(item: HistoryItem) {
     setBullets(item.bullets);
     setAtsAnalysis(item.atsAnalysis);
+    setTruthReview(null);
 
     sendGAEvent("event", "history_restore", {
       bullet_count: item.bullets.length,
@@ -872,6 +928,7 @@ async function handleLogout() {
     setForm(initialForm);
     setBullets([]);
     setAtsAnalysis(null);
+    setTruthReview(null);
     setError("");
     setSuccessMessage("");
     setCopiedId(null);
@@ -985,14 +1042,14 @@ async function handleLogout() {
           </div>
 
           <h1 className="mt-5 max-w-3xl text-3xl font-bold leading-tight tracking-tight sm:mt-6 sm:text-5xl lg:text-6xl">
-            Write powerful resume bullets in seconds
+            Write stronger bullets without inventing experience
           </h1>
 
           <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:mt-5 sm:text-lg sm:leading-8">
-            Turn ordinary job duties into professional,
-            achievement-focused and ATS-friendly resume bullet
-            points using strong action verbs and measurable
-            results.
+            Turn real responsibilities and evidence into professional,
+            ATS-friendly resume bullets. ResumeClimb Truth Check helps
+            prevent unsupported metrics and reminds you what must be
+            verified before use.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -1025,10 +1082,8 @@ async function handleLogout() {
               Free uses daily
             </div>
             <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
-              <div className="text-2xl font-bold text-white">
-                ATS
-              </div>
-              Friendly wording
+              <div className="text-2xl font-bold text-white">Truth</div>
+              Input safeguards
             </div>
           </div>
         </div>
@@ -1047,8 +1102,8 @@ async function handleLogout() {
               </h2>
               <p className="mt-3 text-sm leading-6 text-slate-400 sm:text-base">
                 Job title and responsibility are required.
-                Achievement and metric are optional but improve
-                the result.
+                Achievement, evidence, and metrics are optional. Add
+                only information you can explain truthfully.
               </p>
             </div>
 
@@ -1179,6 +1234,83 @@ async function handleLogout() {
                 />
               </div>
 
+              <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/10 p-5">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-300">
+                      ResumeClimb Truth Check
+                    </p>
+                    <h3 className="mt-2 text-lg font-bold text-white">
+                      Add evidence you can explain
+                    </h3>
+                  </div>
+                  <span className="w-fit rounded-full border border-emerald-500/30 bg-slate-950/50 px-3 py-1 text-xs font-semibold text-emerald-200">
+                    Optional
+                  </span>
+                </div>
+
+                <p className="mt-3 text-sm leading-6 text-slate-300">
+                  No verified number? Use truthful context such as scope,
+                  frequency, complexity, quality, ownership, or a clear
+                  contribution. The tool will not require a metric.
+                </p>
+
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="evidence-type"
+                      className="mb-2 block text-sm font-medium text-slate-200"
+                    >
+                      Best evidence type
+                    </label>
+                    <select
+                      id="evidence-type"
+                      value={form.evidenceType}
+                      onChange={(event) =>
+                        updateField(
+                          "evidenceType",
+                          event.target.value
+                        )
+                      }
+                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-emerald-500"
+                    >
+                      <option>Outcome or contribution</option>
+                      <option>Scope or volume</option>
+                      <option>Frequency or consistency</option>
+                      <option>Complexity or difficulty</option>
+                      <option>Quality or accuracy</option>
+                      <option>Ownership or leadership</option>
+                      <option>No additional evidence</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="supporting-evidence"
+                      className="mb-2 block text-sm font-medium text-slate-200"
+                    >
+                      Evidence detail
+                      <span className="ml-2 font-normal text-slate-500">
+                        Optional
+                      </span>
+                    </label>
+                    <input
+                      id="supporting-evidence"
+                      value={form.supportingEvidence}
+                      onChange={(event) =>
+                        updateField(
+                          "supportingEvidence",
+                          event.target.value
+                        )
+                      }
+                      type="text"
+                      placeholder="Example: Handled complex cases across phone and email"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label
                   htmlFor="metric"
@@ -1193,15 +1325,40 @@ async function handleLogout() {
                   id="metric"
                   value={form.metric}
                   onChange={(event) =>
-                    updateField(
-                      "metric",
-                      event.target.value
-                    )
+                    updateMetric(event.target.value)
                   }
                   type="text"
                   placeholder="Example: 20%"
                   className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
+
+                {form.metric.trim() ? (
+                  <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
+                    <input
+                      type="checkbox"
+                      checked={form.metricVerified}
+                      onChange={(event) => {
+                        setForm((current) => ({
+                          ...current,
+                          metricVerified: event.target.checked,
+                        }));
+                        setError("");
+                        setSuccessMessage("");
+                      }}
+                      className="mt-1 h-4 w-4 shrink-0 accent-emerald-500"
+                    />
+                    <span className="text-sm leading-6 text-slate-200">
+                      I confirm this metric is accurate, relevant to this
+                      responsibility, and something I can explain in an
+                      interview.
+                    </span>
+                  </label>
+                ) : (
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    Leave this blank when you do not have a reliable number.
+                    ResumeClimb AI will not invent one.
+                  </p>
+                )}
               </div>
 
               {error && (
@@ -1317,15 +1474,78 @@ async function handleLogout() {
                 )}
               </div>
 
+              {truthReview && (
+                <div className="mt-6 rounded-2xl border border-blue-500/30 bg-blue-500/10 p-5 sm:p-6">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-300">
+                        ResumeClimb Truth Check
+                      </p>
+                      <h3 className="mt-2 text-2xl font-bold text-white">
+                        {truthReview.status}
+                      </h3>
+                      <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">
+                        {truthReview.summary}
+                      </p>
+                    </div>
+                    <span className="w-fit shrink-0 rounded-full border border-blue-500/30 bg-slate-950/50 px-4 py-2 text-sm font-semibold text-blue-200">
+                      Input-based review
+                    </span>
+                  </div>
+
+                  {truthReview.evidenceUsed.length > 0 && (
+                    <div className="mt-5">
+                      <h4 className="text-sm font-semibold text-white">
+                        Evidence supplied for this generation
+                      </h4>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {truthReview.evidenceUsed.map((item) => (
+                          <span
+                            key={item}
+                            className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-200"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-5 grid gap-5 md:grid-cols-2">
+                    <div>
+                      <h4 className="font-semibold text-emerald-300">
+                        Safeguards applied
+                      </h4>
+                      <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+                        {truthReview.checks.map((item) => (
+                          <li key={item}>✓ {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-amber-300">
+                        Final review
+                      </h4>
+                      <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+                        {truthReview.warnings.map((item) => (
+                          <li key={item}>• {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {atsAnalysis && (
                 <div className="mt-6 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5 sm:p-6">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-400">
-                        ATS Analysis
+                        Bullet Quality Estimate
                       </p>
                       <h3 className="mt-2 text-2xl font-bold">
-                        ATS Score: {atsAnalysis.score}/100
+                        Estimated Quality: {atsAnalysis.score}/100
                       </h3>
                     </div>
                     <span className="w-fit rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 font-semibold text-emerald-300">
@@ -1360,6 +1580,12 @@ async function handleLogout() {
                       </ul>
                     </div>
                   </div>
+
+                  <p className="mt-5 text-xs leading-5 text-slate-500">
+                    This is an educational writing-quality estimate based on
+                    the information supplied here. It is not a score from an
+                    employer or applicant tracking system.
+                  </p>
                 </div>
               )}
 
@@ -1660,7 +1886,7 @@ async function handleLogout() {
             </h2>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <article className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
               <div className="mb-4 text-3xl">⚡</div>
               <h3 className="text-xl font-semibold">
@@ -1678,8 +1904,19 @@ async function handleLogout() {
                 Achievement focused
               </h3>
               <p className="mt-3 leading-7 text-slate-400">
-                Present duties using stronger wording, measurable
-                outcomes and professional impact.
+                Present duties using stronger wording, verified results,
+                or truthful evidence when reliable metrics are unavailable.
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6">
+              <div className="mb-4 text-3xl">🛡️</div>
+              <h3 className="text-xl font-semibold">
+                Truth-first safeguards
+              </h3>
+              <p className="mt-3 leading-7 text-slate-300">
+                Confirm metrics, use evidence alternatives, and review which
+                user-supplied facts supported each generation.
               </p>
             </article>
 
@@ -1720,7 +1957,8 @@ async function handleLogout() {
               <ul className="mt-8 space-y-4 text-slate-300">
                 <li>✓ 5 generations per day</li>
                 <li>✓ 3 bullets per generation</li>
-                <li>✓ ATS analysis</li>
+                <li>✓ ResumeClimb Truth Check</li>
+                <li>✓ Bullet quality estimate</li>
                 <li>✓ Saved bullet library</li>
               </ul>
             </div>
@@ -1783,8 +2021,28 @@ async function handleLogout() {
         </div>
       </nav>
 
-      <footer className="border-t border-slate-900 px-6 py-8 text-center text-sm text-slate-500">
-        © 2026 ResumeClimb AI. Built by UDA Apps.
+      <footer className="border-t border-slate-900 px-6 py-8 text-center text-sm text-slate-400">
+        <p>© 2026 ResumeClimb AI. Built by UDA Apps.</p>
+        <div className="mt-3 flex flex-wrap justify-center gap-4">
+          <Link href="/about" className="transition hover:text-white">
+            About
+          </Link>
+          <Link
+            href="/editorial-policy"
+            className="transition hover:text-white"
+          >
+            Editorial Policy
+          </Link>
+          <Link href="/guides" className="transition hover:text-white">
+            Resume Guides
+          </Link>
+          <Link
+            href="/ats-resume-checker"
+            className="transition hover:text-white"
+          >
+            ATS Resume Checker
+          </Link>
+        </div>
       </footer>
     </main>
   );
