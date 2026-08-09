@@ -331,6 +331,18 @@ const guides = [
       "Confidential-data guidance",
     ],
   },
+  {
+    href: "/guides/accountant-resume-bullets",
+    category: "Accounting and Finance",
+    title: "30 Accountant Resume Bullet Examples",
+    description:
+      "Use original examples for general ledger, reconciliations, financial reporting, month-end close, AP/AR, audits, controls, and verified results.",
+    highlights: [
+      "30 accounting examples",
+      "Accountant ATS keywords",
+      "Credential and confidentiality guidance",
+    ],
+  },
 ] as const;
 
 const structuredData = {
@@ -460,7 +472,7 @@ export default function GuidesPage() {
               {guides.length} detailed guides
             </span>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-emerald-300">
-              385 role-specific examples
+              415 role-specific examples
             </span>
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-amber-300">
               No invented claims

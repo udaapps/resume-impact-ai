@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+// Keep every sitemap entry on the canonical www host.
 const baseUrl = "https://www.resumeclimbai.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -24,7 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/guides`,
-      lastModified: new Date("2026-08-08"),
+      lastModified: new Date("2026-08-09"),
       changeFrequency: "weekly",
       priority: 0.9,
     },
@@ -127,6 +128,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/guides/data-analyst-resume-bullets`,
       lastModified: new Date("2026-08-07"),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/guides/accountant-resume-bullets`,
+      lastModified: new Date("2026-08-09"),
       changeFrequency: "monthly",
       priority: 0.8,
     },
