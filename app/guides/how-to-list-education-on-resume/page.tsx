@@ -8,10 +8,10 @@ const PAGE_PATH = "/guides/how-to-list-education-on-resume";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 const PAGE_TITLE = "How to List Education on a Resume";
 const PAGE_DESCRIPTION =
-  "Format education on your resume with 14 truthful examples for completed, in-progress, unfinished, vocational, high-school, and international study.";
+  "Learn where education should go and how to list degrees, current study, fields, courses, and certifications with 14 truthful resume examples.";
 
 export const metadata: Metadata = {
-  title: `${PAGE_TITLE} | ResumeClimb AI`,
+  title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   authors: [{ name: "UDA Apps", url: SITE_URL }],
   creator: "UDA Apps",
@@ -26,6 +26,11 @@ export const metadata: Metadata = {
     "how to list high school on resume",
     "relevant coursework on resume",
     "certifications on resume",
+    "should education be first on a resume",
+    "education and certifications on resume",
+    "course title on resume",
+    "field of study meaning on resume",
+    "how to list current education on resume",
   ],
   alternates: {
     canonical: PAGE_URL,
@@ -89,6 +94,33 @@ const entryFields = [
     label: "Relevant optional details",
     guidance:
       "Add a major, minor, concentration, honors, GPA, coursework, thesis, capstone, academic project, or activity only when accurate, relevant, and useful for the target role.",
+  },
+] as const;
+
+const educationTerms = [
+  {
+    term: "Degree or qualification",
+    meaning:
+      "The official credential or program level awarded or pursued, such as Bachelor of Science, Associate Degree, diploma, or trade qualification.",
+    example: "Bachelor of Science",
+  },
+  {
+    term: "Field of study",
+    meaning:
+      "The main academic subject, major, discipline, or specialization studied. It is not the institution name or the degree level.",
+    example: "Computer Science, Accounting, or Marketing",
+  },
+  {
+    term: "Course title",
+    meaning:
+      "The official name of a class, training course, or program. Use the wording supplied by the institution or provider and follow a form's instructions because the term can vary by country.",
+    example: "Financial Accounting II or Introduction to Data Analytics",
+  },
+  {
+    term: "Certification or license",
+    meaning:
+      "A credential issued by a named organization or authority, sometimes with an issue date, expiration date, or current-status requirement.",
+    example: "Project Management Professional (PMP)",
   },
 ] as const;
 
@@ -499,14 +531,30 @@ const faqItems = [
       "Include the official qualification or program, institution, and completion status or date. Location, major, minor, coursework, projects, grades, honors, and activities are optional when relevant and accurate.",
   },
   {
-    question: "Where should education go on a resume?",
+    question: "Should education be first on a resume?",
     answer:
-      "Students and recent graduates often place education near the top. Experienced professionals commonly place it after work experience. A required credential or highly relevant recent program may deserve earlier placement.",
+      "Education can come first when you are a student, recent graduate, career changer with relevant recent study, or applicant for a credential-required role. Experienced professionals usually place relevant work experience first and keep education below it.",
   },
   {
-    question: "How do I list a degree that is still in progress?",
+    question: "How do I list current education or a degree still in progress?",
     answer:
-      "Use the official program name, institution, In Progress status, and an accurate expected completion date. Update the entry when the expected date or enrollment status changes.",
+      "Use the official program name, institution, In Progress status, and an accurate expected completion date when you are actively enrolled. Update the entry whenever the expected date or enrollment status changes.",
+  },
+  {
+    question: "What does field of study mean on a resume?",
+    answer:
+      "Field of study means the main subject, major, discipline, or specialization you studied, such as Computer Science, Accounting, or Marketing. It is different from the degree level and institution name.",
+  },
+  {
+    question: "What is a course title on a resume?",
+    answer:
+      "A course title is the official name of a class, training course, or program. Use the name supplied by the institution or provider, and do not present a course as a degree or professional certification unless that is its official status.",
+  },
+  {
+    question:
+      "Should education and certifications be in the same resume section?",
+    answer:
+      "They can share a section when you have only one or two supporting credentials and the result remains clear. Use separate Education and Certifications or Licenses sections when professional credentials are numerous, role-critical, regulated, renewable, or need issue and expiration dates.",
   },
   {
     question: "How do I list an unfinished degree?",
@@ -558,7 +606,7 @@ export default function HowToListEducationOnResumePage() {
     headline: "How to List Education on a Resume: 14 Examples",
     description: PAGE_DESCRIPTION,
     datePublished: "2026-08-08",
-    dateModified: "2026-08-08",
+    dateModified: "2026-08-11",
     inLanguage: "en-US",
     mainEntityOfPage: PAGE_URL,
     author: {
@@ -704,6 +752,8 @@ export default function HowToListEducationOnResumePage() {
 
             <p className="mt-6 text-sm text-slate-400">
               Published <time dateTime="2026-08-08">August 8, 2026</time>
+              {" · "}
+              Updated <time dateTime="2026-08-11">August 11, 2026</time>
             </p>
           </div>
         </header>
@@ -775,13 +825,56 @@ export default function HowToListEducationOnResumePage() {
               </ol>
             </section>
 
+            <section aria-labelledby="terms-heading">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-400">
+                Education terms explained
+              </p>
+              <h2
+                id="terms-heading"
+                className="mt-3 text-3xl font-bold tracking-tight"
+              >
+                Degree, field of study, course title, and certification
+              </h2>
+              <p className="mt-5 max-w-3xl leading-8 text-slate-300">
+                These labels describe different parts of your education. Use the
+                official wording from your institution, provider, or credential
+                issuer instead of choosing a label that sounds more advanced.
+              </p>
+              <div className="mt-8 grid gap-5 md:grid-cols-2">
+                {educationTerms.map((item) => (
+                  <article
+                    key={item.term}
+                    className="rounded-2xl border border-violet-500/20 bg-violet-500/5 p-6"
+                  >
+                    <h3 className="text-xl font-bold text-violet-200">
+                      {item.term}
+                    </h3>
+                    <p className="mt-3 leading-7 text-slate-300">
+                      {item.meaning}
+                    </p>
+                    <p className="mt-4 text-sm leading-6 text-slate-400">
+                      <strong className="text-slate-200">Example:</strong>{" "}
+                      {item.example}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
             <section aria-labelledby="placement-heading">
               <h2
                 id="placement-heading"
                 className="text-3xl font-bold tracking-tight"
               >
-                Where to place education on your resume
+                Should education come first on a resume?
               </h2>
+              <p className="mt-5 max-w-3xl leading-8 text-slate-300">
+                Put education first when it is your strongest relevant
+                qualification, especially as a student, recent graduate, or
+                candidate for a credential-required role. Put relevant work
+                experience first when it provides stronger and more recent
+                evidence for the target job.
+              </p>
               <div className="mt-8 grid gap-5 md:grid-cols-2">
                 {placementOptions.map((option) => (
                   <article
@@ -799,6 +892,73 @@ export default function HowToListEducationOnResumePage() {
                     </p>
                   </article>
                 ))}
+              </div>
+            </section>
+
+            <section aria-labelledby="current-education-heading">
+              <h2
+                id="current-education-heading"
+                className="text-3xl font-bold tracking-tight"
+              >
+                How to list current education on a resume
+              </h2>
+              <p className="mt-5 max-w-3xl leading-8 text-slate-300">
+                Name the official program and institution, state that the
+                program is In Progress, and add an expected completion date only
+                while you are actively enrolled and the date is accurate. Do not
+                format current study as an awarded degree.
+              </p>
+              <div className="mt-6 rounded-3xl border border-blue-500/30 bg-blue-500/10 p-6 sm:p-8">
+                <p className="font-semibold text-blue-200">
+                  Bachelor of Science in Computer Science, In Progress
+                </p>
+                <p className="mt-2 text-slate-300">
+                  [University Name], [City, Country]
+                </p>
+                <p className="mt-2 text-slate-300">Expected [Month Year]</p>
+              </div>
+              <p className="mt-4 text-sm leading-6 text-slate-400">
+                If you stop pursuing the program, remove the expected date and
+                use Coursework toward, Studies in, or accurate attendance dates
+                instead.
+              </p>
+            </section>
+
+            <section aria-labelledby="certifications-heading">
+              <h2
+                id="certifications-heading"
+                className="text-3xl font-bold tracking-tight"
+              >
+                Education and certifications on a resume: together or separate?
+              </h2>
+              <p className="mt-5 max-w-3xl leading-8 text-slate-300">
+                A combined Education and Certifications section can work when
+                you have only one or two supporting credentials and every item
+                remains easy to identify. Use separate sections when
+                certifications or licenses are numerous, required for the role,
+                regulated, renewable, or need issue and expiration dates.
+              </p>
+              <div className="mt-7 grid gap-5 md:grid-cols-2">
+                <article className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+                  <h3 className="text-xl font-bold text-white">
+                    Combine when clarity remains high
+                  </h3>
+                  <p className="mt-3 leading-7 text-slate-400">
+                    Use a heading such as Education and Certifications when a
+                    short combined section keeps closely related qualifications
+                    clear and compact.
+                  </p>
+                </article>
+                <article className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+                  <h3 className="text-xl font-bold text-white">
+                    Separate role-critical credentials
+                  </h3>
+                  <p className="mt-3 leading-7 text-slate-400">
+                    Use Certifications or Licenses as a separate section when
+                    recruiters must quickly confirm the issuer, credential name,
+                    status, issue date, or expiration date.
+                  </p>
+                </article>
               </div>
             </section>
 
@@ -1250,10 +1410,28 @@ export default function HowToListEducationOnResumePage() {
                   Entry template
                 </a>
                 <a
+                  href="#terms-heading"
+                  className="block text-slate-400 hover:text-white"
+                >
+                  Education terms
+                </a>
+                <a
                   href="#placement-heading"
                   className="block text-slate-400 hover:text-white"
                 >
-                  Section placement
+                  Education first?
+                </a>
+                <a
+                  href="#current-education-heading"
+                  className="block text-slate-400 hover:text-white"
+                >
+                  Current education
+                </a>
+                <a
+                  href="#certifications-heading"
+                  className="block text-slate-400 hover:text-white"
+                >
+                  Education and certifications
                 </a>
                 <a
                   href="#truth-heading"
