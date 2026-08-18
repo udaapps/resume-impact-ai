@@ -8,7 +8,7 @@ const PAGE_PATH = "/guides/how-to-list-education-on-resume";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 const PAGE_TITLE = "How to List Education on a Resume";
 const PAGE_DESCRIPTION =
-  "Learn where education should go and how to list degrees, current study, fields, courses, and certifications with 14 truthful resume examples.";
+  "Learn where education should go and how to list degrees, current study, fields, courses, training, and certifications with 14 truthful resume examples.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -121,6 +121,18 @@ const educationTerms = [
     meaning:
       "A credential issued by a named organization or authority, sometimes with an issue date, expiration date, or current-status requirement.",
     example: "Project Management Professional (PMP)",
+  },
+  {
+    term: "Education level or educational attainment",
+    meaning:
+      "The highest level or credential you have officially completed. Current or unfinished study can still appear separately when its real status is clear.",
+    example: "Completed: Associate Degree; In Progress: Bachelor's Degree",
+  },
+  {
+    term: "Education status",
+    meaning:
+      "The accurate state of a program or credential, such as Completed, In Progress, Expected, Coursework toward, or dates attended.",
+    example: "Bachelor of Science, In Progress — Expected May 2027",
   },
 ] as const;
 
@@ -536,9 +548,10 @@ const faqItems = [
       "Education can come first when you are a student, recent graduate, career changer with relevant recent study, or applicant for a credential-required role. Experienced professionals usually place relevant work experience first and keep education below it.",
   },
   {
-    question: "How do I list current education or a degree still in progress?",
+    question:
+      "How do I list current education or education in progress on a resume?",
     answer:
-      "Use the official program name, institution, In Progress status, and an accurate expected completion date when you are actively enrolled. Update the entry whenever the expected date or enrollment status changes.",
+      "Use the official program name, institution, and In Progress status. Add an accurate expected completion date when one is confirmed; otherwise use In Progress without guessing a date. Update the entry whenever the expected date or enrollment status changes.",
   },
   {
     question: "What does field of study mean on a resume?",
@@ -551,10 +564,19 @@ const faqItems = [
       "A course title is the official name of a class, training course, or program. Use the name supplied by the institution or provider, and do not present a course as a degree or professional certification unless that is its official status.",
   },
   {
-    question:
-      "Should education and certifications be in the same resume section?",
+    question: "Should certifications go under education on a resume?",
     answer:
       "They can share a section when you have only one or two supporting credentials and the result remains clear. Use separate Education and Certifications or Licenses sections when professional credentials are numerous, role-critical, regulated, renewable, or need issue and expiration dates.",
+  },
+  {
+    question: "How do I list training or continuing education on a resume?",
+    answer:
+      "Use the official training or course name, provider, completion or in-progress status, and date. Put short role-relevant learning in Training, Continuing Education, or Professional Development. Do not present classroom training as employment or call a course a certification unless that is the credential actually awarded.",
+  },
+  {
+    question: "How do I list transfer schools on a resume?",
+    answer:
+      "List the current or degree-granting institution first. Include an earlier school with accurate attendance dates when you earned a credential there, completed relevant coursework, or need to clarify your path. Do not imply that the earlier institution awarded the final degree.",
   },
   {
     question: "How do I list an unfinished degree?",
@@ -606,7 +628,7 @@ export default function HowToListEducationOnResumePage() {
     headline: "How to List Education on a Resume: 14 Examples",
     description: PAGE_DESCRIPTION,
     datePublished: "2026-08-08",
-    dateModified: "2026-08-11",
+    dateModified: "2026-08-18",
     inLanguage: "en-US",
     mainEntityOfPage: PAGE_URL,
     author: {
@@ -753,7 +775,7 @@ export default function HowToListEducationOnResumePage() {
             <p className="mt-6 text-sm text-slate-400">
               Published <time dateTime="2026-08-08">August 8, 2026</time>
               {" · "}
-              Updated <time dateTime="2026-08-11">August 11, 2026</time>
+              Updated <time dateTime="2026-08-18">August 18, 2026</time>
             </p>
           </div>
         </header>
@@ -900,7 +922,8 @@ export default function HowToListEducationOnResumePage() {
                 id="current-education-heading"
                 className="text-3xl font-bold tracking-tight"
               >
-                How to list current education on a resume
+                How to list current education or education in progress on a
+                resume
               </h2>
               <p className="mt-5 max-w-3xl leading-8 text-slate-300">
                 Name the official program and institution, state that the
@@ -909,13 +932,29 @@ export default function HowToListEducationOnResumePage() {
                 format current study as an awarded degree.
               </p>
               <div className="mt-6 rounded-3xl border border-blue-500/30 bg-blue-500/10 p-6 sm:p-8">
-                <p className="font-semibold text-blue-200">
-                  Bachelor of Science in Computer Science, In Progress
-                </p>
-                <p className="mt-2 text-slate-300">
-                  [University Name], [City, Country]
-                </p>
-                <p className="mt-2 text-slate-300">Expected [Month Year]</p>
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-wide text-blue-300">
+                    Confirmed completion date
+                  </p>
+                  <p className="mt-3 font-semibold text-blue-200">
+                    Bachelor of Science in Computer Science, In Progress
+                  </p>
+                  <p className="mt-2 text-slate-300">
+                    [University Name], [City, Country]
+                  </p>
+                  <p className="mt-2 text-slate-300">Expected [Month Year]</p>
+                </div>
+                <div className="mt-6 border-t border-blue-400/20 pt-6">
+                  <p className="text-sm font-semibold uppercase tracking-wide text-blue-300">
+                    No confirmed completion date
+                  </p>
+                  <p className="mt-3 font-semibold text-blue-200">
+                    Bachelor of Science in Computer Science, In Progress
+                  </p>
+                  <p className="mt-2 text-slate-300">
+                    [University Name], [City, Country]
+                  </p>
+                </div>
               </div>
               <p className="mt-4 text-sm leading-6 text-slate-400">
                 If you stop pursuing the program, remove the expected date and
@@ -960,6 +999,86 @@ export default function HowToListEducationOnResumePage() {
                   </p>
                 </article>
               </div>
+            </section>
+
+            <section aria-labelledby="training-heading">
+              <h2
+                id="training-heading"
+                className="text-3xl font-bold tracking-tight"
+              >
+                How to list training and continuing education on a resume
+              </h2>
+              <p className="mt-5 max-w-3xl leading-8 text-slate-300">
+                Put relevant training in Education and Training, Continuing
+                Education, or Professional Development. Use the official
+                program name, provider, accurate status, and date. Add verified
+                hours, units, topics, or a project only when they help confirm a
+                job requirement.
+              </p>
+              <div className="mt-7 grid gap-5 md:grid-cols-2">
+                <article className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-6">
+                  <h3 className="text-xl font-bold text-cyan-200">
+                    Completed training program
+                  </h3>
+                  <div className="mt-4 space-y-2 leading-7 text-slate-300">
+                    <p>[Official Training or Program Name]</p>
+                    <p>[Training Provider] | Completed [Month Year]</p>
+                    <p>Relevant Topics or Project: [Verified details]</p>
+                  </div>
+                </article>
+                <article className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-6">
+                  <h3 className="text-xl font-bold text-cyan-200">
+                    Continuing education
+                  </h3>
+                  <div className="mt-4 space-y-2 leading-7 text-slate-300">
+                    <p>[Continuing Education or Development Area]</p>
+                    <p>[Provider or Professional Body] | [Year or Cycle]</p>
+                    <p>[Verified hours or units completed, when useful]</p>
+                  </div>
+                </article>
+              </div>
+              <p className="mt-5 text-sm leading-6 text-slate-400">
+                Training is not automatically work experience. Put supervised
+                practical, clinical, apprenticeship, or workplace training in
+                Experience only when you can accurately describe the setting,
+                responsibilities, dates, and real work completed.
+              </p>
+            </section>
+
+            <section aria-labelledby="transfer-heading">
+              <h2
+                id="transfer-heading"
+                className="text-3xl font-bold tracking-tight"
+              >
+                How to list transfer schools on a resume
+              </h2>
+              <p className="mt-5 max-w-3xl leading-8 text-slate-300">
+                List your current or degree-granting institution first. Add an
+                earlier school when you earned a separate credential there,
+                completed relevant coursework, or need to explain the education
+                path. It is often reasonable to omit an earlier school when no
+                credential or useful evidence came from it.
+              </p>
+              <div className="mt-6 rounded-3xl border border-violet-500/25 bg-violet-500/5 p-6 sm:p-8">
+                <p className="font-semibold text-violet-200">
+                  Bachelor of Science in [Official Field], In Progress
+                </p>
+                <p className="mt-2 text-slate-300">
+                  [Current University], [Location] | Expected [Month Year]
+                </p>
+                <p className="mt-5 border-t border-violet-400/20 pt-5 font-semibold text-violet-200">
+                  Studies in [Relevant Field]
+                </p>
+                <p className="mt-2 text-slate-300">
+                  [Previous Institution], [Location] | Attended [Year–Year]
+                </p>
+              </div>
+              <p className="mt-4 text-sm leading-6 text-slate-400">
+                Do not attach the final degree to the previous institution or
+                make attendance look like graduation. If the earlier school is
+                omitted, keep the dates and degree claim for the graduating
+                institution accurate.
+              </p>
             </section>
 
             <section aria-labelledby="truth-heading">
@@ -1348,6 +1467,20 @@ export default function HowToListEducationOnResumePage() {
                     placement choices.
                   </p>
                 </a>
+                <a
+                  href="https://tips.career.vt.edu/Resumes/examples/TransferStudentResume.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-blue-500"
+                >
+                  <p className="text-lg font-bold text-white">
+                    Virginia Tech: Transfer Student Resume
+                  </p>
+                  <p className="mt-3 leading-7 text-slate-400">
+                    Shows how an earlier college can be listed with its location
+                    and accurate attendance dates when it remains relevant.
+                  </p>
+                </a>
               </div>
             </section>
 
@@ -1432,6 +1565,18 @@ export default function HowToListEducationOnResumePage() {
                   className="block text-slate-400 hover:text-white"
                 >
                   Education and certifications
+                </a>
+                <a
+                  href="#training-heading"
+                  className="block text-slate-400 hover:text-white"
+                >
+                  Training and continuing education
+                </a>
+                <a
+                  href="#transfer-heading"
+                  className="block text-slate-400 hover:text-white"
+                >
+                  Transfer schools
                 </a>
                 <a
                   href="#truth-heading"
