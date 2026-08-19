@@ -1,5 +1,5 @@
 const SITE_URL =
-  "https://https://www.resumeclimbai.com";
+  "https://www.resumeclimbai.com";
 
 const PAGE_URL =
   `${SITE_URL}/ats-resume-checker`;

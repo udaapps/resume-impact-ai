@@ -94,13 +94,25 @@ const guides = [
   {
     href: "/guides/skills-to-put-on-a-resume",
     category: "Resume Skills",
-    title: "Skills to Put on a Resume: 100+ Examples and ATS Tips",
+    title: "Skills to Put on a Resume: 120 Examples and ATS Tips",
     description:
       "Choose relevant hard and soft skills, confirm each claim against real evidence, place supported skills naturally, and avoid keyword stuffing.",
     highlights: [
-      "100+ categorized skill examples",
+      "120 categorized skill examples",
       "Confirmed, Related, and Not Confirmed",
       "Skills section and ATS guidance",
+    ],
+  },
+  {
+    href: "/guides/skills-to-put-on-a-resume-with-no-experience",
+    category: "Resume Skills",
+    title: "Skills to Put on a Resume With No Experience",
+    description:
+      "Find first-job and student skills from coursework, projects, volunteering, and personal work, with evidence-first examples and ATS guidance.",
+    highlights: [
+      "60+ first-job skill examples",
+      "Hard and soft skills",
+      "Evidence-first ATS guidance",
     ],
   },
   {

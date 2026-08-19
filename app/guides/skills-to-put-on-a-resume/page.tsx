@@ -1026,7 +1026,24 @@ export default function SkillsToPutOnResumePage() {
                 ))}
               </div>
             </section>
+<div className="rounded-2xl border border-violet-500/25 bg-violet-500/10 p-6">
+  <h3 className="text-xl font-bold text-violet-200">
+    Building your first resume?
+  </h3>
 
+  <p className="mt-3 leading-7 text-slate-300">
+    If you have little or no paid work experience, use the dedicated guide to
+    identify skills from coursework, projects, volunteering, clubs, and personal
+    work without overstating your background.
+  </p>
+
+  <Link
+    href="/guides/skills-to-put-on-a-resume-with-no-experience"
+    className="mt-4 inline-flex font-semibold text-violet-200 hover:text-white"
+  >
+    See skills for a resume with no experience →
+  </Link>
+</div>
             <section
               aria-labelledby="ats-heading"
               className="rounded-3xl border border-blue-500/25 bg-blue-500/10 p-6 sm:p-8"

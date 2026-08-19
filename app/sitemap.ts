@@ -78,6 +78,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+  url: `${baseUrl}/guides/skills-to-put-on-a-resume-with-no-experience`,
+  lastModified: new Date("2026-08-19"),
+  changeFrequency: "monthly",
+  priority: 0.8,
+},
+    {
       url: `${baseUrl}/guides/resume-action-verbs`,
       lastModified: new Date("2026-08-08"),
       changeFrequency: "monthly",
