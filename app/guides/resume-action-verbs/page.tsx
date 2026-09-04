@@ -6,9 +6,9 @@ import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 const SITE_URL = "https://www.resumeclimbai.com";
 const PAGE_PATH = "/guides/resume-action-verbs";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
-const PAGE_TITLE = "200+ Resume Action Verbs With Examples";
+const PAGE_TITLE = "220 Resume Action Verbs & Action Words With Examples";
 const PAGE_DESCRIPTION =
-  "Choose precise resume action verbs from 220 categorized examples, match each verb to your real contribution, and write stronger evidence-based bullets.";
+  "Browse 220 resume action verbs and action words for leadership, customer service, sales, admin, technical, and more, with truthful bullet examples and ATS tips.";
 
 export const metadata: Metadata = {
   title: `${PAGE_TITLE} | ResumeClimb AI`,
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     type: "article",
     url: PAGE_URL,
     siteName: "ResumeClimb AI",
-    title: "200+ Resume Action Verbs With Truthful Bullet Examples",
+    title: "220 Resume Action Verbs & Action Words With Examples",
     description: PAGE_DESCRIPTION,
     images: [
       {
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "200+ Resume Action Verbs With Examples",
+    title: "220 Resume Action Verbs & Action Words With Examples",
     description: PAGE_DESCRIPTION,
     images: [`${SITE_URL}/opengraph-image.png`],
   },
@@ -788,10 +788,10 @@ export default function ResumeActionVerbsPage() {
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: "200+ Resume Action Verbs With Examples",
+    headline: "220 Resume Action Verbs & Action Words With Examples",
     description: PAGE_DESCRIPTION,
     datePublished: "2026-08-08",
-    dateModified: "2026-08-08",
+    dateModified: "2026-09-04",
     inLanguage: "en-US",
     mainEntityOfPage: PAGE_URL,
     author: {
@@ -900,12 +900,14 @@ export default function ResumeActionVerbsPage() {
               Truth-First Resume Writing Guide
             </p>
             <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-              200+ Resume Action Verbs With Examples
+              220 Resume Action Verbs & Action Words With Examples
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-              Choose from 220 categorized action verbs, match each word to your
-              real contribution, and build clearer resume bullets without
-              overstating ownership, seniority, or results.
+              Browse 220 resume action verbs and action words organized by
+              responsibility, including leadership, customer service, sales,
+              administration, technical work, finance, and more. Choose words that
+              accurately match your contribution and use the examples to write
+              clearer, stronger resume bullets.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -937,12 +939,48 @@ export default function ResumeActionVerbsPage() {
 
             <p className="mt-6 text-sm text-slate-400">
               Published <time dateTime="2026-08-08">August 8, 2026</time>
+              {" · "}
+              Updated <time dateTime="2026-09-04">September 4, 2026</time>
             </p>
           </div>
         </header>
 
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_300px] lg:px-8">
           <div className="min-w-0 space-y-14">
+            <section
+              aria-labelledby="best-action-verbs-heading"
+              className="rounded-3xl border border-blue-500/25 bg-blue-500/10 p-6 sm:p-8"
+            >
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-300">
+                Quick answer
+              </p>
+              <h2
+                id="best-action-verbs-heading"
+                className="mt-3 text-3xl font-bold tracking-tight text-white"
+              >
+                Best resume action verbs to use
+              </h2>
+              <p className="mt-4 max-w-3xl leading-8 text-slate-300">
+                Strong resume action verbs describe exactly what you did. Useful
+                examples include led, coordinated, analyzed, developed, resolved,
+                improved, trained, supported, reconciled, configured, delivered,
+                created, organized, tested, managed, documented, streamlined,
+                negotiated, monitored, and implemented.
+              </p>
+              <p className="mt-4 max-w-3xl leading-8 text-slate-400">
+                The best word depends on your real responsibility. Use a leadership
+                verb only when you led the work, a result verb only when you can
+                support the result, and a technical or task-specific verb when it
+                describes your contribution more accurately.
+              </p>
+              <a
+                href="#verbs-heading"
+                className="mt-5 inline-flex font-semibold text-blue-200 hover:text-white"
+              >
+                See all 220 resume action verbs →
+              </a>
+            </section>
+
             <section aria-labelledby="definition-heading">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
                 Precision before power
@@ -951,7 +989,7 @@ export default function ResumeActionVerbsPage() {
                 id="definition-heading"
                 className="mt-3 text-3xl font-bold tracking-tight"
               >
-                What makes an action verb strong?
+                What are resume action verbs, and what makes them strong?
               </h2>
               <p className="mt-5 max-w-3xl leading-8 text-slate-300">
                 A strong resume action verb tells the reader what you actually

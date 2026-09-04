@@ -454,6 +454,18 @@ export default function AccountantResumeBulletsPage() {
                   </div>
                 </div>
               </div>
+
+              <p className="mt-5 max-w-3xl leading-8 text-slate-400">
+                Choose a precise verb that matches your actual accounting
+                responsibility. See our{" "}
+                <Link
+                  href="/guides/resume-action-verbs"
+                  className="font-semibold text-blue-300 hover:text-blue-200"
+                >
+                  resume action verbs and action words guide
+                </Link>{" "}
+                for 220 categorized options and truthful examples.
+              </p>
             </section>
 
             <section aria-labelledby="examples-heading">
