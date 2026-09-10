@@ -31,6 +31,9 @@ export const metadata: Metadata = {
     "course title on resume",
     "field of study meaning on resume",
     "how to list current education on resume",
+    "title of qualification credential awarded",
+    "education qualification table on resume",
+    "ongoing education on resume",
   ],
   alternates: {
     canonical: PAGE_URL,
@@ -548,10 +551,9 @@ const faqItems = [
       "Education can come first when you are a student, recent graduate, career changer with relevant recent study, or applicant for a credential-required role. Experienced professionals usually place relevant work experience first and keep education below it.",
   },
   {
-    question:
-      "How do I list current education or education in progress on a resume?",
+    question: "How do I list current or ongoing education on a resume?",
     answer:
-      "Use the official program name, institution, and In Progress status. Add an accurate expected completion date when one is confirmed; otherwise use In Progress without guessing a date. Update the entry whenever the expected date or enrollment status changes.",
+      "List the official program name and institution, clearly mark the education as In Progress, and add an expected completion date only when it is accurate. If no completion date is confirmed, use In Progress without guessing. Update the entry whenever your enrollment status or expected date changes.",
   },
   {
     question: "What does field of study mean on a resume?",
@@ -628,7 +630,7 @@ export default function HowToListEducationOnResumePage() {
     headline: "How to List Education on a Resume: 14 Examples",
     description: PAGE_DESCRIPTION,
     datePublished: "2026-08-08",
-    dateModified: "2026-08-18",
+    dateModified: "2026-09-10",
     inLanguage: "en-US",
     mainEntityOfPage: PAGE_URL,
     author: {
@@ -775,7 +777,7 @@ export default function HowToListEducationOnResumePage() {
             <p className="mt-6 text-sm text-slate-400">
               Published <time dateTime="2026-08-08">August 8, 2026</time>
               {" · "}
-              Updated <time dateTime="2026-08-18">August 18, 2026</time>
+              Updated <time dateTime="2026-09-10">September 10, 2026</time>
             </p>
           </div>
         </header>
@@ -847,6 +849,45 @@ export default function HowToListEducationOnResumePage() {
               </ol>
             </section>
 
+            <section aria-labelledby="qualification-title-heading">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-400">
+                Qualification terminology
+              </p>
+              <h2
+                id="qualification-title-heading"
+                className="mt-3 text-3xl font-bold tracking-tight"
+              >
+                What does “title of qualification/credential awarded” mean?
+              </h2>
+
+              <p className="mt-5 max-w-3xl leading-8 text-slate-300">
+                The title of qualification or credential awarded is the official
+                name of the degree, diploma, certificate, license, or other
+                qualification you completed. Use the exact wording shown by the
+                institution or credential issuer rather than shortening it or
+                making it sound more advanced.
+              </p>
+
+              <div className="mt-6 rounded-3xl border border-violet-500/25 bg-violet-500/5 p-6 sm:p-8">
+                <p className="font-semibold text-violet-200">
+                  Examples of qualification or credential titles
+                </p>
+
+                <ul className="mt-4 space-y-2 leading-7 text-slate-300">
+                  <li>• Bachelor of Science</li>
+                  <li>• Diploma in Radiography</li>
+                  <li>• Certificate in Project Management</li>
+                  <li>• Master of Business Administration</li>
+                </ul>
+
+                <p className="mt-5 text-sm leading-6 text-slate-400">
+                  The qualification title is different from the field of study.
+                  For example, “Bachelor of Science” is the qualification, while
+                  “Computer Science” may be the field of study.
+                </p>
+              </div>
+            </section>
+
             <section aria-labelledby="terms-heading">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-violet-400">
                 Education terms explained
@@ -880,6 +921,59 @@ export default function HowToListEducationOnResumePage() {
                     </p>
                   </article>
                 ))}
+              </div>
+            </section>
+
+            <section aria-labelledby="education-table-heading">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">
+                Education example
+              </p>
+              <h2
+                id="education-table-heading"
+                className="mt-3 text-3xl font-bold tracking-tight"
+              >
+                Education qualification table example for a resume
+              </h2>
+
+              <p className="mt-5 max-w-3xl leading-8 text-slate-300">
+                Use a simple structure to separate the qualification, field of
+                study, institution, and completion date. On an actual resume, a
+                standard text-based education section is usually easier for ATS
+                systems to parse than a complex visual table.
+              </p>
+
+              <div className="mt-7 overflow-x-auto rounded-2xl border border-slate-800">
+                <table className="min-w-full text-left">
+                  <thead className="bg-slate-900 text-slate-200">
+                    <tr>
+                      <th className="p-4">Qualification</th>
+                      <th className="p-4">Field of Study</th>
+                      <th className="p-4">Institution</th>
+                      <th className="p-4">Year</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="divide-y divide-slate-800 text-slate-300">
+                    <tr>
+                      <td className="p-4">Bachelor of Science</td>
+                      <td className="p-4">Computer Science</td>
+                      <td className="p-4">University Name</td>
+                      <td className="p-4">2026</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4">Diploma</td>
+                      <td className="p-4">Business Management</td>
+                      <td className="p-4">College Name</td>
+                      <td className="p-4">2023</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4">Certificate</td>
+                      <td className="p-4">Data Analytics</td>
+                      <td className="p-4">Training Provider</td>
+                      <td className="p-4">2025</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </section>
 
@@ -922,14 +1016,14 @@ export default function HowToListEducationOnResumePage() {
                 id="current-education-heading"
                 className="text-3xl font-bold tracking-tight"
               >
-                How to list current education or education in progress on a
-                resume
+                How to list current or ongoing education on a resume
               </h2>
               <p className="mt-5 max-w-3xl leading-8 text-slate-300">
-                Name the official program and institution, state that the
-                program is In Progress, and add an expected completion date only
-                while you are actively enrolled and the date is accurate. Do not
-                format current study as an awarded degree.
+                Current, ongoing, or in-progress education should use the
+                official program name and institution, clearly state that the
+                program is In Progress, and include an expected completion date
+                only when that date is accurate. Do not format current study as
+                an awarded degree.
               </p>
               <div className="mt-6 rounded-3xl border border-blue-500/30 bg-blue-500/10 p-6 sm:p-8">
                 <div>
@@ -1543,10 +1637,22 @@ export default function HowToListEducationOnResumePage() {
                   Entry template
                 </a>
                 <a
+                  href="#qualification-title-heading"
+                  className="block text-slate-400 hover:text-white"
+                >
+                  Qualification title
+                </a>
+                <a
                   href="#terms-heading"
                   className="block text-slate-400 hover:text-white"
                 >
                   Education terms
+                </a>
+                <a
+                  href="#education-table-heading"
+                  className="block text-slate-400 hover:text-white"
+                >
+                  Qualification table
                 </a>
                 <a
                   href="#placement-heading"
@@ -1558,7 +1664,7 @@ export default function HowToListEducationOnResumePage() {
                   href="#current-education-heading"
                   className="block text-slate-400 hover:text-white"
                 >
-                  Current education
+                  Current or ongoing education
                 </a>
                 <a
                   href="#certifications-heading"
