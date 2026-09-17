@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link"; // Added for internal linking
 
 import AtsResumeCheckerClient from "@/components/ats/ats-resume-checker-client";
 import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
@@ -162,6 +163,40 @@ export default function AtsResumeCheckerPage() {
       />
 
       <AtsResumeCheckerClient />
+      
+      {/* --- ADDED SEO & ADSENSE CONTENT SECTION --- */}
+      <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="rounded-2xl bg-slate-900 border border-slate-800 p-8 shadow-sm">
+          <h2 className="mb-6 text-2xl font-bold text-white">How the Free ATS Resume Checker Works</h2>
+          
+          <p className="mb-8 text-slate-300 leading-relaxed">
+            Before your resume reaches a human recruiter, it often passes through an Applicant Tracking System (ATS). Our tool analyzes your resume against the specific job description you are targeting to ensure you have the highest chance of passing these automated filters.
+          </p>
+
+          <h3 className="mb-4 text-xl font-semibold text-white">What does the ATS Checker analyze?</h3>
+          <ul className="mb-10 ml-5 list-disc space-y-3 text-slate-300">
+            <li><strong className="text-white">Keyword Matching:</strong> Identifies hard skills, soft skills, and required qualifications mentioned in the job post that are missing from your resume.</li>
+            <li><strong className="text-white">Format Compatibility:</strong> Checks if your resume uses standard formatting that robotic scanners can easily read (avoiding complex tables or graphics).</li>
+            <li><strong className="text-white">Actionable Feedback:</strong> Provides an estimated ATS score and suggestions on how to reword your experience for better alignment.</li>
+          </ul>
+
+          <div className="mb-8 rounded-r-lg border-l-4 border-indigo-500 bg-indigo-950/30 p-5">
+            <h3 className="mb-2 text-lg font-semibold text-indigo-300">The Golden Rule of Resume Keywords</h3>
+            <p className="text-sm text-indigo-200/80">
+              Only add suggested keywords if you actually possess that skill or experience. Our tool is designed to help you highlight your real qualifications, not to trick the system. Honesty is always the best policy.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-3 text-xl font-semibold text-white">Privacy & Data Security</h3>
+            <p className="text-slate-300 leading-relaxed">
+              We value your privacy. The resume data and job descriptions you paste into our ATS Checker are processed temporarily to generate your analysis. We do not permanently store your resume, and we do not sell your personal data to third parties. For more details, please review our <Link href="/privacy-policy" className="text-blue-400 hover:text-blue-300 underline">Privacy Policy</Link>.
+            </p>
+          </div>
+        </div>
+      </section>
+      {/* --- END SEO & ADSENSE CONTENT SECTION --- */}
+
       <HumanAtsReviewCta source="ats-resume-checker" />
       <AtsResumeCheckerSeoContent />
 

@@ -4,9 +4,11 @@ import Link from "next/link";
 import HumanAtsReviewCta from "@/components/marketing/human-ats-review-cta";
 
 const SITE_URL = "https://www.resumeclimbai.com";
-const PAGE_TITLE = "Free AI Resume Tools & Writing Guides | ResumeClimb AI";
+
+// SEO වෙනස්කම් කරන ලද Title සහ Description
+const PAGE_TITLE = "Free AI Resume Checker & ATS Keyword Optimizer | ResumeClimb AI";
 const PAGE_DESCRIPTION =
-  "Build a stronger resume with free AI tools, an ATS resume checker, role-specific bullet examples, and practical resume writing guides.";
+  "Get an instant ATS score with our free AI Resume Checker. Analyze your ATS resume keywords and use our AI tools to land your dream job faster.";
 
 export const metadata: Metadata = {
   title: {
@@ -82,6 +84,13 @@ const tools = [
 ] as const;
 
 const guides = [
+  {
+    href: "/guides/how-to-list-education-on-resume",
+    category: "Resume Writing Fundamentals",
+    title: "How to List Education in Progress on Your Resume",
+    description:
+      "Learn exactly how to list ongoing education, degrees in progress, and current training on your resume with practical examples.",
+  },
   {
     href: "/guides/resume-bullets-without-metrics",
     category: "Resume Writing Fundamentals",
@@ -235,9 +244,10 @@ export default function HomePage() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
             Free Resume Tools and Practical Guidance
           </p>
-
+          
+          {/* SEO වෙනස්කම් කරන ලද H1 Tag එක */}
           <h1 className="mx-auto mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Build a stronger resume with AI tools you can use responsibly
+            Free AI Resume Checker & ATS Grader to Build a Stronger Resume
           </h1>
 
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-300">
