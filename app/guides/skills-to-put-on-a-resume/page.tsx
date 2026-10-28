@@ -11,7 +11,7 @@ const PAGE_DESCRIPTION =
   "Choose skills for your resume with 120 categorized examples, an evidence-first selection method, ATS placement tips, and truthful wording guidance.";
 
 export const metadata: Metadata = {
-  title: `${PAGE_TITLE}: 120 Examples | ResumeClimb AI`,
+  title: `${PAGE_TITLE}: 120 Examples`,
   description: PAGE_DESCRIPTION,
   authors: [{ name: "UDA Apps", url: SITE_URL }],
   creator: "UDA Apps",
@@ -1157,7 +1157,7 @@ export default function SkillsToPutOnResumePage() {
               <p className="mt-4 max-w-3xl leading-8 text-slate-400">
                 These resources offer additional perspectives on selecting and
                 demonstrating skills. Adapt all advice to your evidence,
-                location, field, and the employer's instructions.
+                location, field, and the employer&apos;s instructions.
               </p>
               <div className="mt-7 grid gap-5 md:grid-cols-3">
                 <a
@@ -1328,7 +1328,7 @@ export default function SkillsToPutOnResumePage() {
               <h2 className="font-bold text-amber-200">Related is not exact</h2>
               <p className="mt-3 text-sm leading-6 text-slate-300">
                 Similar software, methods, or responsibilities may be
-                transferable, but they do not prove the employer's exact
+                transferable, but they do not prove the employer&apos;s exact
                 requirement.
               </p>
             </section>

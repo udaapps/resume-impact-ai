@@ -9,7 +9,7 @@ const PAGE_DESCRIPTION =
   "Learn why ResumeClimb AI was created, how its free resume tools and guides are developed, and why truthful experience matters in every resume.";
 
 export const metadata: Metadata = {
-  title: PAGE_TITLE,
+  title: { absolute: PAGE_TITLE },
   description: PAGE_DESCRIPTION,
   authors: [{ name: "UDA Apps", url: PAGE_URL }],
   creator: "UDA Apps",

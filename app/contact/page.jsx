@@ -2,8 +2,9 @@ import React from 'react';
 
 // SEO සඳහා Metadata
 export const metadata = {
-  title: 'Contact Us | ResumeClimb AI',
+  title: 'Contact Us',
   description: 'Contact ResumeClimb AI for support, questions about our AI resume tools, or business inquiries.',
+  alternates: { canonical: '/contact' },
 };
 
 export default function ContactUs() {

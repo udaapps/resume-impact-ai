@@ -4,7 +4,7 @@ import Link from "next/link";
 const SITE_URL = "https://www.resumeclimbai.com";
 
 export const metadata: Metadata = {
-  title: "How to List Education in Progress on Your Resume (2026 Guide) | ResumeClimb AI",
+  title: "How to List Education in Progress on Your Resume (2026 Guide)",
   description: "Learn exactly how to list ongoing education, degrees in progress, and current training on your resume with practical examples.",
   alternates: {
     canonical: `${SITE_URL}/guides/how-to-list-education-on-resume`,
@@ -92,7 +92,7 @@ export default function EducationInProgressGuide() {
               <div>
                 <h3 className="mb-3 text-lg font-bold text-white">Always Include the Expected Graduation Date</h3>
                 <p className="text-slate-400 leading-relaxed">
-                  Recruiters need to know when you will be available for full-time work or when you will officially hold the qualification. Instead of writing "Present," explicitly use the term <strong>"Expected [Month, Year]"</strong> to maintain ATS compliance.
+                  Recruiters need to know when you will be available for full-time work or when you will officially hold the qualification. Instead of writing &quot;Present,&quot; explicitly use the term <strong>&quot;Expected [Month, Year]&quot;</strong> to maintain ATS compliance.
                 </p>
               </div>
             </div>
@@ -105,7 +105,7 @@ export default function EducationInProgressGuide() {
               <div>
                 <h3 className="mb-3 text-lg font-bold text-white">State the Degree You Are Pursuing</h3>
                 <p className="text-slate-400 leading-relaxed">
-                  Be clear about the specific degree or certification you are working towards. Avoid vague terms and use the official title of the program (e.g., "Bachelor of Science in Computer Science").
+                  Be clear about the specific degree or certification you are working towards. Avoid vague terms and use the official title of the program (e.g., &quot;Bachelor of Science in Computer Science&quot;).
                 </p>
               </div>
             </div>

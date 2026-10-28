@@ -11,7 +11,7 @@ const PAGE_DESCRIPTION =
   "Learn how to find ATS resume keywords in a job description, verify each term against your evidence, place keywords naturally, and avoid keyword stuffing.";
 
 export const metadata: Metadata = {
-  title: `${PAGE_TITLE} | ResumeClimb AI`,
+  title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   authors: [{ name: "UDA Apps", url: SITE_URL }],
   creator: "UDA Apps",

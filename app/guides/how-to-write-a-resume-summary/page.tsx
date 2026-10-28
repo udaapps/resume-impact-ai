@@ -11,7 +11,7 @@ const PAGE_DESCRIPTION =
   "Write a clear, truthful resume summary with an evidence-first formula, 18 adaptable examples, ATS keyword guidance, and advice for every career stage.";
 
 export const metadata: Metadata = {
-  title: `${PAGE_TITLE} | ResumeClimb AI`,
+  title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   authors: [{ name: "UDA Apps", url: SITE_URL }],
   creator: "UDA Apps",

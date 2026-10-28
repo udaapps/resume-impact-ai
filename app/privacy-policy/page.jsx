@@ -2,8 +2,9 @@ import React from 'react';
 
 // SEO සඳහා Metadata
 export const metadata = {
-  title: 'Privacy Policy | ResumeClimb AI',
+  title: 'Privacy Policy',
   description: 'Privacy policy and data handling practices for ResumeClimb AI resume tools.',
+  alternates: { canonical: '/privacy-policy' },
 };
 
 export default function PrivacyPolicy() {

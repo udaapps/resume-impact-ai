@@ -165,12 +165,12 @@ export default function ResumeBulletGeneratorPage() {
                   <h3 className="mb-4 text-xl font-semibold">Frequently Asked Questions</h3>
                   <div className="space-y-5">
                     <div className="rounded-lg bg-slate-50 p-5 border border-slate-100">
-                      <h4 className="mb-1 font-medium text-slate-900">Does this tool hallucinate or make up lies?</h4>
-                      <p className="text-sm text-slate-600">No. Unlike general AI chatbots, our tool is strictly prompted to use only the information you provide. It focuses on improving the phrasing, structure, and grammar of your real experience.</p>
+                      <h4 className="mb-1 font-medium text-slate-900">Can AI-generated bullets contain mistakes?</h4>
+                      <p className="text-sm text-slate-600">The tool is designed to use the information you provide, but AI-generated wording can still contain mistakes. Review every bullet and remove any unsupported skill, metric, responsibility, or result before using it.</p>
                     </div>
                     <div className="rounded-lg bg-slate-50 p-5 border border-slate-100">
                       <h4 className="mb-1 font-medium text-slate-900">Is this tool entirely free?</h4>
-                      <p className="text-sm text-slate-600">Yes, the AI Resume Bullet Generator is 100% free to use. You can generate as many variations as you need to perfect your resume.</p>
+                      <p className="text-sm text-slate-600">Yes. The free plan currently provides up to five generations per day, with three resume bullet options in each generation.</p>
                     </div>
                   </div>
                 </div>

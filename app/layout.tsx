@@ -116,6 +116,12 @@ export default function RootLayout({
           {/* --- ADDED FOOTER SECTION --- */}
           <footer className="border-t border-slate-800 bg-slate-950 py-8 text-center text-sm text-slate-500">
             <div className="flex flex-wrap justify-center gap-4 sm:gap-8 mb-4">
+              <Link href="/about" className="hover:text-slate-300 transition-colors">
+                About
+              </Link>
+              <Link href="/editorial-policy" className="hover:text-slate-300 transition-colors">
+                Editorial Policy
+              </Link>
               <Link href="/privacy-policy" className="hover:text-slate-300 transition-colors">
                 Privacy Policy
               </Link>

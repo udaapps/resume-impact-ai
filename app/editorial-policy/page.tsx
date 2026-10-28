@@ -9,7 +9,7 @@ const PAGE_DESCRIPTION =
   "Learn how ResumeClimb AI researches, creates, reviews, and updates resume guides and AI-assisted content while protecting accuracy and transparency.";
 
 export const metadata: Metadata = {
-  title: PAGE_TITLE,
+  title: { absolute: PAGE_TITLE },
   description: PAGE_DESCRIPTION,
   authors: [{ name: "UDA Apps", url: `${SITE_URL}/about` }],
   creator: "UDA Apps",

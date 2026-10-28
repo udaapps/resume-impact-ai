@@ -2,8 +2,9 @@ import React from 'react';
 
 // SEO සඳහා Metadata
 export const metadata = {
-  title: 'Terms of Service | ResumeClimb AI',
+  title: 'Terms of Service',
   description: 'Terms of service and usage guidelines for ResumeClimb AI resume tools and guides.',
+  alternates: { canonical: '/terms-of-service' },
 };
 
 export default function TermsOfService() {

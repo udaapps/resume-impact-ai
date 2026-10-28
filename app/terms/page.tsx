@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Use | ResumeClimb AI",
+  title: "Terms of Use",
   description:
     "Terms of Use for ResumeClimb AI, including acceptable use, AI-generated content, resume accuracy, and service limitations.",
   alternates: {
@@ -63,7 +63,7 @@ export default function TermsPage() {
             </h2>
             <p className="mt-3">
               ATS scores, keyword matches, and resume assessments are
-              educational estimates only. They do not represent an employer's
+              educational estimates only. They do not represent an employer&apos;s
               actual applicant tracking system and do not guarantee interviews,
               employment, rankings, or other outcomes.
             </p>

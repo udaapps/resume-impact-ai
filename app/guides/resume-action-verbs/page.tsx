@@ -11,7 +11,7 @@ const PAGE_DESCRIPTION =
   "Browse 220 resume action verbs and action words for leadership, customer service, sales, admin, technical, and more, with truthful bullet examples and ATS tips.";
 
 export const metadata: Metadata = {
-  title: `${PAGE_TITLE} | ResumeClimb AI`,
+  title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   authors: [{ name: "UDA Apps", url: SITE_URL }],
   creator: "UDA Apps",

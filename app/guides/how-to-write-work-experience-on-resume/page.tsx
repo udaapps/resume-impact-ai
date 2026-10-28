@@ -11,7 +11,7 @@ const PAGE_DESCRIPTION =
   "Write a clear resume work-experience section with truthful formatting, 14 adaptable examples, evidence-based bullets, ATS tips, and career-stage guidance.";
 
 export const metadata: Metadata = {
-  title: `${PAGE_TITLE} | ResumeClimb AI`,
+  title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   authors: [{ name: "UDA Apps", url: SITE_URL }],
   creator: "UDA Apps",
@@ -1283,7 +1283,7 @@ export default function HowToWriteWorkExperienceOnResumePage() {
                 These resources provide additional perspectives on experience
                 structure, bullet writing, relevance, and older work history.
                 Adapt guidance to your field, country, evidence, and the
-                employer's instructions.
+                employer&apos;s instructions.
               </p>
               <div className="mt-7 grid gap-5 md:grid-cols-2">
                 <a
